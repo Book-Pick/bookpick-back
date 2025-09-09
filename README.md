@@ -5,4 +5,4 @@
 
 ## 🎫 다이어그램
 
-[ERD](https://dbdiagram.io/d/Book-Pick-mvp-v1%ED%81%90%EB%A0%88%EC%9D%B4%EC%85%98%EC%A0%84%EA%B9%8C%EC%A7%80-68b43bb1777b52b76c59f4ec)
+[ERD](https://bookpick.notion.site/MVP-DB-2628ea683fd880dfb17be1589ed69581?source=copy_link)
