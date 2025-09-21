@@ -23,10 +23,13 @@ public class User {
     private String email; // 로그인 ID, 고유
 
     @Column(name = "login_password", nullable = false, length = 255)
-    private String passwordHash; // 비밀번호 해시
+    private String password; // 비밀번호 해시
 
     @Column(length = 50)
     private String nickname; // 프로필 닉네임
+
+    @Column(length = 20)
+    private String role;  // ROLE_USER, ROLE_ADMIN 등
 
     @Column(length = 255)
     private String bio; // 자기소개 문구
