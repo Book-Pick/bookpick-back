@@ -21,16 +21,5 @@ public class UserService {
     private final PasswordEncoder passwordEncoder;
 
 
-    // 회원가입, DB에 추가
-    public Res create(CreateReq req) {
-        if (repo.existsByEmail(req.email())) {
-            throw new IllegalArgumentException("email-duplicated");
-        }
-        User u = new User();
-        u.setEmail(req.email());
-        u.setPassword(passwordEncoder.encode((req.password()))); // 실제로는 BCrypt 권장
-        repo.save(u);
-        return new Res(u.getId(),u.getNickname(), u.getEmail());
 
-    }
 }

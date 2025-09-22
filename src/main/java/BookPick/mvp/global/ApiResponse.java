@@ -1,4 +1,4 @@
-package BookPick.mvp.common;
+package BookPick.mvp.global;
 
 import lombok.Getter;
 
@@ -19,15 +19,15 @@ public class ApiResponse<T> {
     }
 
     // 정적 팩토리 메서드
-    public static <T> ApiResponse<T> ok(T data) {
-        return new ApiResponse<>( 200, null, data) ;
+    public static <T> ApiResponse<T> success(String msg, T data) {
+        return new ApiResponse<>( 200, msg, data) ;
     }
 
-    public static <T> ApiResponse<T> created(T data) {
-        return new ApiResponse<>(201, null, data);
+    public static <T> ApiResponse<T> created(String msg, T data) {
+        return new ApiResponse<>(201, msg, data);
     }
 
-    public static ApiResponse<Void> noContent() {
+    public static ApiResponse<Void> noContent() {       //헤더만 주는놈
         return new ApiResponse<>(204, null, null);
     }
 

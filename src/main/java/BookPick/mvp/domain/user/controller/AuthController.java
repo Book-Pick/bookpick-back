@@ -1,8 +1,8 @@
 package BookPick.mvp.domain.user.controller;
 
-import BookPick.mvp.common.ApiResponse;
+import BookPick.mvp.global.ApiResponse;
 import BookPick.mvp.domain.user.dto.AuthDtos.*;
-import BookPick.mvp.domain.user.AuthService;
+import BookPick.mvp.domain.user.service.AuthService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -24,7 +24,7 @@ public class AuthController {
         SignRes res = authService.signUp(req);
         System.out.println(res);
         return ResponseEntity.status(HttpStatus.CREATED)   // 201
-                .body(ApiResponse.created(res));           // created 사용
+                .body(ApiResponse.created("create",res));           // created 사용
     }
 
     // 2. 로그인
@@ -33,7 +33,7 @@ public class AuthController {
 
         AuthRes authRes = authService.login(req);
         return ResponseEntity.status(HttpStatus.OK)
-                .body(ApiResponse.ok(authRes))    ;      //data 에 DTO 주기
+                .body(ApiResponse.success("success", authRes))    ;      //data 에 DTO 주기
     }
 
     // 3. 로그아웃
@@ -41,7 +41,7 @@ public class AuthController {
     @PostMapping("/logout")
     public ResponseEntity<ApiResponse<Void>> logout(){
         return ResponseEntity.status(HttpStatus.OK)
-                .body(ApiResponse.ok(null));
+                .body(ApiResponse.success("success", null));
     }
 
 

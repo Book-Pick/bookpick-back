@@ -16,7 +16,7 @@ public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "user_id")
+    @Column(name = "userId")
     private Long id; // 내부 식별자 (PK)
 
     @Column(name = "login_email", nullable = false, unique = true, length = 255)
@@ -34,7 +34,7 @@ public class User {
     @Column(length = 255)
     private String bio; // 자기소개 문구
 
-    @Column(name = "profile_image_url", length = 500)
+    @Column(name = "profileImageUrl", length = 500)
     private String profileImageUrl; // 프로필 사진 경로
 
     @CreationTimestamp

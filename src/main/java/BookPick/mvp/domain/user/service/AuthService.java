@@ -1,7 +1,8 @@
-package BookPick.mvp.domain.user;
+package BookPick.mvp.domain.user.service;
 
 import BookPick.mvp.domain.user.dto.AuthDtos.*;
 import BookPick.mvp.domain.user.entity.User;
+import BookPick.mvp.domain.user.exception.DuplicateEmailException;
 import BookPick.mvp.domain.user.repository.UserRepository;
 import BookPick.mvp.global.util.JwtUtil;
 import lombok.RequiredArgsConstructor;
@@ -22,15 +23,24 @@ public class AuthService {
 
     @Transactional
     public SignRes signUp(SignReq req) {
+        // 1. 이메일 중복 확인
+        if (userRepository.existsByEmail(req.email())) {
+            throw new DuplicateEmailException("이미 존재하는 이메일입니다.");
+        }
+
+        // 2. 신규 유저 생성
         User user = new User();
         user.setEmail(req.email());
         user.setPassword(passwordEncoder.encode(req.password()));
         user.setRole("normal_user");   // normal_user, curator
 
-        User savedUser = userRepository.save(user);         // 1. DB에 저장
+        // 3. DB 저장
+        User savedUser = userRepository.save(user);
 
+        // 4. 응답
         return new SignRes(savedUser.getId());
     }
+
 
 
     public AuthRes login(LoginReq req){

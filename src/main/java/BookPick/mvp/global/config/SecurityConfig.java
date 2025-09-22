@@ -9,6 +9,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
 @EnableWebSecurity
@@ -19,6 +20,8 @@ public class SecurityConfig {
     PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
+
+    private final JwtFilter jwtFilter;
 
     @Bean  // 이 메서드가 반환하는 객체(SecurityFilterChain)를 스프링 빈으로 등록
     SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -34,10 +37,13 @@ public class SecurityConfig {
             // URL 별 접근 권한 규칙 정의
             .authorizeHttpRequests(auth -> auth
                 // 회원가입, 로그인 요청은 인증 없이 누구나 접근 가능
-                .requestMatchers("/api/auth/signup", "/api/auth/login").permitAll()
+                .requestMatchers("/api/auth/signup", "/api/auth/login", "/api/auth/logout").permitAll()
+                .requestMatchers("/api/users/*/preferences").permitAll()
+                .requestMatchers("/v3/api-docs/**", "/swagger-ui/**", "/swagger-resources/**").permitAll()
                 // 나머지 모든 요청은 인증된 사용자만 접근 가능
                 .anyRequest().authenticated()
             )
+            .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
 
             // 위 설정으로 SecurityFilterChain 객체 생성
             .build();

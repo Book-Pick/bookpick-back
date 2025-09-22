@@ -1,8 +1,10 @@
 package BookPick.mvp.global.util;
 
+
 import BookPick.mvp.domain.user.entity.User;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
+import org.springframework.security.authentication.AuthenticationServiceException;
 import org.springframework.stereotype.Component;
 
 import io.jsonwebtoken.*;
@@ -42,6 +44,23 @@ public class JwtUtil {
                 .parseSignedClaims(token).getPayload();
         return claims;
     }
+
+    // 4. JWT 검증
+    public Claims parse(String token) {
+    try {
+        return Jwts.parser()
+                .verifyWith(key)                 // 서명 검증
+                .clockSkewSeconds(60)            // 시계 오차 허용(선택)
+                .build()
+                .parseSignedClaims(token)
+                .getPayload();
+    } catch (ExpiredJwtException e) {
+        throw new AuthenticationServiceException("TOKEN_EXPIRED", e);
+    } catch (JwtException e) {
+        throw new AuthenticationServiceException("TOKEN_INVALID", e);
+    }
+}
+
 
 
 
