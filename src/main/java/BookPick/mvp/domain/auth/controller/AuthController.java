@@ -1,7 +1,7 @@
-package BookPick.mvp.domain.user.controller;
+package BookPick.mvp.domain.auth.controller;
 
 import BookPick.mvp.global.ApiResponse;
-import BookPick.mvp.domain.user.dto.AuthDtos.*;
+import BookPick.mvp.domain.auth.dto.AuthDtos.*;
 import BookPick.mvp.domain.user.service.AuthService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;

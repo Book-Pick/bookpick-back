@@ -1,67 +1,112 @@
 package BookPick.mvp.global.util;
 
-
 import BookPick.mvp.domain.user.entity.User;
-import io.jsonwebtoken.io.Decoders;
+import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.AuthenticationServiceException;
 import org.springframework.stereotype.Component;
 
-import io.jsonwebtoken.*;
-
 import javax.crypto.SecretKey;
+import java.nio.charset.StandardCharsets;
+import java.time.Duration;
 import java.util.Date;
-
+import java.util.Map;
 
 @Component
 public class JwtUtil {
 
+    @Value("${jwt.access.secret}")
+    private String accessSecret;
 
-    // 1. 키발급
-    static final SecretKey key =
-            Keys.hmacShaKeyFor(Decoders.BASE64.decode(
-                    "jwtpassword123jwtpassword123jwtpassword123jwtpassword123jwtpassword"
-            ));
+    @Value("${jwt.access.expiration}")
+    private Duration accessExpiration;  // 15m -> Duration 으로 자동 변환
 
-    // 2. JWT 생성
-    public static String createToken(User user) {
+    @Value("${jwt.refresh.secret}")
+    private String refreshSecret;
 
+    @Value("${jwt.refresh.expiration}")
+    private Duration refreshExpiration; // 7d -> Duration 으로 자동 변환
 
-        String jwt = Jwts.builder()
-                .claim("email", user.getEmail())                             // 이메일
+    private static final int CLOCK_SKEW_SECONDS = 60;
+
+    private SecretKey getAccessKey() {
+        return Keys.hmacShaKeyFor(accessSecret.getBytes(StandardCharsets.UTF_8));
+    }
+
+    private SecretKey getRefreshKey() {
+        return Keys.hmacShaKeyFor(refreshSecret.getBytes(StandardCharsets.UTF_8));
+    }
+
+    /* ====== 토큰 생성 ====== */
+
+    public String createAccessToken(User user) {
+        return buildToken(user, getAccessKey(), accessExpiration, "access");
+    }
+
+    public String createRefreshToken(User user) {
+        return buildToken(user, getRefreshKey(), refreshExpiration, "refresh");
+    }
+
+    public Map<String, String> createTokenPair(User user) {
+        return Map.of(
+                "accessToken", createAccessToken(user),
+                "refreshToken", createRefreshToken(user)
+        );
+    }
+
+    private String buildToken(User user, SecretKey key, Duration ttl, String typ) {
+        long now = System.currentTimeMillis();
+        return Jwts.builder()
+                .subject(user.getEmail())
+                .claim("email", user.getEmail())
                 .claim("role", user.getRole())
-                .issuedAt(new Date(System.currentTimeMillis()))                 // 발급 시간
-                .expiration(new Date(System.currentTimeMillis() + 1000*60*60))  // 만료 시간
-                .signWith(key)                                                  // 비밀키 서명
+                .claim("typ", typ)
+                .issuedAt(new Date(now))
+                .expiration(new Date(now + ttl.toMillis())) // Duration 을 millis 로 변환
+                .signWith(key)
                 .compact();
-        return jwt;
     }
 
+    /* ====== 파싱/검증 ====== */
 
-    //3. JWT 오픈
-    public static Claims extractToken(String token) {
-        Claims claims = Jwts.parser().verifyWith(key).build()
-                .parseSignedClaims(token).getPayload();
-        return claims;
+    public Claims parseAccess(String accessToken) {
+        try {
+            Claims claims = Jwts.parser()
+                    .verifyWith(getAccessKey())
+                    .clockSkewSeconds(CLOCK_SKEW_SECONDS)
+                    .build()
+                    .parseSignedClaims(accessToken)
+                    .getPayload();
+
+            if (!"access".equals(claims.get("typ"))) {
+                throw new AuthenticationServiceException("TOKEN_TYPE_MISMATCH");
+            }
+            return claims;
+        } catch (ExpiredJwtException e) {
+            throw new AuthenticationServiceException("TOKEN_EXPIRED", e);
+        } catch (JwtException e) {
+            throw new AuthenticationServiceException("TOKEN_INVALID", e);
+        }
     }
 
-    // 4. JWT 검증
-    public Claims parse(String token) {
-    try {
-        return Jwts.parser()
-                .verifyWith(key)                 // 서명 검증
-                .clockSkewSeconds(60)            // 시계 오차 허용(선택)
-                .build()
-                .parseSignedClaims(token)
-                .getPayload();
-    } catch (ExpiredJwtException e) {
-        throw new AuthenticationServiceException("TOKEN_EXPIRED", e);
-    } catch (JwtException e) {
-        throw new AuthenticationServiceException("TOKEN_INVALID", e);
+    public Claims parseRefresh(String refreshToken) {
+        try {
+            Claims claims = Jwts.parser()
+                    .verifyWith(getRefreshKey())
+                    .clockSkewSeconds(CLOCK_SKEW_SECONDS)
+                    .build()
+                    .parseSignedClaims(refreshToken)
+                    .getPayload();
+
+            if (!"refresh".equals(claims.get("typ"))) {
+                throw new AuthenticationServiceException("TOKEN_TYPE_MISMATCH");
+            }
+            return claims;
+        } catch (ExpiredJwtException e) {
+            throw new AuthenticationServiceException("TOKEN_EXPIRED", e);
+        } catch (JwtException e) {
+            throw new AuthenticationServiceException("TOKEN_INVALID", e);
+        }
     }
-}
-
-
-
-
 }

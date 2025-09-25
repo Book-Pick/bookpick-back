@@ -1,6 +1,6 @@
-package BookPick.mvp.domain.Author.repository;
+package BookPick.mvp.domain.author.repository;
 
-import BookPick.mvp.domain.Author.entity.Author;
+import BookPick.mvp.domain.author.entity.Author;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;

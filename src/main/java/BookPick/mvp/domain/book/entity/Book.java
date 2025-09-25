@@ -1,7 +1,7 @@
-package BookPick.mvp.domain.Book.entity;
+package BookPick.mvp.domain.book.entity;
 
 
-import BookPick.mvp.domain.Author.entity.Author;
+import BookPick.mvp.domain.author.entity.Author;
 import jakarta.persistence.*;
 import lombok.*;
 

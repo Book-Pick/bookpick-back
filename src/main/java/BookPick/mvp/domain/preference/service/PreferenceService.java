@@ -1,9 +1,9 @@
 package BookPick.mvp.domain.preference.service;
 
-import BookPick.mvp.domain.Author.entity.Author;
-import BookPick.mvp.domain.Author.repository.AuthorRepository;
-import BookPick.mvp.domain.Book.entity.Book;
-import BookPick.mvp.domain.Book.repository.BookRepository;
+import BookPick.mvp.domain.author.entity.Author;
+import BookPick.mvp.domain.author.repository.AuthorRepository;
+import BookPick.mvp.domain.book.entity.Book;
+import BookPick.mvp.domain.book.repository.BookRepository;
 import BookPick.mvp.domain.preference.dto.PreferenceDtos.*;
 import BookPick.mvp.domain.preference.entity.UserPreference;
 import BookPick.mvp.domain.preference.repository.PreferenceRepository;

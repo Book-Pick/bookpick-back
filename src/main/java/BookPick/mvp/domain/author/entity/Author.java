@@ -1,4 +1,4 @@
-package BookPick.mvp.domain.Author.entity;
+package BookPick.mvp.domain.author.entity;
 
 
 import jakarta.persistence.*;

@@ -1,4 +1,4 @@
-package BookPick.mvp.domain.user.exception;
+package BookPick.mvp.domain.auth.exception;
 
 public class InvalidLoginException extends RuntimeException {
     public InvalidLoginException() {

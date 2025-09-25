@@ -1,8 +1,8 @@
 package BookPick.mvp.global.exception;
 
 import BookPick.mvp.global.ApiResponse;
-import BookPick.mvp.domain.user.exception.DuplicateEmailException;
-import BookPick.mvp.domain.user.exception.InvalidLoginException;
+import BookPick.mvp.domain.auth.exception.DuplicateEmailException;
+import BookPick.mvp.domain.auth.exception.InvalidLoginException;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

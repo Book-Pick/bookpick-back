@@ -1,8 +1,8 @@
 package BookPick.mvp.domain.user.service;
 
-import BookPick.mvp.domain.user.dto.AuthDtos.*;
+import BookPick.mvp.domain.auth.dto.AuthDtos.*;
 import BookPick.mvp.domain.user.entity.User;
-import BookPick.mvp.domain.user.exception.DuplicateEmailException;
+import BookPick.mvp.domain.auth.exception.DuplicateEmailException;
 import BookPick.mvp.domain.user.repository.UserRepository;
 import BookPick.mvp.global.util.JwtUtil;
 import lombok.RequiredArgsConstructor;

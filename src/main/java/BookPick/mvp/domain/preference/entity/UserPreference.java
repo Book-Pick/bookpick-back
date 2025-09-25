@@ -1,7 +1,7 @@
 package BookPick.mvp.domain.preference.entity;
 
-import BookPick.mvp.domain.Author.entity.Author;
-import BookPick.mvp.domain.Book.entity.Book;
+import BookPick.mvp.domain.author.entity.Author;
+import BookPick.mvp.domain.book.entity.Book;
 import BookPick.mvp.domain.preference.dto.PreferenceDtos.CreateReq;
 import BookPick.mvp.domain.preference.dto.PreferenceDtos.UpdateReq;
 import BookPick.mvp.domain.user.entity.User;

@@ -1,7 +1,7 @@
 package BookPick.mvp.domain.preference.dto;
 
-import BookPick.mvp.domain.Author.entity.Author;
-import BookPick.mvp.domain.Book.entity.Book;
+import BookPick.mvp.domain.author.entity.Author;
+import BookPick.mvp.domain.book.entity.Book;
 import BookPick.mvp.domain.preference.entity.UserPreference;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;

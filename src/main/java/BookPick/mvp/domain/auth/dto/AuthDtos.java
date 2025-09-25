@@ -1,4 +1,4 @@
-package BookPick.mvp.domain.user.dto;
+package BookPick.mvp.domain.auth.dto;
 
 
 import jakarta.validation.constraints.Email;
@@ -37,7 +37,10 @@ public class AuthDtos {
         String nickname,
         String bio,
         String profileImageUrl,
-        String accessToken
+        String accessToken,
+        String refreshToken,   // 👈 추가
+        long   expiresIn       // 👈 선택: Access 만료(초)
+
 ) {}
 
 
