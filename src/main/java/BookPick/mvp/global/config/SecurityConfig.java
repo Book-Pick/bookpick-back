@@ -40,9 +40,11 @@ public class SecurityConfig {
                 .requestMatchers("/api/auth/signup", "/api/auth/login", "/api/auth/logout").permitAll()
                 .requestMatchers("/api/users/*/preferences").permitAll()
                 .requestMatchers("/v3/api-docs/**", "/swagger-ui/**", "/swagger-resources/**").permitAll()
+                .requestMatchers("/error").permitAll()
                 // 나머지 모든 요청은 인증된 사용자만 접근 가능
                 .anyRequest().authenticated()
             )
+
             .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
 
             // 위 설정으로 SecurityFilterChain 객체 생성

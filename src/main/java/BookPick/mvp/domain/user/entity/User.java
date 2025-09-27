@@ -1,5 +1,6 @@
 package BookPick.mvp.domain.user.entity;
 
+import BookPick.mvp.domain.auth.Roles;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -28,8 +29,9 @@ public class User {
     @Column(length = 50)
     private String nickname; // 프로필 닉네임
 
+    @Enumerated(EnumType.STRING)
     @Column(length = 20)
-    private String role;  // ROLE_USER, ROLE_ADMIN 등
+    private Roles role;  // ROLE_USER, ROLE_ADMIN 등
 
     @Column(length = 255)
     private String bio; // 자기소개 문구

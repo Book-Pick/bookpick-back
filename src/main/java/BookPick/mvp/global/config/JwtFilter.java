@@ -1,90 +1,120 @@
 package BookPick.mvp.global.config;
 
+import BookPick.mvp.domain.auth.service.MyUserDetailsService.*;
 import BookPick.mvp.global.ApiResponse;
-import BookPick.mvp.global.util.JwtUtil; // JWT 파싱/검증 유틸
+import BookPick.mvp.global.util.JwtUtil;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import io.jsonwebtoken.Claims; // JWT Payload(클레임) 타입
-import jakarta.servlet.FilterChain; // 필터 체인 (다음 필터 호출용)
-import jakarta.servlet.ServletException; // 서블릿 예외
-import jakarta.servlet.http.HttpServletRequest; // HTTP 요청
-import jakarta.servlet.http.HttpServletResponse; // HTTP 응답
-import lombok.RequiredArgsConstructor; // 생성자 자동 생성
-import org.springframework.security.authentication.AuthenticationServiceException; // 인증 관련 예외
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken; // 인증 객체 구현체
-import org.springframework.security.core.authority.SimpleGrantedAuthority; // 권한 객체
-import org.springframework.security.core.context.SecurityContextHolder; // 인증 정보를 담는 컨텍스트
-import org.springframework.stereotype.Component; // 스프링 빈 등록
-import org.springframework.web.filter.OncePerRequestFilter; // 요청마다 한 번 실행되는 필터
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.JwtException;
+import jakarta.servlet.FilterChain;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import lombok.RequiredArgsConstructor;
+import org.springframework.security.authentication.AuthenticationServiceException;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
+import org.springframework.stereotype.Component;
+import org.springframework.web.filter.OncePerRequestFilter;
 
-import java.io.IOException; // IO 예외
-import java.util.List; // 권한 리스트
+import java.io.IOException;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.List;
 
-/**
- * JWT 필터 (MVP 버전, 리프레시 없음)
- * - Authorization 헤더에서 토큰 추출
- * - JwtUtil.parse(token)으로 만료/서명 검증
- * - 성공하면 SecurityContext에 인증 정보 세팅
- * - 실패하면 401 Unauthorized 반환
- */
-@Component // 스프링 컴포넌트 스캔에 의해 빈 등록
-@RequiredArgsConstructor // final 필드 생성자 자동 주입
+@Component
+@RequiredArgsConstructor
 public class JwtFilter extends OncePerRequestFilter {
 
-    private final JwtUtil jwtUtil; // JwtUtil 주입받음
-
-    private static final String AUTH_HEADER = "Authorization"; // 토큰이 담기는 헤더 이름
-    private static final String BEARER = "Bearer ";            // 토큰 앞에 붙는 접두어
-
     @Override
-    protected void doFilterInternal(HttpServletRequest request,   // 들어온 요청
-                                    HttpServletResponse response, // 응답
-                                    FilterChain chain)            // 필터 체인 : 필터들을 관리하는 객체 , chain.dofilter -> 다음필터 실행
-            throws ServletException, IOException {
+    protected void doFilterInternal(
+            HttpServletRequest request, HttpServletResponse response, FilterChain filterChain
+    ) throws ServletException, IOException {
 
-        // 1. 요청 헤더에서 Authorization 값 꺼냄
-        String header = request.getHeader(AUTH_HEADER);
-
-        // 2. 헤더가 없거나 Bearer로 시작하지 않으면 → 그냥 다음 필터로 넘김
-        if (header == null || !header.startsWith(BEARER)) {
-            chain.doFilter(request, response);      // 다음 필터로 넘기는 코드
+        Cookie jwtCookie = findCookie(request, "jwt");
+        if (jwtCookie == null || isAuthenticatedAlready()) {
+            filterChain.doFilter(request, response);
             return;
         }
 
-        // 3. "Bearer " 부분 제거하고 실제 토큰만 추출
-        String token = header.substring(BEARER.length()).trim();
-
         try {
-            // 4. JwtUtil로 토큰 검증 (만료·서명 체크 포함)
-            Claims claims = jwtUtil.parse(token);
+            // 1) 파싱/검증
+            Claims claim = JwtUtil.extractToken(jwtCookie.getValue());
 
-            // 5. 클레임에서 사용자 정보 꺼내기
-            String email = claims.get("email", String.class);
-            String role  = claims.get("role", String.class);
+            // 2) 인증 세팅
+            String[] arr = claim.get("authorities").toString().split(",");
+            var authorities = Arrays.stream(arr).map(SimpleGrantedAuthority::new).toList();
 
-            // 6. 권한 객체 생성 (ROLE_ 접두어 보정)
-            SimpleGrantedAuthority authority =
-                    (role != null && role.startsWith("ROLE_"))
-                            ? new SimpleGrantedAuthority(role)
-                            : new SimpleGrantedAuthority("ROLE_" + role);
+            String email = String.valueOf(claim.get("email"));
 
-            // 7. 인증 객체 생성 (principal: email, credentials: null, authorities: 권한)
-            UsernamePasswordAuthenticationToken authentication =
-                    new UsernamePasswordAuthenticationToken(email, null, List.of(authority));
+            AuthPrincipal principal = new AuthPrincipal(email, authorities);
 
-            // 8. SecurityContext에 인증 객체 저장
-            SecurityContextHolder.getContext().setAuthentication(authentication);
+            var authToken = new UsernamePasswordAuthenticationToken(principal, null, authorities);
+            authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+            SecurityContextHolder.getContext().setAuthentication(authToken);
 
-            // 9. 다음 필터로 진행
-            chain.doFilter(request, response);
-
-        } catch (AuthenticationServiceException ex) {
-            // 10. 토큰이 만료되었거나 유효하지 않음
-            SecurityContextHolder.clearContext(); // 기존 인증 정보 제거
-            ApiResponse<Void> body = new ApiResponse<>(401, ex.getMessage(), null);
-            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED); // 401 반환
-            response.setContentType("application/json;charset=UTF-8"); // JSON 응답
-            new ObjectMapper().writeValue(response.getWriter(), body);
-            return; // 컨트롤러로 요청 안 넘어감
+            filterChain.doFilter(request, response);
+        } catch (ExpiredJwtException e) {
+            // 만료 토큰: 쿠키 제거
+            clearJwtCookie(response);
+            // API 경로면 401, 뷰/정적은 계속 통과
+            if (isApi(request)) {
+                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                return;
+            }
+            filterChain.doFilter(request, response);
+        } catch (JwtException | IllegalArgumentException e) {
+            // 서명 불일치/손상 등: 쿠키 제거 후 동일 처리
+            clearJwtCookie(response);
+            if (isApi(request)) {
+                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                return;
+            }
+            filterChain.doFilter(request, response);
         }
     }
+
+    private boolean isAuthenticatedAlready() {
+        return SecurityContextHolder.getContext().getAuthentication() != null;
+    }
+
+    private boolean isApi(HttpServletRequest req) {
+        String uri = req.getRequestURI();
+        return uri != null && uri.startsWith("/api/");
+    }
+
+    private Cookie findCookie(HttpServletRequest request, String name) {
+        Cookie[] cookies = request.getCookies();
+        if (cookies == null) return null;
+        for (Cookie c : cookies) if (name.equals(c.getName())) return c;
+        return null;
+    }
+
+    private void clearJwtCookie(HttpServletResponse res) {
+        Cookie c = new Cookie("jwt", null);
+        c.setPath("/");
+        c.setMaxAge(0);
+        c.setHttpOnly(true);
+        res.addCookie(c);
+    }
+
+    public static class AuthPrincipal extends User {
+        private Long id;
+        private String email;
+
+        public AuthPrincipal(
+                String email,
+                Collection<? extends GrantedAuthority> authorities
+        ){
+            super(email, "",authorities);
+        }
+
+    }
+
 }

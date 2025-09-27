@@ -37,10 +37,7 @@ public class AuthDtos {
         String nickname,
         String bio,
         String profileImageUrl,
-        String accessToken,
-        String refreshToken,   // 👈 추가
-        long   expiresIn       // 👈 선택: Access 만료(초)
-
+        String access
 ) {}
 
 

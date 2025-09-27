@@ -2,7 +2,8 @@ package BookPick.mvp.domain.auth.controller;
 
 import BookPick.mvp.global.ApiResponse;
 import BookPick.mvp.domain.auth.dto.AuthDtos.*;
-import BookPick.mvp.domain.user.service.AuthService;
+import BookPick.mvp.domain.auth.service.AuthService;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -29,9 +30,9 @@ public class AuthController {
 
     // 2. 로그인
     @PostMapping("/login")
-    public ResponseEntity<ApiResponse<AuthRes>> login(@Valid @RequestBody LoginReq req){
+    public ResponseEntity<ApiResponse<AuthRes>> login(@Valid @RequestBody LoginReq req, HttpServletResponse res){
 
-        AuthRes authRes = authService.login(req);
+        AuthRes authRes = authService.login(req, res);
         return ResponseEntity.status(HttpStatus.OK)
                 .body(ApiResponse.success("success", authRes))    ;      //data 에 DTO 주기
     }
