@@ -8,10 +8,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/auth")
@@ -37,13 +34,6 @@ public class AuthController {
                 .body(ApiResponse.success("success", authRes))    ;      //data 에 DTO 주기
     }
 
-    // 3. 로그아웃
-    // Note : 서베에서는 별도 로직 x, 클라이언트가 토큰 지움
-    @PostMapping("/logout")
-    public ResponseEntity<ApiResponse<Void>> logout(){
-        return ResponseEntity.status(HttpStatus.OK)
-                .body(ApiResponse.success("success", null));
-    }
 
 
 }

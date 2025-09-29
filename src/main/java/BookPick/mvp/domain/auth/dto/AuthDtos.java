@@ -23,6 +23,7 @@ public class AuthDtos {
     }
 
 
+
     // 2. 로그인
     //Req
     public record LoginReq(
@@ -38,7 +39,13 @@ public class AuthDtos {
         String bio,
         String profileImageUrl,
         String access
-) {}
+) {
+         public AuthRes(long userId){
+             this(userId,null,null,null,null,null);
+         }
+    }
+
+    AuthRes authRes = new  AuthRes(1);
 
 
 

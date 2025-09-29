@@ -5,6 +5,8 @@ import BookPick.mvp.domain.user.entity.User;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
+import jakarta.servlet.http.HttpServletRequest;
+import org.springframework.http.HttpHeaders;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
 
@@ -25,6 +27,9 @@ public class JwtUtil {
                     "jwtpassword123jwtpassword123jwtpassword123jwtpassword123jwtpassword"
             ));
 
+    // (추가) 토큰 수명 상수
+    private static final long ACCESS_TTL_MS  = 1000L * 60 * 60;          // 1시간
+    private static final long REFRESH_TTL_MS = 1000L * 60 * 60 * 24 * 14; // 14일
 
     // 2. JWT 생성
     public static String createAccessToken(Authentication auth) {
@@ -46,6 +51,19 @@ public class JwtUtil {
         return jwt;
     }
 
+    // ✅ 2-1. Refresh 토큰 생성 (여기 추가)
+    public static String createRefreshToken(Authentication auth) {
+        CustomUser usr = (CustomUser) auth.getPrincipal();
+
+        // refresh 토큰에는 최소 정보만: subject/email + typ 정도만 권장
+        return Jwts.builder()
+                .claim("email", usr.getUsername())
+                .claim("typ", "refresh") // (권장) 토큰 타입 명시
+                .issuedAt(new Date(System.currentTimeMillis()))
+                .expiration(new Date(System.currentTimeMillis() + REFRESH_TTL_MS))
+                .signWith(key)
+                .compact();
+    }
 
 
     //3. JWT 오픈
@@ -54,5 +72,9 @@ public class JwtUtil {
                 .parseSignedClaims(token).getPayload();
         return claims;
     }
-}
+
+
+    }
+
+
 

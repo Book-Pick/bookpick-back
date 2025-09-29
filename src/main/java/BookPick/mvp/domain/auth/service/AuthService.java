@@ -8,6 +8,7 @@ import BookPick.mvp.domain.auth.exception.DuplicateEmailException;
 import BookPick.mvp.domain.user.repository.UserRepository;
 import BookPick.mvp.global.util.JwtUtil;
 import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -56,6 +57,7 @@ public class AuthService {
 
 
 
+
     // access Token 만 전송, refresh x
     @Transactional(readOnly = true)
     public AuthRes login(LoginReq req, HttpServletResponse res) {
@@ -65,6 +67,7 @@ public class AuthService {
 
             // Access 토큰만 발급
             String access = JwtUtil.createAccessToken(auth);
+            String refresh = JwtUtil.createRefreshToken(auth);
 
             var principal = (MyUserDetailsService.CustomUser) auth.getPrincipal();
 
@@ -77,7 +80,7 @@ public class AuthService {
                     principal.getNickname(),
                     principal.getBio(),
                     principal.getProfileImageUrl(),
-                    access                     // 프론트가 Authorization: Bearer 로 전송
+                    refresh                     // 프론트가 Authorization: Bearer 로 전송
             );
         } catch (BadCredentialsException | UsernameNotFoundException e) {
             throw new InvalidLoginException("아이디 또는 비밀번호가 잘못되었습니다.");
@@ -85,5 +88,7 @@ public class AuthService {
             throw new InvalidLoginException("로그인 실패");
         }
     }
+
+
 
 }

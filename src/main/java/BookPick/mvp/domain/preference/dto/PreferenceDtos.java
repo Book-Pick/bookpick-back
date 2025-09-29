@@ -1,7 +1,6 @@
 package BookPick.mvp.domain.preference.dto;
 
-import BookPick.mvp.domain.author.entity.Author;
-import BookPick.mvp.domain.book.entity.Book;
+
 import BookPick.mvp.domain.preference.entity.UserPreference;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -55,12 +54,8 @@ public class PreferenceDtos {
     return new PreferenceRes(
         p.getId(),
         p.getMbti(),
-        p.getFavoriteAuthors().stream()
-            .map(Author::getName) // Author → String
-            .toList(),
-        p.getFavoriteBooks().stream()
-            .map(Book::getTitle) // Book → String
-            .toList(),
+        p.getFavoriteAuthors(),
+        p.getFavoriteBooks(),
         p.getSelectionCriteria(),
         p.getReadingHabits(),
         p.getPreferredGenres(),

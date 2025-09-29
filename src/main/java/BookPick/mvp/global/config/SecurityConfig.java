@@ -10,6 +10,11 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+
+import java.util.List;
 
 @Configuration
 @EnableWebSecurity
@@ -49,5 +54,29 @@ public class SecurityConfig {
 
             // 위 설정으로 SecurityFilterChain 객체 생성
             .build();
+    }
+
+    @Bean
+    public CorsConfigurationSource corsConfigurationSource() {
+        CorsConfiguration config = new CorsConfiguration();
+
+        // allowCredentials(true) 를 쓰면 "*" 와일드카드는 안 됩니다. 꼭 구체적으로!
+        config.setAllowedOrigins(List.of(
+            "http://localhost:5173"
+        ));
+        // 터널 도메인이 자주 바뀌면 패턴 허용도 가능 (Boot 3+)
+        config.setAllowedOriginPatterns(List.of(
+            "https://*.trycloudflare.com"
+        ));
+
+        config.setAllowedMethods(List.of("GET","POST","PUT","PATCH","DELETE","OPTIONS"));
+        config.setAllowedHeaders(List.of("Authorization","Content-Type","X-Requested-With","Accept","Origin"));
+        config.setAllowCredentials(true);
+        // 필요 시 preflight 캐시 시간(초)
+        // config.setMaxAge(3600L);
+
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", config);
+        return source;
     }
 }

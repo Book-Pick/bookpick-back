@@ -1,7 +1,5 @@
 package BookPick.mvp.domain.preference.entity;
 
-import BookPick.mvp.domain.author.entity.Author;
-import BookPick.mvp.domain.book.entity.Book;
 import BookPick.mvp.domain.preference.dto.PreferenceDtos.CreateReq;
 import BookPick.mvp.domain.preference.dto.PreferenceDtos.UpdateReq;
 import BookPick.mvp.domain.user.entity.User;
@@ -32,22 +30,12 @@ public class UserPreference {
 
     private String mbti;
 
-    @ManyToMany
-    @JoinTable(
-        name = "preference_authors",
-        joinColumns = @JoinColumn(name = "preference_id"),
-        inverseJoinColumns = @JoinColumn(name = "author_id")
-    )
-    private List<Author> favoriteAuthors;
+
+    private List<String> favoriteAuthors;
 
 
-    @ManyToMany
-    @JoinTable(
-        name = "preference_books",
-        joinColumns = @JoinColumn(name = "preference_id"),
-        inverseJoinColumns = @JoinColumn(name = "book_id")
-    )
-    private List<Book> favoriteBooks;
+
+    private List<String> favoriteBooks;
 
     @ElementCollection
     @CollectionTable(name = "preference_selection_criteria", joinColumns = @JoinColumn(name = "preference_id"))

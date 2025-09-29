@@ -13,6 +13,7 @@ import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.AuthenticationServiceException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.GrantedAuthority;
@@ -32,52 +33,49 @@ import java.util.List;
 @RequiredArgsConstructor
 public class JwtFilter extends OncePerRequestFilter {
 
+    private static final String BEARER = "Bearer";
+
+
+
+
     @Override
     protected void doFilterInternal(
             HttpServletRequest request, HttpServletResponse response, FilterChain filterChain
     ) throws ServletException, IOException {
 
-        Cookie jwtCookie = findCookie(request, "jwt");
-        if (jwtCookie == null || isAuthenticatedAlready()) {
+
+        // 이미 인증된 상태면 패스
+        if (SecurityContextHolder.getContext().getAuthentication() != null) {
             filterChain.doFilter(request, response);
             return;
         }
 
-        try {
-            // 1) 파싱/검증
-            Claims claim = JwtUtil.extractToken(jwtCookie.getValue());
-
-            // 2) 인증 세팅
-            String[] arr = claim.get("authorities").toString().split(",");
-            var authorities = Arrays.stream(arr).map(SimpleGrantedAuthority::new).toList();
-
-            String email = String.valueOf(claim.get("email"));
-
-            AuthPrincipal principal = new AuthPrincipal(email, authorities);
-
-            var authToken = new UsernamePasswordAuthenticationToken(principal, null, authorities);
-            authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-            SecurityContextHolder.getContext().setAuthentication(authToken);
-
-            filterChain.doFilter(request, response);
-        } catch (ExpiredJwtException e) {
-            // 만료 토큰: 쿠키 제거
-            clearJwtCookie(response);
-            // API 경로면 401, 뷰/정적은 계속 통과
-            if (isApi(request)) {
-                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+        String token = resolveAccessToken(request);
+            if (token == null) { // 토큰 없으면 그냥 통과
+                filterChain.doFilter(request, response);
                 return;
             }
-            filterChain.doFilter(request, response);
-        } catch (JwtException | IllegalArgumentException e) {
-            // 서명 불일치/손상 등: 쿠키 제거 후 동일 처리
-            clearJwtCookie(response);
-            if (isApi(request)) {
-                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-                return;
-            }
-            filterChain.doFilter(request, response);
+
+    try {
+            Claims claims = JwtUtil.extractToken(token);
+
+            var authorities = Arrays.stream(
+                    claims.get("authorities").toString().split(",")
+            ).map(SimpleGrantedAuthority::new).toList();
+
+            var auth = new UsernamePasswordAuthenticationToken(
+                    claims.get("email"), null, authorities
+            );
+            auth.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+
+            SecurityContextHolder.getContext().setAuthentication(auth);
+
+        } catch (ExpiredJwtException   e) {
+            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            return;
         }
+
+        filterChain.doFilter(request, response);
     }
 
     private boolean isAuthenticatedAlready() {
@@ -115,6 +113,14 @@ public class JwtFilter extends OncePerRequestFilter {
             super(email, "",authorities);
         }
 
+    }
+
+    private String resolveAccessToken(HttpServletRequest request) {
+        String header = request.getHeader(HttpHeaders.AUTHORIZATION);
+        if (header != null && header.startsWith(BEARER)) {
+            return header.substring(BEARER.length()).trim();
+        }
+        return null;
     }
 
 }
