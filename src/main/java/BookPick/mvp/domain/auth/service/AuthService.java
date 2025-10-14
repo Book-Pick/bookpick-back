@@ -2,6 +2,7 @@ package BookPick.mvp.domain.auth.service;
 
 import BookPick.mvp.domain.auth.Roles;
 import BookPick.mvp.domain.auth.dto.AuthDtos.*;
+import BookPick.mvp.domain.auth.exception.DuplicateEmailException;
 import BookPick.mvp.domain.auth.exception.InvalidLoginException;
 import BookPick.mvp.domain.user.entity.User;
 import BookPick.mvp.domain.user.repository.UserRepository;
@@ -34,26 +35,25 @@ public class AuthService {
 
     @Transactional
     public SignRes signUp(SignReq req) {
-         // 1. 중복 확인
+
+        // 1. 중복 확인
         if (userRepository.existsAllByEmail((req.email()))) {
-            throw new DuplicateResourceException(ErrorCode.DUPLICATE_EMAIL);
+            throw new DuplicateEmailException();
         }
 
         // 2. 신규 유저 생성
-        User user = new User();
-        user.setEmail(req.email());
-        user.setPassword(passwordEncoder.encode(req.password()));
-        user.setRole(Roles.ROLE_USER);   // normal_user, curator
+        User user = User.builder()
+                .email(req.email())
+                .password(passwordEncoder.encode(req.password()))
+                .role(Roles.ROLE_USER)
+                .build();
 
         // 3. DB 저장
-        User savedUser = userRepository.save(user);
+        User saved = userRepository.save(user);
 
         // 4. 응답
-        return new SignRes(savedUser.getId());
+        return  SignRes.from(saved.getId());
     }
-
-
-
 
 
     // access Token 만 전송, refresh x
@@ -81,12 +81,11 @@ public class AuthService {
                     "Bearer " + access
             );
         } catch (BadCredentialsException | UsernameNotFoundException e) {
-            throw new InvalidLoginException("아이디 또는 비밀번호가 잘못되었습니다.");
+            throw new InvalidLoginException();
         } catch (AuthenticationException e) {
-            throw new InvalidLoginException("로그인 실패");
+            throw new InvalidLoginException();
         }
     }
-
 
 
 }

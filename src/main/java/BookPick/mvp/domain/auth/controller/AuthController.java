@@ -17,16 +17,16 @@ import org.springframework.web.bind.annotation.*;
 public class AuthController {
 
     private final AuthService authService;
-    // 1. 회원가입
+
    @PostMapping("/signup")
     public ResponseEntity<ApiResponse<SignRes>> signUp(@Valid @RequestBody SignReq req) {
+       SignRes signRes = authService.signUp(req);
 
-
-        return ResponseEntity.status(HttpStatus.CREATED)   // 201
-                .body(ApiResponse.success(SuccessCode.REGISTER_SUCCESS,authService.signUp(req)));           // code, message, DTO 반환
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(ApiResponse.success(SuccessCode.REGISTER_SUCCESS, signRes));
     }
 
-    // 2. 로그인
+
     @PostMapping("/login")
     public ResponseEntity<ApiResponse<AuthRes>> login(@Valid @RequestBody LoginReq req, HttpServletResponse res){
 
