@@ -11,7 +11,7 @@ import lombok.Setter;
 public class DuplicateResourceException extends RuntimeException{
         ErrorCode errorCode;
 
-    public DuplicateResourceException(ErrorCode errorCode){
-        super(errorCode.getMessage()); // Throwable의 detailMessage에 message 저장
+    public DuplicateResourceException(){
+        super(ErrorCode.DUPLICATE_EMAIL.getMessage());
     }
 }
