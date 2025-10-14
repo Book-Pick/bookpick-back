@@ -17,8 +17,9 @@ public class PreferenceService {
 
     @Transactional
     public PreferenceRes create(Long userId, CreateReq req) {
-        User user = new User();
-        user.setId(userId);
+        User user = User.builder()
+                .id(userId)
+                .build();
 
         if (preferenceRepository.existsByUserId(userId)) {
             throw new IllegalStateException("이미 등록된 선호정보가 있습니다.");
@@ -26,7 +27,7 @@ public class PreferenceService {
 
         // --- 문자열 요청 → 엔티티 변환 ---
         List<String> authors = req.favoriteAuthors();  // ["1", "2", "3"]
-        List<String> books   = req.favoriteBooks();    // ["1", "2", "3"]
+        List<String> books = req.favoriteBooks();    // ["1", "2", "3"]
 
         // --- UserPreference 생성 ---
         UserPreference pref = UserPreference.from(req, user);

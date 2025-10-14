@@ -8,57 +8,45 @@ import jakarta.validation.constraints.Size;
 public class AuthDtos {
 
 
-
-    // 1. 회원가입
-    //Req
-     public record SignReq(
+    // -- SignUp --
+    public record SignReq(
             @NotBlank @Email String email,
-            @Size(min=8, max = 72 ) String password
-    ){ }
-
-    //res
+            @Size(min = 8, max = 72) String password
+    ) {}
     public record SignRes(
             long userId
-    ){
+    ) {
+        public static SignRes from(long userId) {
+            return new SignRes(userId);
+        }
     }
 
 
-
-    // 2. 로그인
-    //Req
+    // -- Login --
     public record LoginReq(
             @NotBlank @Email String email,
-            @Size(min=8, max = 72 ) String password
-    ){}
-
-    //Res
+            @Size(min = 8, max = 72) String password
+    ) {}
     public record AuthRes(
-        long userId,
-        String email,
-        String nickname,
-        String bio,
-        String profileImageUrl,
-        String accessToken
-) {
-         public AuthRes(long userId){
-             this(userId,null,null,null,null,null);
-         }
+            long userId,
+            String email,
+            String nickname,
+            String bio,
+            String profileImageUrl,
+            String accessToken
+    ) {
     }
-
-    AuthRes authRes = new  AuthRes(1);
-
-
 
 
     // 3. 로그아
     public record LogoutReq(
-        @NotBlank String refreshToken
-    ){
+            @NotBlank String refreshToken
+    ) {
     }
 
     // 3. 토큰 재발급 요청
     public record RefreshToken(
-        @NotBlank String refreshToken
-    ){
+            @NotBlank String refreshToken
+    ) {
     }
 }
