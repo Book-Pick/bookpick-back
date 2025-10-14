@@ -30,6 +30,7 @@ public class PreferenceDtos {
     public record UpdateReq(
             @NotBlank String mbti,
             @NotNull List<String> favoriteAuthors,
+            @NotNull List<String> favoriteBooks,
             @NotNull List<String> selectionCriteria,
             @NotNull List<String> readingHabits,
             @NotNull List<String> preferredGenres,

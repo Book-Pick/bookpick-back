@@ -10,7 +10,7 @@ public enum ErrorCode {
 
     // -- Auth
     INVALID_REQUEST(HttpStatus.BAD_REQUEST, "잘못된 요청입니다."),                          // 400 회원 가입
-    DUPLICATE_EMAIL(HttpStatus.CONFLICT, "중복된 이메일 입니다."),                           // 409 회원 가입
+    DUPLICATE_EMAIL(HttpStatus.CONFLICT, "이미 존재하는 이메일 입니다."),                           // 409 회원 가입
     AUTHENTICATION_FAILED(HttpStatus.UNAUTHORIZED, "아이디 또는 비밀번호가 잘 못 되었습니다."),  // 401 로그인
 
     // -- User --

@@ -29,7 +29,7 @@ public class JwtUtil {
 
     // 2. JWT 생성
     public static String createAccessToken(Authentication auth) {
-        CustomUser usr = (CustomUser) auth.getPrincipal();
+        CustomUserDetails usr = (CustomUserDetails) auth.getPrincipal();
 
         String authorities = auth.getAuthorities().stream()                 //getAuthorities -> List<auth객체> return
                 .map(a->a.getAuthority())   // getAuthority() -> String return
@@ -50,7 +50,7 @@ public class JwtUtil {
 
     // ✅ 2-1. Refresh 토큰 생성 (여기 추가)
     public static String createRefreshToken(Authentication auth) {
-        CustomUser usr = (CustomUser) auth.getPrincipal();
+        CustomUserDetails usr = (CustomUserDetails) auth.getPrincipal();
 
         // refresh 토큰에는 최소 정보만: subject/email + typ 정도만 권장
         return Jwts.builder()
