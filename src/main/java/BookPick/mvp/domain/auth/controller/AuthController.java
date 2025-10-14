@@ -18,9 +18,9 @@ public class AuthController {
 
     private final AuthService authService;
 
-   @PostMapping("/signup")
+    @PostMapping("/signup")
     public ResponseEntity<ApiResponse<SignRes>> signUp(@Valid @RequestBody SignReq req) {
-       SignRes signRes = authService.signUp(req);
+        SignRes signRes = authService.signUp(req);
 
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(ApiResponse.success(SuccessCode.REGISTER_SUCCESS, signRes));
@@ -28,13 +28,12 @@ public class AuthController {
 
 
     @PostMapping("/login")
-    public ResponseEntity<ApiResponse<AuthRes>> login(@Valid @RequestBody LoginReq req, HttpServletResponse res){
-
+    public ResponseEntity<ApiResponse<AuthRes>> login(@Valid @RequestBody LoginReq req, HttpServletResponse res) {
         AuthRes authRes = authService.login(req, res);
-        return ResponseEntity.status(HttpStatus.OK)
-                .body(ApiResponse.success(SuccessCode.LOGIN_SUCCESS, authRes))    ;      //data 에 DTO 주기
-    }
 
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(ApiResponse.success(SuccessCode.LOGIN_SUCCESS, authRes));
+    }
 
 
 }

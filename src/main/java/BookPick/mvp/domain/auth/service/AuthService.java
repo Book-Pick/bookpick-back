@@ -52,14 +52,15 @@ public class AuthService {
         User saved = userRepository.save(user);
 
         // 4. 응답
-        return  SignRes.from(saved.getId());
+        return SignRes.from(saved.getId());
     }
 
 
-    // access Token 만 전송, refresh x
+    // access Token O, refresh X
     @Transactional(readOnly = true)
     public AuthRes login(LoginReq req, HttpServletResponse res) {
-        var authToken = new UsernamePasswordAuthenticationToken(req.email(), req.password());
+        var authToken = new UsernamePasswordAuthenticationToken(req.email(), req.password());   // -> UserDetailsService.loadUserByUsername()
+
         try {
             var auth = authenticationManagerBuilder.getObject().authenticate(authToken);
 
