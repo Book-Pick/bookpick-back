@@ -25,6 +25,6 @@ public class PreferenceController {
         URI location = URI.create("/api/users/" + userId + "/preferences");
 
         return ResponseEntity.created(location)
-                .body(ApiResponse.success(SuccessCode.PREFERENCE_CREATED, res));
+                .body(ApiResponse.success(SuccessCode.COMMENT_CREATE_SUCCESS, res));
     }
 }

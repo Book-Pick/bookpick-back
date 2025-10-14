@@ -1,11 +1,12 @@
 package BookPick.mvp.domain.auth.exception;
 
-public class InvalidLoginException extends RuntimeException {
-    public InvalidLoginException() {
-        super("잘못된 로그인 시도입니다.");
-    }
+import BookPick.mvp.global.api.ErrorCode;
+import BookPick.mvp.global.exception.BusinessException;
 
-    public InvalidLoginException(String message) {
-        super(message);
+
+// 401
+public class InvalidLoginException extends BusinessException {
+    public InvalidLoginException() {
+        super(ErrorCode.AUTHENTICATION_FAILED);
     }
 }

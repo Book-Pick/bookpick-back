@@ -1,7 +1,10 @@
 package BookPick.mvp.domain.auth.exception;
 
-public class DuplicateEmailException extends RuntimeException {
-    public DuplicateEmailException(String message) {
-        super(message);
+import BookPick.mvp.global.api.ErrorCode;
+import BookPick.mvp.global.exception.BusinessException;
+
+public class DuplicateEmailException extends BusinessException {
+    public DuplicateEmailException() {
+        super(ErrorCode.DUPLICATE_EMAIL);
     }
 }
