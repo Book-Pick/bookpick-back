@@ -1,7 +1,7 @@
 plugins {
-	id 'java'
-	id 'org.springframework.boot' version '3.5.5'
-	id 'io.spring.dependency-management' version '1.1.7'
+    id 'java'
+    id 'org.springframework.boot' version '3.5.5'
+    id 'io.spring.dependency-management' version '1.1.7'
 }
 
 group = 'BookPick'
@@ -9,44 +9,61 @@ version = '0.0.1-SNAPSHOT'
 description = 'Book-Pick Project MVP version'
 
 java {
-	toolchain {
-		languageVersion = JavaLanguageVersion.of(17)
-	}
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(17) // Boot 3.5.x는 17+ OK
+    }
 }
 
 configurations {
-	compileOnly {
-		extendsFrom annotationProcessor
-	}
+    compileOnly {
+        extendsFrom annotationProcessor
+    }
+    // 필요 시 예전 springfox 끼어드는 것 전역 차단 (주석 해제해서 사용)
+    // all {
+    //     exclude group: 'io.springfox'
+    // }
 }
 
 repositories {
-	mavenCentral()
+    mavenCentral()
 }
 
 dependencies {
-	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-	implementation 'org.springframework.boot:spring-boot-starter-security'
-	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
-	implementation 'org.springframework.boot:spring-boot-starter-web'
-	implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity6'
-	compileOnly 'org.projectlombok:lombok'
-	annotationProcessor 'org.projectlombok:lombok'
-	testImplementation 'org.springframework.boot:spring-boot-starter-test'
-	testImplementation 'org.springframework.security:spring-security-test'
-	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
-	runtimeOnly 'com.mysql:mysql-connector-j'
-	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-	implementation 'org.springframework.boot:spring-boot-starter-validation'
-	implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.0.2'
-	implementation 'io.jsonwebtoken:jjwt-api:0.12.5'
-	runtimeOnly   'io.jsonwebtoken:jjwt-impl:0.12.5'
-	runtimeOnly   'io.jsonwebtoken:jjwt-gson:0.12.5'
+    // Spring Boot starters
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.boot:spring-boot-starter-security'
+    implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
 
+    // Thymeleaf + Spring Security 6 integration
+    implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity6'
 
+    // ✅ Spring Framework 6.2.x / Boot 3.5.x 호환 springdoc
+    implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.8.11'
+    // (WebFlux면 위를 webflux-ui로 교체)
 
+    // (선택) 개발 편의 - 자동 재시작/리로드
+    developmentOnly 'org.springframework.boot:spring-boot-devtools'
+
+    // JWT (JJWT 0.12.x)
+    implementation 'io.jsonwebtoken:jjwt-api:0.12.5'
+    runtimeOnly   'io.jsonwebtoken:jjwt-impl:0.12.5'
+    runtimeOnly   'io.jsonwebtoken:jjwt-gson:0.12.5' // Gson 사용 중. Jackson 쓰려면 jjwt-jackson로 교체
+
+    // DB
+    runtimeOnly 'com.mysql:mysql-connector-j'
+
+    // Lombok
+    compileOnly 'org.projectlombok:lombok'
+    annotationProcessor 'org.projectlombok:lombok'
+
+    // Test
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testImplementation 'org.springframework.security:spring-security-test'
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 }
 
 tasks.named('test') {
-	useJUnitPlatform()
+    useJUnitPlatform()
 }

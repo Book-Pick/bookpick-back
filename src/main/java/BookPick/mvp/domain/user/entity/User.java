@@ -1,6 +1,10 @@
 package BookPick.mvp.domain.user.entity;
 
+import BookPick.mvp.domain.auth.Roles;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
@@ -14,24 +18,30 @@ import java.time.LocalDateTime;
 @Setter
 public class User {
 
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "userId")
     private Long id; // 내부 식별자 (PK)
 
     @Column(name = "login_email", nullable = false, unique = true, length = 255)
+    @Email(message = "올바른 이메일 형식이여야 합니다.")
     private String email; // 로그인 ID, 고유
+
 
     @Column(name = "login_password", nullable = false, length = 255)
     private String password; // 비밀번호 해시
 
     @Column(length = 50)
+    @Size(min = 2, max = 10, message = "닉네임은 2~10자여야 합니다.")
     private String nickname; // 프로필 닉네임
 
+    @Enumerated(EnumType.STRING)
     @Column(length = 20)
-    private String role;  // ROLE_USER, ROLE_ADMIN 등
+    private Roles role;  // ROLE_USER, ROLE_ADMIN 등
 
     @Column(length = 255)
+    @Size(message = "자기소개는 255자 이하여야 합니다.")
     private String bio; // 자기소개 문구
 
     @Column(name = "profileImageUrl", length = 500)
@@ -44,4 +54,7 @@ public class User {
     @UpdateTimestamp
     @Column(name = "updated_at", nullable = false)
     private LocalDateTime updatedAt; // 수정 시각
+
+
+
 }

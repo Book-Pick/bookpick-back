@@ -1,9 +1,5 @@
 package BookPick.mvp.domain.preference.service;
 
-import BookPick.mvp.domain.author.entity.Author;
-import BookPick.mvp.domain.author.repository.AuthorRepository;
-import BookPick.mvp.domain.book.entity.Book;
-import BookPick.mvp.domain.book.repository.BookRepository;
 import BookPick.mvp.domain.preference.dto.PreferenceDtos.*;
 import BookPick.mvp.domain.preference.entity.UserPreference;
 import BookPick.mvp.domain.preference.repository.PreferenceRepository;
@@ -18,8 +14,6 @@ import java.util.List;
 @RequiredArgsConstructor
 public class PreferenceService {
     private final PreferenceRepository preferenceRepository;
-    private final AuthorRepository authorRepository;
-    private final BookRepository bookRepository;
 
     @Transactional
     public PreferenceRes create(Long userId, CreateReq req) {
@@ -31,19 +25,8 @@ public class PreferenceService {
         }
 
         // --- 문자열 요청 → 엔티티 변환 ---
-        List<Author> authors = req.favoriteAuthors().stream()
-            .map(name -> authorRepository.findByName((name))
-                .orElseGet(() -> authorRepository.save(
-                    Author.builder().name(name).build()
-                ))
-            ).toList();
-
-        List<Book> books = req.favoriteBooks().stream()
-            .map(title -> bookRepository.findByTitle((title))
-                .orElseGet(() -> bookRepository.save(
-                    Book.builder().title(title).build()
-                ))
-            ).toList();
+        List<String> authors = req.favoriteAuthors();  // ["1", "2", "3"]
+        List<String> books   = req.favoriteBooks();    // ["1", "2", "3"]
 
         // --- UserPreference 생성 ---
         UserPreference pref = UserPreference.from(req, user);

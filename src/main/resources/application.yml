@@ -1,0 +1,43 @@
+spring:
+  application:
+    name: BookPick
+
+  datasource:
+    url: jdbc:mysql://hii.mysql.database.azure.com:3306/book_pick
+    username: nan7789
+    password: gustjq3735!
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        show_sql: false
+
+server:
+  port: 8081
+  error:
+    include-message: always
+    include-binding-errors: always
+    include-stacktrace: always
+    include-exception: true
+
+
+logging:
+  level:
+    root: INFO
+    org.springframework.web: DEBUG
+    org.springframework.security: DEBUG
+    BookPick: DEBUG
+
+jwt:
+  secret: yourSuperSecretKeyHere1234567890
+  access:
+    secret: accesssecret123accesssecret123accesssecret123accesssecret123
+    expiration: 15m
+  refresh:
+    secret: refreshsecret123refreshsecret123refreshsecret123refreshsecret123
+    expiration: 7d
+
+

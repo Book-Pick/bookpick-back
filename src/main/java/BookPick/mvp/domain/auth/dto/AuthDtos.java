@@ -23,6 +23,7 @@ public class AuthDtos {
     }
 
 
+
     // 2. 로그인
     //Req
     public record LoginReq(
@@ -37,11 +38,14 @@ public class AuthDtos {
         String nickname,
         String bio,
         String profileImageUrl,
-        String accessToken,
-        String refreshToken,   // 👈 추가
-        long   expiresIn       // 👈 선택: Access 만료(초)
+        String accessToken
+) {
+         public AuthRes(long userId){
+             this(userId,null,null,null,null,null);
+         }
+    }
 
-) {}
+    AuthRes authRes = new  AuthRes(1);
 
 
 
