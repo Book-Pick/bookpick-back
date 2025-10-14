@@ -114,5 +114,6 @@ out/
 # AWS related files
 aws/
 
-
+# macOS system files
+.DS_Store
 
