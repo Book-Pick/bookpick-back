@@ -43,7 +43,7 @@ public class MyUserDetailsService implements UserDetailsService {
             auth.add(new SimpleGrantedAuthority(Roles.ROLE_USER.name()));
         }
 
-        var customUser=new CustomUser(customeUserOpt.get(), auth);  //username = email, passowrd, authorities 등록
+        var customUser = new CustomUser(customeUserOpt.get(), auth);  //username = email, passowrd, authorities 등록
         customUser.setId(customeUserOpt.get().getId());
         customUser.setNickname(customeUserOpt.get().getNickname());
         customUser.setBio(customeUserOpt.get().getBio());

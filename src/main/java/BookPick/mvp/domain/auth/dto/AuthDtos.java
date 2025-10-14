@@ -38,7 +38,7 @@ public class AuthDtos {
         String nickname,
         String bio,
         String profileImageUrl,
-        String access
+        String accessToken
 ) {
          public AuthRes(long userId){
              this(userId,null,null,null,null,null);

@@ -4,11 +4,10 @@ import BookPick.mvp.domain.auth.Roles;
 import BookPick.mvp.domain.auth.dto.AuthDtos.*;
 import BookPick.mvp.domain.auth.exception.InvalidLoginException;
 import BookPick.mvp.domain.user.entity.User;
-import BookPick.mvp.domain.auth.exception.DuplicateEmailException;
 import BookPick.mvp.domain.user.repository.UserRepository;
+import BookPick.mvp.global.api.ErrorCode;
+import BookPick.mvp.global.exception.custom.DuplicateResourceException;
 import BookPick.mvp.global.util.JwtUtil;
-import jakarta.servlet.http.Cookie;
-import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -17,7 +16,6 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -36,9 +34,9 @@ public class AuthService {
 
     @Transactional
     public SignRes signUp(SignReq req) {
-        // 1. 이메일 중복 확인
-        if (userRepository.existsByEmail(req.email())) {
-            throw new DuplicateEmailException("이미 존재하는 이메일입니다.");
+         // 1. 중복 확인
+        if (userRepository.existsAllByEmail((req.email()))) {
+            throw new DuplicateResourceException(ErrorCode.DUPLICATE_EMAIL);
         }
 
         // 2. 신규 유저 생성
@@ -80,7 +78,7 @@ public class AuthService {
                     principal.getNickname(),
                     principal.getBio(),
                     principal.getProfileImageUrl(),
-                    refresh                     // 프론트가 Authorization: Bearer 로 전송
+                    "Bearer " + access
             );
         } catch (BadCredentialsException | UsernameNotFoundException e) {
             throw new InvalidLoginException("아이디 또는 비밀번호가 잘못되었습니다.");

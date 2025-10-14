@@ -1,12 +1,8 @@
 package BookPick.mvp.global.util;
 
 import BookPick.mvp.domain.auth.service.MyUserDetailsService.*;
-import BookPick.mvp.domain.user.entity.User;
-import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
-import jakarta.servlet.http.HttpServletRequest;
-import org.springframework.http.HttpHeaders;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
 
@@ -42,6 +38,7 @@ public class JwtUtil {
 
 
         String jwt = Jwts.builder()
+                .claim("userId", usr.getId())
                 .claim("email", usr.getUsername())
                 .claim("authorities", authorities)
                 .issuedAt(new Date(System.currentTimeMillis()))
