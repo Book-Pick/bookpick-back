@@ -16,6 +16,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -58,29 +59,19 @@ public class AuthService {
 
     // access Token O, refresh X
     @Transactional(readOnly = true)
-    public AuthRes login(LoginReq req, HttpServletResponse res) {
-        var authToken = new UsernamePasswordAuthenticationToken(req.email(), req.password());   // -> UserDetailsService.loadUserByUsername()
+    public LoginRes login(LoginReq req, HttpServletResponse res) {
+        UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(req.email(), req.password());   // 임시로 이메일과 아이디가 담김
 
         try {
-            var auth = authenticationManagerBuilder.getObject().authenticate(authToken);
+            Authentication auth = authenticationManagerBuilder.getObject().authenticate(authToken);        // -> UserDetailsService.loadUserByUsername(), 비밀 번호 및 아이디 검증
+            String accessToken = JwtUtil.createAccessToken(auth);    // Access O
+            String refreshToken = JwtUtil.createRefreshToken(auth);  // Refresh X
+            res.setHeader(HttpHeaders.AUTHORIZATION, "Bearer " + accessToken);
 
-            // Access 토큰만 발급
-            String access = JwtUtil.createAccessToken(auth);
-            String refresh = JwtUtil.createRefreshToken(auth);
+            MyUserDetailsService.CustomUserDetails customUserDetails = (MyUserDetailsService.CustomUserDetails) auth.getPrincipal();
 
-            var principal = (MyUserDetailsService.CustomUser) auth.getPrincipal();
+            return LoginRes.from(customUserDetails,  "Bearer " + accessToken);
 
-            // 선택: 응답 헤더에도 추가해주면 프론트가 꺼내 쓰기 쉬움
-            res.setHeader(HttpHeaders.AUTHORIZATION, "Bearer " + access);
-
-            return new AuthRes(
-                    principal.getId(),
-                    principal.getUsername(),   // email
-                    principal.getNickname(),
-                    principal.getBio(),
-                    principal.getProfileImageUrl(),
-                    "Bearer " + access
-            );
         } catch (BadCredentialsException | UsernameNotFoundException e) {
             throw new InvalidLoginException();
         } catch (AuthenticationException e) {

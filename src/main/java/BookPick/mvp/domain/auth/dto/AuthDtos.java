@@ -1,18 +1,19 @@
 package BookPick.mvp.domain.auth.dto;
 
 
+import BookPick.mvp.domain.auth.service.MyUserDetailsService;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 
 public class AuthDtos {
 
-
     // -- SignUp --
     public record SignReq(
             @NotBlank @Email String email,
             @Size(min = 8, max = 72) String password
-    ) {}
+    ) {
+    }
     public record SignRes(
             long userId
     ) {
@@ -26,8 +27,9 @@ public class AuthDtos {
     public record LoginReq(
             @NotBlank @Email String email,
             @Size(min = 8, max = 72) String password
-    ) {}
-    public record AuthRes(
+    ) {
+    }
+    public record LoginRes(
             long userId,
             String email,
             String nickname,
@@ -35,18 +37,30 @@ public class AuthDtos {
             String profileImageUrl,
             String accessToken
     ) {
-    }
+
+        public static LoginRes from(MyUserDetailsService.CustomUserDetails customUserDetails, String accessToken) {
+            return new LoginRes(
+                    customUserDetails.getId(),
+                    customUserDetails.getUsername(),       // username = email
+                    customUserDetails.getNickname(),
+                    customUserDetails.getBio(),
+                    customUserDetails.getProfileImageUrl(),
+                    accessToken
+            );
+        }
 
 
-    // 3. 로그아
-    public record LogoutReq(
-            @NotBlank String refreshToken
-    ) {
-    }
+        // 3. 로그아
+        public record LogoutReq(
+                @NotBlank String refreshToken
+        ) {
+        }
 
-    // 3. 토큰 재발급 요청
-    public record RefreshToken(
-            @NotBlank String refreshToken
-    ) {
+        // 3. 토큰 재발급 요청
+        public record RefreshToken(
+                @NotBlank String refreshToken
+        ) {
+        }
     }
 }
+

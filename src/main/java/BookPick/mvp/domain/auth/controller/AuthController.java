@@ -28,16 +28,10 @@ public class AuthController {
 
 
     @PostMapping("/login")
-    public ResponseEntity<ApiResponse<AuthRes>> login(@Valid @RequestBody LoginReq req, HttpServletResponse res) {
-        AuthRes authRes = authService.login(req, res);
+    public ResponseEntity<ApiResponse<LoginRes>> login(@Valid @RequestBody LoginReq req, HttpServletResponse res) {
+        LoginRes loginRes = authService.login(req, res);
 
         return ResponseEntity.status(HttpStatus.OK)
-                .body(ApiResponse.success(SuccessCode.LOGIN_SUCCESS, authRes));
+                .body(ApiResponse.success(SuccessCode.LOGIN_SUCCESS, loginRes));
     }
-
-
 }
-
-// 제목
-// 내용
-//

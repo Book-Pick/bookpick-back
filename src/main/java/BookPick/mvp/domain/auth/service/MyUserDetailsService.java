@@ -2,10 +2,12 @@ package BookPick.mvp.domain.auth.service;
 
 
 import BookPick.mvp.domain.auth.Roles;
+import BookPick.mvp.domain.user.exception.UserNotFoundException;
 import BookPick.mvp.domain.user.repository.UserRepository;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
@@ -27,51 +29,46 @@ import static org.apache.coyote.http11.Constants.a;
 @Service
 @RequiredArgsConstructor
 public class MyUserDetailsService implements UserDetailsService {
-    private final UserRepository UserRepo;
+    private final UserRepository userRepository;
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        var customeUserOpt = UserRepo.findByEmail(email);
-        List<GrantedAuthority> auth= new ArrayList<>();
-        if(customeUserOpt.isEmpty()){
-            throw new UsernameNotFoundException("사용자를 찾을 수 없습니다: " + email);
-        }
+        List<GrantedAuthority> auth = new ArrayList<>();
+
+        BookPick.mvp.domain.user.entity.User user = userRepository.findByEmail(email)
+                .orElseThrow(UserNotFoundException::new);
 
 
-
-        if (customeUserOpt.get().getRole().equals(Roles.ROLE_USER)) {
+        if (user.getRole().equals(Roles.ROLE_USER)) {
             auth.add(new SimpleGrantedAuthority(Roles.ROLE_USER.name()));
         }
 
-        var customUser = new CustomUser(customeUserOpt.get(), auth);  //username = email, passowrd, authorities 등록
-        customUser.setId(customeUserOpt.get().getId());
-        customUser.setNickname(customeUserOpt.get().getNickname());
-        customUser.setBio(customeUserOpt.get().getBio());
-        customUser.setProfileImageUrl(customeUserOpt.get().getProfileImageUrl());
+        CustomUserDetails customUserDetails = new CustomUserDetails(user, auth);  // email, passWord, authorities 등록
+        customUserDetails.setId(user.getId());
+        customUserDetails.setNickname(user.getNickname());
+        customUserDetails.setBio(user.getBio());
+        customUserDetails.setProfileImageUrl(user.getProfileImageUrl());
 
-        return customUser;
+        return customUserDetails;
 
     }
 
     @Getter
     @Setter
-    public static class CustomUser extends User{
+    public static class CustomUserDetails extends User {
         private Long id;
         private String nickname;
         private String bio;
         private String profileImageUrl;
 
-        public CustomUser(
+        public CustomUserDetails(
                 BookPick.mvp.domain.user.entity.User user,
                 Collection<? extends GrantedAuthority> authorities
-        ){
-            super(user.getEmail(), user.getPassword(),authorities);
+        ) {
+            super(user.getEmail(), user.getPassword(), authorities);
             this.bio = user.getBio();
-            this.profileImageUrl=user.getProfileImageUrl();
+            this.profileImageUrl = user.getProfileImageUrl();
         }
-
     }
-
-
 }
 

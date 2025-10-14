@@ -10,9 +10,6 @@ import lombok.Setter;
 
 import java.util.List;
 
-
-
-
 @Entity
 @Getter
 @Setter
@@ -23,18 +20,21 @@ public class UserPreference {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    // 유저와 1:1 관계 (유저당 하나만)
-    @OneToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "userId", unique = true, nullable = false)
+    // ✅ 유저와 1:1 관계 (유저 삭제 시 preference도 자동 삭제)
+    @OneToOne(fetch = FetchType.LAZY, optional = false, cascade = CascadeType.REMOVE)
+    @JoinColumn(name = "user_id", unique = true, nullable = false)
     private User user;
 
     private String mbti;
 
-
+    @ElementCollection
+    @CollectionTable(name = "preference_favorite_authors", joinColumns = @JoinColumn(name = "preference_id"))
+    @Column(name = "author")
     private List<String> favoriteAuthors;
 
-
-
+    @ElementCollection
+    @CollectionTable(name = "preference_favorite_books", joinColumns = @JoinColumn(name = "preference_id"))
+    @Column(name = "book")
     private List<String> favoriteBooks;
 
     @ElementCollection
@@ -67,7 +67,8 @@ public class UserPreference {
         UserPreference pref = new UserPreference();
         pref.user = user;
         pref.mbti = req.mbti();
-        // Author/Book 매핑은 별도 Repository에서 가져와야 함
+        pref.favoriteAuthors = req.favoriteAuthors();
+        pref.favoriteBooks = req.favoriteBooks();
         pref.selectionCriteria = req.selectionCriteria();
         pref.readingHabits = req.readingHabits();
         pref.preferredGenres = req.preferredGenres();
@@ -76,14 +77,14 @@ public class UserPreference {
         return pref;
     }
 
-    // ---- 수정 적용 ----
     public void apply(UpdateReq req) {
         this.mbti = req.mbti();
+        this.favoriteAuthors = req.favoriteAuthors();
+        this.favoriteBooks = req.favoriteBooks();
         this.selectionCriteria = req.selectionCriteria();
         this.readingHabits = req.readingHabits();
         this.preferredGenres = req.preferredGenres();
         this.keywords = req.keywords();
         this.recommendedTrends = req.recommendedTrends();
     }
-
 }
