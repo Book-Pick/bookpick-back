@@ -45,8 +45,11 @@ public class User {
     @Size(message = "자기소개는 255자 이하여야 합니다.")
     private String bio; // 자기소개 문구
 
-    @Column(name = "profileImageUrl", length = 500)
+    @Column(name = "profile_image_url", length = 500)
     private String profileImageUrl; // 프로필 사진 경로
+
+    @Column(name ="is_first_login", nullable = false)
+    private boolean isFirstLogin = true;
 
     @CreationTimestamp
     @Column(name = "created_at", nullable = false, updatable = false)
@@ -56,6 +59,10 @@ public class User {
     @Column(name = "updated_at", nullable = false)
     private LocalDateTime updatedAt; // 수정 시각
 
+
+    public void isNotFirstLogin(){
+        this.isFirstLogin=false;
+    }
 
 
 }

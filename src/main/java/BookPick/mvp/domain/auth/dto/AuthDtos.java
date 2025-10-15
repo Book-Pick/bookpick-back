@@ -14,6 +14,7 @@ public class AuthDtos {
             @Size(min = 8, max = 72) String password
     ) {
     }
+
     public record SignRes(
             long userId
     ) {
@@ -29,12 +30,15 @@ public class AuthDtos {
             @Size(min = 8, max = 72) String password
     ) {
     }
+
     public record LoginRes(
             long userId,
             String email,
             String nickname,
             String bio,
             String profileImageUrl,
+            boolean isFirstLogin,
+
             String accessToken
     ) {
 
@@ -45,6 +49,7 @@ public class AuthDtos {
                     customUserDetails.getNickname(),
                     customUserDetails.getBio(),
                     customUserDetails.getProfileImageUrl(),
+                    customUserDetails.isFirstLogin(),
                     accessToken
             );
         }

@@ -5,6 +5,7 @@ import BookPick.mvp.domain.auth.dto.AuthDtos.*;
 import BookPick.mvp.domain.auth.exception.DuplicateEmailException;
 import BookPick.mvp.domain.auth.exception.InvalidLoginException;
 import BookPick.mvp.domain.user.entity.User;
+import BookPick.mvp.domain.user.exception.UserNotFoundException;
 import BookPick.mvp.domain.user.repository.UserRepository;
 import BookPick.mvp.global.api.ErrorCode;
 import BookPick.mvp.global.exception.custom.DuplicateResourceException;
@@ -58,19 +59,23 @@ public class AuthService {
 
 
     // access Token O, refresh X
-    @Transactional(readOnly = true)
+    @Transactional
     public LoginRes login(LoginReq req, HttpServletResponse res) {
         UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(req.email(), req.password());   // 임시로 이메일과 아이디가 담김
 
         try {
             Authentication auth = authenticationManagerBuilder.getObject().authenticate(authToken);        // -> UserDetailsService.loadUserByUsername(), 비밀 번호 및 아이디 검증
+
+            firstLoginHandle(req.email());
+
             String accessToken = JwtUtil.createAccessToken(auth);    // Access O
             String refreshToken = JwtUtil.createRefreshToken(auth);  // Refresh X
+
             res.setHeader(HttpHeaders.AUTHORIZATION, "Bearer " + accessToken);
 
             MyUserDetailsService.CustomUserDetails customUserDetails = (MyUserDetailsService.CustomUserDetails) auth.getPrincipal();
 
-            return LoginRes.from(customUserDetails,  "Bearer " + accessToken);
+            return LoginRes.from(customUserDetails, "Bearer " + accessToken);
 
         } catch (BadCredentialsException | UsernameNotFoundException e) {
             throw new InvalidLoginException();
@@ -79,5 +84,14 @@ public class AuthService {
         }
     }
 
+    @Transactional
+    void firstLoginHandle(String email){
+         User user = userRepository.findByEmail(email)
+                    .orElseThrow(UserNotFoundException::new);
+
+            if(user.isFirstLogin()){
+                user.isNotFirstLogin();
+            }
+    }
 
 }
