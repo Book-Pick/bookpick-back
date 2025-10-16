@@ -48,6 +48,7 @@ public class MyUserDetailsService implements UserDetailsService {
         customUserDetails.setNickname(user.getNickname());
         customUserDetails.setBio(user.getBio());
         customUserDetails.setProfileImageUrl(user.getProfileImageUrl());
+        customUserDetails.setFirstLogin(user.isFirstLogin());
 
         return customUserDetails;
 
@@ -60,6 +61,7 @@ public class MyUserDetailsService implements UserDetailsService {
         private String nickname;
         private String bio;
         private String profileImageUrl;
+        private boolean isFirstLogin;
 
         public CustomUserDetails(
                 BookPick.mvp.domain.user.entity.User user,
