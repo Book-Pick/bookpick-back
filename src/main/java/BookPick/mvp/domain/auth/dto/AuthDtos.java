@@ -2,9 +2,9 @@ package BookPick.mvp.domain.auth.dto;
 
 
 import BookPick.mvp.domain.auth.service.MyUserDetailsService;
-import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.Email;
 
 public class AuthDtos {
 
@@ -22,7 +22,6 @@ public class AuthDtos {
             return new SignRes(userId);
         }
     }
-
 
     // -- Login --
     public record LoginReq(
