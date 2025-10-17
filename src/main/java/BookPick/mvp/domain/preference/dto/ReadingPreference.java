@@ -1,13 +1,12 @@
 package BookPick.mvp.domain.preference.dto;
 
 
-import BookPick.mvp.domain.preference.entity.UserPreference;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
 import java.util.List;
 
-public class PreferenceDtos {
+public class ReadingPreference {
 
 
     // 1. 취향 설정
@@ -52,7 +51,7 @@ public class PreferenceDtos {
             List<String> keywords,
             List<String> recommendedTrends
     ) {
-        public static PreferenceRes from(UserPreference p) {
+        public static PreferenceRes from(BookPick.mvp.domain.preference.entity.ReadingPreference p) {
             return new PreferenceRes(
                     p.getId(),
                     p.getMbti(),

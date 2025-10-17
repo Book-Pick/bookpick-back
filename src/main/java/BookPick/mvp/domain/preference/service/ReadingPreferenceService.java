@@ -1,8 +1,8 @@
 package BookPick.mvp.domain.preference.service;
 
-import BookPick.mvp.domain.preference.dto.PreferenceDtos.*;
-import BookPick.mvp.domain.preference.entity.UserPreference;
-import BookPick.mvp.domain.preference.repository.PreferenceRepository;
+import BookPick.mvp.domain.preference.dto.ReadingPreference.*;
+import BookPick.mvp.domain.preference.entity.ReadingPreference;
+import BookPick.mvp.domain.preference.repository.ReadingPreferenceRepository;
 import BookPick.mvp.domain.user.entity.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -12,8 +12,8 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class PreferenceService {
-    private final PreferenceRepository preferenceRepository;
+public class ReadingPreferenceService {
+    private final ReadingPreferenceRepository preferenceRepository;
 
     @Transactional
     public PreferenceRes create(Long userId, CreateReq req) {
@@ -29,12 +29,12 @@ public class PreferenceService {
         List<String> authors = req.favoriteAuthors();  // ["1", "2", "3"]
         List<String> books = req.favoriteBooks();    // ["1", "2", "3"]
 
-        // --- UserPreference 생성 ---
-        UserPreference pref = UserPreference.from(req, user);
+        // --- ReadingPreference 생성 ---
+        ReadingPreference pref = ReadingPreference.from(req, user);
         pref.setFavoriteAuthors(authors);
         pref.setFavoriteBooks(books);
 
-        UserPreference saved = preferenceRepository.save(pref);
+        ReadingPreference saved = preferenceRepository.save(pref);
         return PreferenceRes.from(saved);
     }
 }

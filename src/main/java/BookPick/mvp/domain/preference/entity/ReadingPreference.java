@@ -1,7 +1,7 @@
 package BookPick.mvp.domain.preference.entity;
 
-import BookPick.mvp.domain.preference.dto.PreferenceDtos.CreateReq;
-import BookPick.mvp.domain.preference.dto.PreferenceDtos.UpdateReq;
+import BookPick.mvp.domain.preference.dto.ReadingPreference.CreateReq;
+import BookPick.mvp.domain.preference.dto.ReadingPreference.UpdateReq;
 import BookPick.mvp.domain.user.entity.User;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -14,7 +14,7 @@ import java.util.List;
 @Getter
 @Setter
 @NoArgsConstructor
-public class UserPreference {
+public class ReadingPreference {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -63,8 +63,8 @@ public class UserPreference {
     private List<String> recommendedTrends;
 
     // ---- 팩토리 메서드 ----
-    public static UserPreference from(CreateReq req, User user) {
-        UserPreference pref = new UserPreference();
+    public static ReadingPreference from(CreateReq req, User user) {
+        ReadingPreference pref = new ReadingPreference();
         pref.user = user;
         pref.mbti = req.mbti();
         pref.favoriteAuthors = req.favoriteAuthors();
