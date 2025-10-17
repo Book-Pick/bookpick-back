@@ -22,8 +22,8 @@ public class PreferenceDtos {
             @NotNull List<String> preferredGenres,      // 선호 장르
             @NotNull List<String> keywords,              // 키워드
             @NotNull List<String> recommendedTrends              //
-    ){}
-
+    ) {
+    }
 
 
     // 2. 취향 수정
@@ -36,7 +36,8 @@ public class PreferenceDtos {
             @NotNull List<String> preferredGenres,
             @NotNull List<String> keywords,
             @NotNull List<String> recommendedTrends
-    ) {}
+    ) {
+    }
 
 
     // PreferenceRes (MVP용 단순화)
@@ -52,21 +53,20 @@ public class PreferenceDtos {
             List<String> recommendedTrends
     ) {
         public static PreferenceRes from(UserPreference p) {
-    return new PreferenceRes(
-        p.getId(),
-        p.getMbti(),
-        p.getFavoriteAuthors(),
-        p.getFavoriteBooks(),
-        p.getSelectionCriteria(),
-        p.getReadingHabits(),
-        p.getPreferredGenres(),
-        p.getKeywords(),
-        p.getRecommendedTrends()
-    );
-}
+            return new PreferenceRes(
+                    p.getId(),
+                    p.getMbti(),
+                    p.getFavoriteAuthors(),
+                    p.getFavoriteBooks(),
+                    p.getSelectionCriteria(),
+                    p.getReadingHabits(),
+                    p.getPreferredGenres(),
+                    p.getKeywords(),
+                    p.getRecommendedTrends()
+            );
+        }
 
     }
-
 
 
 }

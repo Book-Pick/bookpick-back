@@ -40,4 +40,6 @@ jwt:
     secret: refreshsecret123refreshsecret123refreshsecret123refreshsecret123
     expiration: 7d
 
-
+api :
+  kakao :
+    key : 103086ac1d365cf71f026f6caac34fb3
