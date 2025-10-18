@@ -38,13 +38,5 @@ public class GlobalExceptionHandler {
     }
 
 
-    @ExceptionHandler(DuplicateResourceException.class)
-    public ResponseEntity<ApiResponse<Void>> handleDuplicateResource(DuplicateResourceException e) {
-        ErrorCode errorCode = ErrorCode.DUPLICATE_EMAIL;
-        return ResponseEntity
-                .status(errorCode.getStatus())                                    // 409
-                .body(ApiResponse.error(errorCode));        // code : DUPLICATE_EMAIL, message : 이미 존재하는 이메일입니다
-    }
-
 
 }

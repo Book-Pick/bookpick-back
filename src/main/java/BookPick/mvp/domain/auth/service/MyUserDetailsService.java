@@ -79,6 +79,7 @@ public class MyUserDetailsService implements UserDetailsService {
                 Collection<? extends GrantedAuthority> authorities
         ){
             super(email, "", authorities);
+            this.id=userId;
         }
 
         static public CustomUserDetails fromJwt(Long userId, String email, Collection<? extends GrantedAuthority> authorities){

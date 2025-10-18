@@ -1,4 +1,4 @@
-package BookPick.mvp.domain.readingPreferenceRepository.Exception;
+package BookPick.mvp.domain.ReadingPreference.Exception;
 
 import BookPick.mvp.global.api.ErrorCode;
 import BookPick.mvp.global.exception.BusinessException;

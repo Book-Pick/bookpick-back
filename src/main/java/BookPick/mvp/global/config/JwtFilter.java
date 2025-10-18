@@ -48,15 +48,19 @@ public class JwtFilter extends OncePerRequestFilter {
         try {
             Claims claims = JwtUtil.extractToken(token);
 
+            Long userId = claims.get("userId", Number.class).longValue();
+            String email = claims.get("email").toString();
+
+
             var authorities = Arrays.stream(
                     claims.get("authorities").toString().split(",")
             ).map(SimpleGrantedAuthority::new).toList();
 
 
-            CustomUserDetails customUserDetails = CustomUserDetails.fromJwt(claims.get("userId"), claims.get("email"), claims.get("authorities"));
+            CustomUserDetails customUserDetails = CustomUserDetails.fromJwt(userId, email, authorities);
 
             var auth = new UsernamePasswordAuthenticationToken(
-                   customUserDetails, null, customUserDetails.getAuthorities()
+                    customUserDetails, null, customUserDetails.getAuthorities()
             );
             auth.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
 
