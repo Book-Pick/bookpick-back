@@ -72,7 +72,9 @@ public class MyUserDetailsService implements UserDetailsService {
             this.profileImageUrl = user.getProfileImageUrl();
         }
 
-        readingㄴㄴㄴ
+        public CustomUserDetails{
+
+        }
 
     }
 }
