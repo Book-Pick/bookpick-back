@@ -4,6 +4,7 @@ package BookPick.mvp.domain.auth.service;
 import BookPick.mvp.domain.auth.Roles;
 import BookPick.mvp.domain.user.exception.UserNotFoundException;
 import BookPick.mvp.domain.user.repository.UserRepository;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
@@ -72,9 +73,21 @@ public class MyUserDetailsService implements UserDetailsService {
             this.profileImageUrl = user.getProfileImageUrl();
         }
 
-        public CustomUserDetails{
-
+        public CustomUserDetails(
+                Long userId,
+                String email,
+                Collection<? extends GrantedAuthority> authorities
+        ){
+            super(email, "", authorities);
         }
+
+        static public CustomUserDetails fromJwt(Long userId, String email, Collection<? extends GrantedAuthority> authorities){
+            return new CustomUserDetails(userId, email, authorities);
+        }
+
+
+
+
 
     }
 }

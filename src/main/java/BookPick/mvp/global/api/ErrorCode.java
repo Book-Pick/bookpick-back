@@ -22,8 +22,10 @@ public enum ErrorCode {
 
 
     // --  Comment --
-    COMMENT_NOT_FOUND(HttpStatus.NOT_FOUND, "해당 댓글 찾을 수 없습니다.");                     //404
+    COMMENT_NOT_FOUND(HttpStatus.NOT_FOUND, "해당 댓글 찾을 수 없습니다."),                     //404
 
+    // -- Reading Preference --
+    READING_PREFERENCE_ALREADY_RESiGSTER(HttpStatus.CONFLICT, "이미 독서 취향이 존재합니다.");
 
     private final HttpStatus status;
     private final String message;
