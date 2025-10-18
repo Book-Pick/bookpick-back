@@ -71,6 +71,9 @@ public class MyUserDetailsService implements UserDetailsService {
             this.bio = user.getBio();
             this.profileImageUrl = user.getProfileImageUrl();
         }
+
+        reading
+
     }
 }
 
