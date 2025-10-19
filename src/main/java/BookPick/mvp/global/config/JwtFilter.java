@@ -1,5 +1,7 @@
 package BookPick.mvp.global.config;
 
+import BookPick.mvp.domain.auth.exception.JwtTokenExpiredException;
+import BookPick.mvp.domain.auth.service.MyUserDetailsService.*;
 import BookPick.mvp.global.util.JwtUtil;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
@@ -26,8 +28,6 @@ public class JwtFilter extends OncePerRequestFilter {
     private static final String BEARER = "Bearer";
 
 
-
-
     @Override
     protected void doFilterInternal(
             HttpServletRequest request, HttpServletResponse response, FilterChain filterChain
@@ -41,33 +41,34 @@ public class JwtFilter extends OncePerRequestFilter {
         }
 
         String token = resolveAccessToken(request);
-            if (token == null) { // 토큰 없으면 그냥 통과
-                filterChain.doFilter(request, response);
-                return;
-            }
+        if (token == null) { // 토큰 없으면 그냥 통과
+            filterChain.doFilter(request, response);
+            return;
+        }
 
-    try {
             Claims claims = JwtUtil.extractToken(token);
+
+            Long userId = claims.get("userId", Number.class).longValue();
+            String email = claims.get("email").toString();
+
 
             var authorities = Arrays.stream(
                     claims.get("authorities").toString().split(",")
             ).map(SimpleGrantedAuthority::new).toList();
 
+
+            CustomUserDetails customUserDetails = CustomUserDetails.fromJwt(userId, email, authorities);
+
             var auth = new UsernamePasswordAuthenticationToken(
-                    claims.get("email"), null, authorities
+                    customUserDetails, null, customUserDetails.getAuthorities()
             );
             auth.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
 
             SecurityContextHolder.getContext().setAuthentication(auth);
 
-        } catch (ExpiredJwtException   e) {
-            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-            return;
-        }
 
         filterChain.doFilter(request, response);
     }
-
 
 
     private String resolveAccessToken(HttpServletRequest request) {

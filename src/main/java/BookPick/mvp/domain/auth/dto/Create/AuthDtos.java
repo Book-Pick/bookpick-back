@@ -1,7 +1,7 @@
-package BookPick.mvp.domain.auth.dto;
+package BookPick.mvp.domain.auth.dto.Create;
 
 
-import BookPick.mvp.domain.auth.service.MyUserDetailsService;
+import BookPick.mvp.domain.auth.service.MyUserDetailsService.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import jakarta.validation.constraints.Email;
@@ -41,7 +41,7 @@ public class AuthDtos {
             String accessToken
     ) {
 
-        public static LoginRes from(MyUserDetailsService.CustomUserDetails customUserDetails, String accessToken) {
+        public static LoginRes from(CustomUserDetails customUserDetails, String accessToken) {
             return new LoginRes(
                     customUserDetails.getId(),
                     customUserDetails.getUsername(),       // username = email

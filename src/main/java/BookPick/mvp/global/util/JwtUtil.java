@@ -1,6 +1,10 @@
 package BookPick.mvp.global.util;
 
+import BookPick.mvp.domain.auth.exception.InvalidTokenTypeException;
+import BookPick.mvp.domain.auth.exception.JwtTokenExpiredException;
 import BookPick.mvp.domain.auth.service.MyUserDetailsService.*;
+import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.security.core.Authentication;
@@ -65,9 +69,17 @@ public class JwtUtil {
 
     //3. JWT 오픈
     public static Claims extractToken(String token) {
-        Claims claims = Jwts.parser().verifyWith(key).build()
+
+        try{
+            Claims claims = Jwts.parser().verifyWith(key).build()
                 .parseSignedClaims(token).getPayload();
         return claims;
+        } catch (ExpiredJwtException e) {
+        throw new JwtTokenExpiredException();
+    } catch (JwtException | IllegalArgumentException e) {
+        throw new InvalidTokenTypeException();
+    }
+
     }
 
 

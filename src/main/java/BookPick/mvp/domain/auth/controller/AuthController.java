@@ -1,7 +1,7 @@
 package BookPick.mvp.domain.auth.controller;
 
 import BookPick.mvp.global.api.ApiResponse;
-import BookPick.mvp.domain.auth.dto.AuthDtos.*;
+import BookPick.mvp.domain.auth.dto.Create.AuthDtos.*;
 import BookPick.mvp.domain.auth.service.AuthService;
 import BookPick.mvp.global.api.SuccessCode;
 import jakarta.servlet.http.HttpServletResponse;

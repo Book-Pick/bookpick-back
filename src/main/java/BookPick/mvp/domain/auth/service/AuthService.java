@@ -1,14 +1,12 @@
 package BookPick.mvp.domain.auth.service;
 
 import BookPick.mvp.domain.auth.Roles;
-import BookPick.mvp.domain.auth.dto.AuthDtos.*;
+import BookPick.mvp.domain.auth.dto.Create.AuthDtos.*;
 import BookPick.mvp.domain.auth.exception.DuplicateEmailException;
 import BookPick.mvp.domain.auth.exception.InvalidLoginException;
 import BookPick.mvp.domain.user.entity.User;
 import BookPick.mvp.domain.user.exception.UserNotFoundException;
 import BookPick.mvp.domain.user.repository.UserRepository;
-import BookPick.mvp.global.api.ErrorCode;
-import BookPick.mvp.global.exception.custom.DuplicateResourceException;
 import BookPick.mvp.global.util.JwtUtil;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
