@@ -1,4 +1,4 @@
-package BookPick.mvp.domain.auth.dto;
+package BookPick.mvp.domain.auth.dto.Create;
 
 
 import BookPick.mvp.domain.auth.service.MyUserDetailsService.*;

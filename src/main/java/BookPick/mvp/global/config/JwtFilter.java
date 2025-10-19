@@ -1,5 +1,6 @@
 package BookPick.mvp.global.config;
 
+import BookPick.mvp.domain.auth.exception.JwtTokenExpiredException;
 import BookPick.mvp.domain.auth.service.MyUserDetailsService.*;
 import BookPick.mvp.global.util.JwtUtil;
 import io.jsonwebtoken.Claims;
@@ -45,7 +46,6 @@ public class JwtFilter extends OncePerRequestFilter {
             return;
         }
 
-        try {
             Claims claims = JwtUtil.extractToken(token);
 
             Long userId = claims.get("userId", Number.class).longValue();
@@ -66,10 +66,6 @@ public class JwtFilter extends OncePerRequestFilter {
 
             SecurityContextHolder.getContext().setAuthentication(auth);
 
-        } catch (ExpiredJwtException e) {
-            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-            return;
-        }
 
         filterChain.doFilter(request, response);
     }

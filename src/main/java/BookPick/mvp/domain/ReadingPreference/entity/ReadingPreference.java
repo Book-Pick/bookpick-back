@@ -1,5 +1,6 @@
 package BookPick.mvp.domain.ReadingPreference.entity;
 
+import BookPick.mvp.domain.ReadingPreference.dto.Update.ReadingPreferenceUpdateReq;
 import BookPick.mvp.domain.user.entity.User;
 import jakarta.persistence.*;
 import lombok.*;
@@ -18,7 +19,7 @@ public class ReadingPreference {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long Id;
 
-    @OneToOne(fetch = FetchType.LAZY, optional = false, cascade = CascadeType.REMOVE)
+    @OneToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "user_id", unique = true, nullable = false)
     private User user;
 
@@ -53,6 +54,16 @@ public class ReadingPreference {
     @CollectionTable(name = "preference_trends", joinColumns = @JoinColumn(name = "preference_id"))
     @Column(name = "trend")
     private List<String> trends;
+
+    public void update(ReadingPreferenceUpdateReq req) {
+        if (req.mbti() != null) this.mbti = req.mbti();
+        if (req.favoriteBooks() != null) this.favoriteBooks = req.favoriteBooks();
+        if (req.moods() != null) this.moods = req.moods();
+        if (req.readingHabits() != null) this.readingHabits = req.readingHabits();
+        if (req.genres() != null) this.genres = req.genres();
+        if (req.keywords() != null) this.keywords = req.keywords();
+        if (req.trends() != null) this.trends = req.trends();
+    }
 
     }
 
