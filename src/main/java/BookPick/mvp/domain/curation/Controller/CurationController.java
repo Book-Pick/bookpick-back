@@ -15,6 +15,8 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/v1/curations")
 public class CurationController {
 
+
+    // -- 큐레이션 생성 --
     @PostMapping
     public ResponseEntity<ApiResponse<CurationCreateRes>> create(@Valid @RequestBody CurationCreateReq req, @AuthenticationPrincipal CustomUserDetails currentUser){
         CurationCreateRes res = curationRepository.create(currentUser.getId(), req);
@@ -23,21 +25,7 @@ public class CurationController {
 
     }
 
-    @PostMapping
-    public ResponseEntity<ApiResponse<CurationCreateRes>> create(@Valid @RequestBody CurationCreateReq req, @AuthenticationPrincipal CustomUserDetails currentUser){
-        CurationCreateRes res = curationRepository.create(currentUser.getId(), req);
-
-        return ApiResponse.success(SuccessCode.READING_PREFERENCE_UPDATE_SUCCESS, res);
-
-    }
-
-    @PostMapping
-    public ResponseEntity<ApiResponse<CurationCreateRes>> create(@Valid @RequestBody CurationCreateReq req, @AuthenticationPrincipal CustomUserDetails currentUser){
-        CurationCreateRes res = curationRepository.create(currentUser.getId(), req);
-
-        return ApiResponse.success(SuccessCode.READING_PREFERENCE_UPDATE_SUCCESS, res);
-
-    }
+    // -- 큐레이션 단건 조회 --
 
     @PostMapping
     public ResponseEntity<ApiResponse<CurationCreateRes>> create(@Valid @RequestBody CurationCreateReq req, @AuthenticationPrincipal CustomUserDetails currentUser){
@@ -47,6 +35,25 @@ public class CurationController {
 
     }
 
+    // -- 큐레이션 리스트 조회 --
+    @PostMapping
+    public ResponseEntity<ApiResponse<CurationCreateRes>> create(@Valid @RequestBody CurationCreateReq req, @AuthenticationPrincipal CustomUserDetails currentUser){
+        CurationCreateRes res = curationRepository.create(currentUser.getId(), req);
+
+        return ApiResponse.success(SuccessCode.READING_PREFERENCE_UPDATE_SUCCESS, res);
+
+    }
+
+    // -- 큐레이션 수정 --
+    @PostMapping
+    public ResponseEntity<ApiResponse<CurationCreateRes>> create(@Valid @RequestBody CurationCreateReq req, @AuthenticationPrincipal CustomUserDetails currentUser){
+        CurationCreateRes res = curationRepository.create(currentUser.getId(), req);
+
+        return ApiResponse.success(SuccessCode.READING_PREFERENCE_UPDATE_SUCCESS, res);
+
+    }
+
+    // -- 큐레이션 삭제 --
     @PostMapping
     public ResponseEntity<ApiResponse<CurationCreateRes>> create(@Valid @RequestBody CurationCreateReq req, @AuthenticationPrincipal CustomUserDetails currentUser){
         CurationCreateRes res = curationRepository.create(currentUser.getId(), req);
