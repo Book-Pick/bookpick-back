@@ -49,6 +49,7 @@ public class User {
     private String profileImageUrl; // 프로필 사진 경로
 
     @Column(name ="is_first_login", nullable = false)
+    @Builder.Default
     private boolean isFirstLogin = true;
 
     @CreationTimestamp
