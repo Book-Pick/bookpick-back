@@ -32,12 +32,11 @@ logging:
     BookPick: DEBUG
 
 jwt:
-  secret: yourSuperSecretKeyHere1234567890
   access:
-    secret: accesssecret123accesssecret123accesssecret123accesssecret123
+    secret: aGVsbG93b3JsZGhlbGxvd29ybGRoZWxsb3dvcmxk
     expiration: 15m
   refresh:
-    secret: refreshsecret123refreshsecret123refreshsecret123refreshsecret123
+    secret: cmVmcmVzaHNlY3JldGtleWZvcmp3dHRva2Vu
     expiration: 7d
 
 api :
