@@ -12,14 +12,14 @@ import javax.crypto.SecretKey;
 @Getter
 public class JwtConfig {
 
-    @Value("${jwt.access.secret")
+    @Value("${jwt.access.secret}")
     private static String accessSecret;
-    @Value("${jwt.access.expiration")
+    @Value("${jwt.access.expiration}")
     private long accessSecretExp;
 
-    @Value("${jwt.refresh.secret")
+    @Value("${jwt.refresh.secret}")
     private String refreshSecret;
-    @Value("${jwt.refresh.expiration")
+    @Value("${jwt.refresh.expiration}")
     private long refreshSecretExp;
 
 

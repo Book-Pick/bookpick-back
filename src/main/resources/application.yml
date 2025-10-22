@@ -34,10 +34,10 @@ logging:
 jwt:
   access:
     secret: aGVsbG93b3JsZGhlbGxvd29ybGRoZWxsb3dvcmxk
-    expiration: 15m
+    expiration: 900000  # 15분 = 15 * 60 * 1000
   refresh:
     secret: cmVmcmVzaHNlY3JldGtleWZvcmp3dHRva2Vu
-    expiration: 7d
+    expiration: 604800000  # 7일 = 7 * 24 * 60 * 60 * 1000
 
 api :
   kakao :
