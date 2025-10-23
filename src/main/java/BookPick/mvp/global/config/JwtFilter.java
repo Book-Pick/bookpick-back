@@ -40,13 +40,13 @@ public class JwtFilter extends OncePerRequestFilter {
             return;
         }
 
-        String token = resolveAccessToken(request);
+        String token = resolveAccessToken(request);         // 토큰있는지 문자열 체크
         if (token == null) { // 토큰 없으면 그냥 통과
-            filterChain.doFilter(request, response);
+            filterChain.doFilter(request, response);        // 넘어가요
             return;
         }
 
-            Claims claims = JwtUtil.extractToken(token);
+            Claims claims = JwtUtil.extractToken(token);    // 토큰 까기 (토큰 진위여부 검증 해당 메서드에서 진행)
 
             Long userId = claims.get("userId", Number.class).longValue();
             String email = claims.get("email").toString();
@@ -62,7 +62,7 @@ public class JwtFilter extends OncePerRequestFilter {
             var auth = new UsernamePasswordAuthenticationToken(
                     customUserDetails, null, customUserDetails.getAuthorities()
             );
-            auth.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+            auth.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));     // 추가 정보 저장 (어디서 접속했는지)
 
             SecurityContextHolder.getContext().setAuthentication(auth);
 
