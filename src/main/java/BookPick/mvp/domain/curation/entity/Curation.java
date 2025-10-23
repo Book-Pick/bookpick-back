@@ -1,5 +1,6 @@
 package BookPick.mvp.domain.curation.entity;
 
+import BookPick.mvp.domain.curation.dto.update.CurationUpdateReq;
 import jakarta.persistence.CollectionTable;
 import jakarta.persistence.Column;
 import jakarta.persistence.ElementCollection;
@@ -92,5 +93,18 @@ public class Curation {
         this.genres = genres;
         this.keywords = keywords;
         this.styles = styles;
+    }
+
+    public void update(CurationUpdateReq req) {
+        this.thumbnailUrl = req.thumbnail().imageUrl();
+        this.thumbnailColor = req.thumbnail().imageColor();
+        this.bookTitle = req.book().title();
+        this.bookAuthor = req.book().author();
+        this.bookIsbn = req.book().isbn();
+        this.review = req.review();
+        this.moods = req.recommend().moods();
+        this.genres = req.recommend().genres();
+        this.keywords = req.recommend().keywords();
+        this.styles = req.recommend().styles();
     }
 }
