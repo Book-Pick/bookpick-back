@@ -32,7 +32,7 @@ public class ReadingPreference {
 
     @ElementCollection
     @CollectionTable(name = "preference_moods", joinColumns = @JoinColumn(name = "preference_id"))
-    @Column(name = "criteria")
+    @Column(name = "moods")
     private List<String> moods;
 
     @ElementCollection
