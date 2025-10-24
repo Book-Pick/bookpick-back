@@ -2,6 +2,7 @@
 package BookPick.mvp.domain.curation.controller;
 
 import BookPick.mvp.domain.auth.service.MyUserDetailsService.*;
+import BookPick.mvp.domain.curation.SortType;
 import BookPick.mvp.domain.curation.dto.create.CurationCreateReq;
 import BookPick.mvp.domain.curation.dto.create.CurationCreateRes;
 import BookPick.mvp.domain.curation.dto.get.CurationGetRes;
@@ -12,6 +13,7 @@ import BookPick.mvp.domain.curation.service.CurationService;
 import BookPick.mvp.global.api.ApiResponse;
 import BookPick.mvp.global.api.SuccessCode;
 import jakarta.validation.Valid;
+import jakarta.websocket.server.PathParam;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -45,6 +47,18 @@ public class CurationController {
         return ResponseEntity.ok()
                 .body(ApiResponse.success(SuccessCode.CURATION_GET_SUCCESS, res));
     }
+
+
+    // -- 큐레이션 리스트 조회 최신순 --
+    //    /sort=latest&page=0&size=20")
+    @GetMapping
+    public ResponseEntity<ApiResponse<CuratoinListGetRes>> getCurationList(@RequestParam String sort, @RequestParam String size) {
+        if(sort.equals(SortType.SORT_LATEST.getValue())){
+            curationService.getCuratoinList(SortType);
+
+        }
+    }
+
 
     // -- 큐레이션 수정 --
     @PatchMapping("/{curationId}")
