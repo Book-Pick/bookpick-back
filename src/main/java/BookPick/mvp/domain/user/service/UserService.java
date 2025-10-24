@@ -1,6 +1,5 @@
 package BookPick.mvp.domain.user.service;
 
-import BookPick.mvp.domain.user.entity.User;
 import BookPick.mvp.domain.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -8,7 +7,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.format.DateTimeFormatter;
-import java.time.ZoneOffset;
 
 @Service
 @Transactional

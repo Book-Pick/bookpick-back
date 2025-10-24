@@ -30,9 +30,12 @@ public enum ErrorCode {
 
     // -- Reading Preference --
     READING_PREFERENCE_ALREADY_RESiGSTER(HttpStatus.CONFLICT, "이미 독서 취향이 존재합니다."),
-    READING_PREFERENCE_NOT_EXISTED(HttpStatus.NOT_FOUND, "사용자의 독서 취향이 존재하지 않습니다.");
+    READING_PREFERENCE_NOT_EXISTED(HttpStatus.NOT_FOUND, "사용자의 독서 취향이 존재하지 않습니다."),
+
+    // -- Curation --
+    CURATION_NOT_FOUND(HttpStatus.NOT_FOUND, "해당 큐레이션을 찾을 수 없습니다."),
+    CURATION_ACCESS_DENIED(HttpStatus.FORBIDDEN, "큐레이션 접근 권한이 없습니다.");
 
     private final HttpStatus status;
     private final String message;
 }
-
