@@ -6,6 +6,7 @@ import BookPick.mvp.domain.curation.dto.create.CurationCreateReq;
 import BookPick.mvp.domain.curation.dto.create.CurationCreateRes;
 import BookPick.mvp.domain.curation.dto.get.list.CurationContentRes;
 import BookPick.mvp.domain.curation.dto.get.list.CurationListGetRes;
+import BookPick.mvp.domain.curation.dto.get.list.CursorPage;
 import BookPick.mvp.domain.curation.dto.get.one.CurationGetRes;
 import BookPick.mvp.domain.curation.dto.update.CurationUpdateReq;
 import BookPick.mvp.domain.curation.dto.update.CurationUpdateRes;
@@ -14,6 +15,7 @@ import BookPick.mvp.domain.curation.entity.Curation;
 import BookPick.mvp.domain.curation.converter.exception.CurationAccessDeniedException;
 import BookPick.mvp.domain.curation.converter.exception.CurationNotFoundException;
 import BookPick.mvp.domain.curation.repository.CurationRepository;
+import BookPick.mvp.domain.curation.service.Handler.CurationPageHandler;
 import BookPick.mvp.domain.curation.service.fetcher.CurationFetcher;
 import BookPick.mvp.domain.user.entity.User;
 import BookPick.mvp.domain.user.exception.UserNotFoundException;
@@ -37,6 +39,8 @@ public class CurationService {
     private final CurationRepository curationRepository;
     private final UserRepository userRepository;
     private final CurationFetcher curationFetcher;
+        private final CurationPageHandler pageHandler;
+
 
 
     // -- 큐레이션 등록 --
@@ -81,19 +85,11 @@ public class CurationService {
 
     // -- 큐레이션 목록 조회 --
     public CurationListGetRes getCurationList(SortType sortType, Long cursor, int size) {
-        Pageable pageable = PageRequest.of(0, size + 1);
+        List<Curation> curations = pageHandler.fetchCurationsWithExtra(sortType, cursor, size);
+        CursorPage<Curation> page = pageHandler.createCursorPage(curations, size);
+        List<CurationContentRes> content = pageHandler.convertToContentRes(page.getContent());
 
-        List<Curation> curations = curationFetcher.fetchCurations(sortType, cursor, pageable);
-
-        boolean hasNext = curations.size() > size;
-        Long nextCursor = curationFetcher.calculateNextCursor(curations, size, hasNext);
-        List<Curation> result = hasNext ? curations.subList(0, size) : curations;
-
-        List<CurationContentRes> content = result.stream()
-                .map(CurationContentRes::from)
-                .toList();
-
-        return CurationListGetRes.from(sortType, content, hasNext, nextCursor);
+        return CurationListGetRes.from(sortType, content, page.isHasNext(), page.getNextCursor());
     }
 
 
@@ -111,6 +107,7 @@ public class CurationService {
 
         return CurationUpdateRes.from(curation);
     }
+
 
     // -- 큐레이션 삭제 --
     @Transactional
