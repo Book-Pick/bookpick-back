@@ -8,6 +8,7 @@ public record CurationListGetRes(
     String sortType,
     String description,
     List<CurationContentRes> content,
+    int size,
     boolean hasNext,
     Long nextCursor
 ) {
@@ -17,6 +18,7 @@ public record CurationListGetRes(
                 sortType.getValue(),
                 sortType.getDescription(),
                 content,
+                content.size(),
                 hasNext,
                 nextCursor
         );
