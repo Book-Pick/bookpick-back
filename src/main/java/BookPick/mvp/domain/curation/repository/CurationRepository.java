@@ -15,7 +15,17 @@ public interface CurationRepository extends JpaRepository<Curation, Long> {
     List<Curation> findByUserId(Long userId);
 
 
+    // 사이즈만큼 최신순으로 불러오는 함수
+    List<Curation> findAllByOrderByCreatedAtDesc(Pageable pageable);
+
+
+
     @Query("SELECT c FROM Curation c WHERE c.id <= :cursor ORDER BY c.createdAt DESC, c.id DESC")
-    List<Curation> findByCursorWithSize(@Param("cursor") Long cursor, Pageable pageable);
+    List<Curation> findCurations(@Param("cursor") Long cursor, Pageable pageable);
+
+    @Query("SELECT c FROM Curation c " +
+            "WHERE (:cursor IS NULL OR c.id < :cursor) " +  // 이 부분!
+            "ORDER BY c.popularityScore DESC, c.id DESC")
+    List<Curation> findCurationsByPopularity(@Param("cursor") Long cursor, Pageable pageable);
 }
 

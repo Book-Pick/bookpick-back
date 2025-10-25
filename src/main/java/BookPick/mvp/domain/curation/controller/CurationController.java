@@ -11,11 +11,14 @@ import BookPick.mvp.domain.curation.dto.update.CurationUpdateReq;
 import BookPick.mvp.domain.curation.dto.update.CurationUpdateRes;
 import BookPick.mvp.domain.curation.dto.delete.CurationDeleteRes;
 import BookPick.mvp.domain.curation.service.CurationService;
+import BookPick.mvp.global.HyperParam.Defaults;
 import BookPick.mvp.global.api.ApiResponse;
 import BookPick.mvp.global.api.SuccessCode;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -51,9 +54,6 @@ public class CurationController {
     }
 
 
-
-    //http://localhost:8081/api/v1/curations?sort=latest&cursor=17&size=1
-
     // -- 큐레이션 목록 조회 --
     @GetMapping
     public ResponseEntity<ApiResponse<CurationListGetRes>> getCurationList(
@@ -61,7 +61,9 @@ public class CurationController {
             @RequestParam(required = false) Long cursor,
             @RequestParam(defaultValue = "10") int size) {
 
-        CurationListGetRes curationListGetRes = curationService.getCurationList(cursor, size);
+        SortType sortType = SortType.fromValue(sort);
+
+        CurationListGetRes curationListGetRes = curationService.getCurationList(sortType, cursor, size);
 
         return ResponseEntity.ok()
                 .body(ApiResponse.success(SuccessCode.CURATION_LIST_GET_SUCCESS, curationListGetRes));
@@ -90,9 +92,8 @@ public class CurationController {
 
         if (currentUser == null) {
             userId = 2L;
-        }
-        else{
-            userId=currentUser.getId();
+        } else {
+            userId = currentUser.getId();
         }
         CurationDeleteRes res = curationService.removeCuration(userId, curationId);
 

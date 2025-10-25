@@ -1,6 +1,7 @@
 // CurationService.java
 package BookPick.mvp.domain.curation.service;
 
+import BookPick.mvp.domain.curation.SortType;
 import BookPick.mvp.domain.curation.dto.create.CurationCreateReq;
 import BookPick.mvp.domain.curation.dto.create.CurationCreateRes;
 import BookPick.mvp.domain.curation.dto.get.list.CurationContentRes;
@@ -13,6 +14,7 @@ import BookPick.mvp.domain.curation.entity.Curation;
 import BookPick.mvp.domain.curation.converter.exception.CurationAccessDeniedException;
 import BookPick.mvp.domain.curation.converter.exception.CurationNotFoundException;
 import BookPick.mvp.domain.curation.repository.CurationRepository;
+import BookPick.mvp.domain.curation.service.fetcher.CurationFetcher;
 import BookPick.mvp.domain.user.entity.User;
 import BookPick.mvp.domain.user.exception.UserNotFoundException;
 import BookPick.mvp.domain.user.repository.UserRepository;
@@ -34,7 +36,7 @@ public class CurationService {
 
     private final CurationRepository curationRepository;
     private final UserRepository userRepository;
-    private static final int PAGE_SIZE = 10;
+    private final CurationFetcher curationFetcher;
 
 
     // -- 큐레이션 등록 --
@@ -64,6 +66,7 @@ public class CurationService {
         return CurationCreateRes.from(saved);
     }
 
+
     // -- 큐레이션 단건 조회 --
     @Transactional
     public CurationGetRes findCuration(Long curationId, HttpServletRequest req) {
@@ -77,36 +80,21 @@ public class CurationService {
 
 
     // -- 큐레이션 목록 조회 --
-    public CurationListGetRes getCurationList(Long cursor, int size) {
-        // size+1개 조회해서 다음 페이지 있는지 확인
+    public CurationListGetRes getCurationList(SortType sortType, Long cursor, int size) {
         Pageable pageable = PageRequest.of(0, size + 1);
 
-        List<Curation> curations = curationRepository.findByCursorWithSize(cursor, pageable);
+        List<Curation> curations = curationFetcher.fetchCurations(sortType, cursor, pageable);
 
-        // 다음 페이지 있는지 확인
         boolean hasNext = curations.size() > size;
+        Long nextCursor = curationFetcher.calculateNextCursor(curations, size, hasNext);
+        List<Curation> result = hasNext ? curations.subList(0, size) : curations;
 
-        // nextCursor = 다음에 조회할 데이터의 ID (size+1번째)
-        Long nextCursor = null;
-        if (hasNext) {
-            nextCursor = curations.get(size).getId(); // 4번째 데이터의 ID
-            curations = curations.subList(0, size); // 3개만 반환
-        }
-
-        // DTO 변환
-        List<CurationContentRes> content = curations.stream()
+        List<CurationContentRes> content = result.stream()
                 .map(CurationContentRes::from)
                 .toList();
 
-        return new CurationListGetRes(
-                "latest",
-                "최신순 정렬",
-                content,
-                hasNext,
-                nextCursor
-        );
+        return CurationListGetRes.from(sortType, content, hasNext, nextCursor);
     }
-
 
 
     // -- 큐레이션 수정 --

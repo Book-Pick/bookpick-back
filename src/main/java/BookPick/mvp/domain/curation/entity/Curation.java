@@ -120,6 +120,6 @@ public class Curation {
         updatePopularityScore(); // 인기도 재계산
     }
     public void updatePopularityScore() {
-        this.popularityScore = (likeCount * 3) + (viewCount * 2) + (commentCount * 1);
+        this.popularityScore = (likeCount * 3) + (commentCount * 2) + (viewCount * 1);
     }
 }
