@@ -19,13 +19,15 @@ public interface CurationRepository extends JpaRepository<Curation, Long> {
     List<Curation> findAllByOrderByCreatedAtDesc(Pageable pageable);
 
 
-
     @Query("SELECT c FROM Curation c WHERE c.id <= :cursor ORDER BY c.createdAt DESC, c.id DESC")
     List<Curation> findCurations(@Param("cursor") Long cursor, Pageable pageable);
 
     @Query("SELECT c FROM Curation c " +
-            "WHERE (:cursor IS NULL OR c.id < :cursor) " +  // 이 부분!
+            "WHERE (:cursor IS NULL) " +
+            "   OR c.popularityScore <= (SELECT c2.popularityScore FROM Curation c2 WHERE c2.id = :cursor) " +
+            "   OR (c.popularityScore = (SELECT c2.popularityScore FROM Curation c2 WHERE c2.id = :cursor) AND c.id < :cursor) " +
             "ORDER BY c.popularityScore DESC, c.id DESC")
     List<Curation> findCurationsByPopularity(@Param("cursor") Long cursor, Pageable pageable);
+
 }
 

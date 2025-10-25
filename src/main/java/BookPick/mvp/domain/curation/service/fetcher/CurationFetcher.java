@@ -29,6 +29,7 @@ public class CurationFetcher {
         return switch (sortType) {
             case SORT_POPULAR -> curationRepository.findCurationsByPopularity(cursor, pageable);
             case SORT_LATEST -> curationRepository.findCurations(cursor, pageable);
+            case SORT_SIMILARITY ->  curationRepository.findCurations(cursor, pageable);
         };
     }
 

@@ -15,7 +15,7 @@ public record CurationContentRes(
         int viewCount,
         Double similarity,
         String matched,
-        Double popularityScore,
+        Integer popularityScore,
         String createdAt
 ) {
     public static CurationContentRes from(Curation curation) {
@@ -32,7 +32,7 @@ public record CurationContentRes(
                 0, // TODO: 조회수
                 null,
                 null,
-                null, // TODO: popularityScore 계산
+                curation.getPopularityScore(), // TODO: popularityScore 계산
                 curation.getCreatedAt().toString()
         );
     }
