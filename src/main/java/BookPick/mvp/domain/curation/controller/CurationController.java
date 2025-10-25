@@ -51,24 +51,21 @@ public class CurationController {
     }
 
 
-    // CurationController.java
-     // GET /api/v1/curations
-    // GET /api/v1/curations?sort=popular
-    // GET /api/v1/curations?sort=latest&cursor=300&size=10
 
+    //http://localhost:8081/api/v1/curations?sort=latest&cursor=17&size=1
+
+    // -- 큐레이션 목록 조회 --
     @GetMapping
     public ResponseEntity<ApiResponse<CurationListGetRes>> getCurationList(
             @RequestParam(defaultValue = "latest") String sort,
             @RequestParam(required = false) Long cursor,
             @RequestParam(defaultValue = "10") int size) {
 
-        CurationListGetRes curationListGetRes = curationService.getCurationList(sort, cursor, size);
+        CurationListGetRes curationListGetRes = curationService.getCurationList(cursor, size);
 
         return ResponseEntity.ok()
                 .body(ApiResponse.success(SuccessCode.CURATION_LIST_GET_SUCCESS, curationListGetRes));
     }
-
-
 
 
     // -- 큐레이션 수정 --
@@ -83,14 +80,25 @@ public class CurationController {
                 .body(ApiResponse.success(SuccessCode.CURATION_UPDATE_SUCCESS, res));
     }
 
+
     // -- 큐레이션 삭제 --
     @DeleteMapping("/{curationId}")
     public ResponseEntity<ApiResponse<CurationDeleteRes>> deleteCuration(
             @PathVariable Long curationId,
             @AuthenticationPrincipal CustomUserDetails currentUser) {
-        CurationDeleteRes res = curationService.removeCuration(currentUser.getId(), curationId);
+        Long userId;
+
+        if (currentUser == null) {
+            userId = 2L;
+        }
+        else{
+            userId=currentUser.getId();
+        }
+        CurationDeleteRes res = curationService.removeCuration(userId, curationId);
 
         return ResponseEntity.ok()
                 .body(ApiResponse.success(SuccessCode.CURATION_DELETE_SUCCESS, res));
     }
 }
+
+

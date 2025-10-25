@@ -20,6 +20,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -33,6 +34,8 @@ public class CurationService {
 
     private final CurationRepository curationRepository;
     private final UserRepository userRepository;
+    private static final int PAGE_SIZE = 10;
+
 
     // -- 큐레이션 등록 --
     @Transactional
@@ -74,67 +77,36 @@ public class CurationService {
 
 
     // -- 큐레이션 목록 조회 --
-    @Transactional(readOnly = true)
-    public CurationListGetRes getCurationList(String sort, Long cursor, int size) {
-        // 커서 기반 조회 (size + 1개 조회)
-        List<Curation> curations;
-        if (cursor == null) {
-            // 첫 요청 - User JOIN
-            PageRequest pageRequest = PageRequest.of(0, size + 1, getSortCondition(sort));
-            curations = curationRepository.findAllWithUser(pageRequest).getContent();
-        } else {
-            // 커서 이후 데이터 조회 - User JOIN
-            PageRequest pageRequest = PageRequest.of(0, size + 1);
-            curations = switch (sort) {
-                case "latest" -> curationRepository.findByIdLessThanWithUserLatest(cursor, pageRequest);
-                case "popular" -> curationRepository.findByIdLessThanWithUserPopular(cursor, pageRequest);
-                case "views" -> curationRepository.findByIdLessThanWithUserViews(cursor, pageRequest);
-                default -> curationRepository.findByIdLessThanWithUserLatest(cursor, pageRequest);
-            };
-        }
+    public CurationListGetRes getCurationList(Long cursor, int size) {
+        // size+1개 조회해서 다음 페이지 있는지 확인
+        Pageable pageable = PageRequest.of(0, size + 1);
 
-        // hasNext 판단
+        List<Curation> curations = curationRepository.findByCursorWithSize(cursor, pageable);
+
+        // 다음 페이지 있는지 확인
         boolean hasNext = curations.size() > size;
+
+        // nextCursor = 다음에 조회할 데이터의 ID (size+1번째)
+        Long nextCursor = null;
         if (hasNext) {
-            curations = curations.subList(0, size);
+            nextCursor = curations.get(size).getId(); // 4번째 데이터의 ID
+            curations = curations.subList(0, size); // 3개만 반환
         }
 
-        // Entity -> DTO 변환
+        // DTO 변환
         List<CurationContentRes> content = curations.stream()
                 .map(CurationContentRes::from)
                 .toList();
 
-        // nextCursor 계산
-        Long nextCursor = hasNext && !content.isEmpty()
-                ? content.get(content.size() - 1).curationId()
-                : null;
-
         return new CurationListGetRes(
-                sort,
-                getSortDescription(sort),
+                "latest",
+                "최신순 정렬",
                 content,
                 hasNext,
                 nextCursor
         );
     }
 
-    private Sort getSortCondition(String sort) {
-        return switch (sort) {
-            case "latest" -> Sort.by(Sort.Direction.DESC, "createdAt");
-            case "popular" -> Sort.by(Sort.Direction.DESC, "popularityScore", "id");
-            case "views" -> Sort.by(Sort.Direction.DESC, "viewCount", "id");
-            default -> Sort.by(Sort.Direction.DESC, "createdAt");
-        };
-    }
-
-    private String getSortDescription(String sort) {
-        return switch (sort) {
-            case "latest" -> "최신 작성순";
-            case "popular" -> "인기순";
-            case "views" -> "조회순";
-            default -> "최신 작성순";
-        };
-    }
 
 
     // -- 큐레이션 수정 --
