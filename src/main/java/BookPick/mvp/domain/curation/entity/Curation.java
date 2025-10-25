@@ -1,16 +1,8 @@
 package BookPick.mvp.domain.curation.entity;
 
 import BookPick.mvp.domain.curation.dto.update.CurationUpdateReq;
-import jakarta.persistence.CollectionTable;
-import jakarta.persistence.Column;
-import jakarta.persistence.ElementCollection;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EntityListeners;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.Table;
+import BookPick.mvp.domain.user.entity.User;
+import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -33,8 +25,9 @@ public class Curation {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
-    private Long userId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
 
     private String thumbnailUrl;
     private String thumbnailColor;
@@ -68,6 +61,19 @@ public class Curation {
     @Column(name = "style")
     private List<String> styles;
 
+    @Column(name = "like_count")
+    private Integer likeCount = 0;
+
+    @Column(name = "view_count")
+    private Integer viewCount = 0;
+
+    @Column(name = "comment_count")
+    private Integer commentCount = 0;
+
+    @Column(name = "popularity_score")
+    private Integer popularityScore = 0;
+
+
     @CreatedDate
     @Column(updatable = false)
     private LocalDateTime createdAt;
@@ -77,12 +83,13 @@ public class Curation {
 
     private LocalDateTime deletedAt;
 
+
     @Builder
-    public Curation(Long userId, String thumbnailUrl, String thumbnailColor,
+    public Curation(User user, String thumbnailUrl, String thumbnailColor,
                     String bookTitle, String bookAuthor, String bookIsbn,
                     String review, List<String> moods, List<String> genres,
                     List<String> keywords, List<String> styles) {
-        this.userId = userId;
+        this.user = user;
         this.thumbnailUrl = thumbnailUrl;
         this.thumbnailColor = thumbnailColor;
         this.bookTitle = bookTitle;
@@ -106,5 +113,13 @@ public class Curation {
         this.genres = req.recommend().genres();
         this.keywords = req.recommend().keywords();
         this.styles = req.recommend().styles();
+    }
+
+    public void increaseViewCount() {
+        this.viewCount++;
+        updatePopularityScore(); // 인기도 재계산
+    }
+    public void updatePopularityScore() {
+        this.popularityScore = (likeCount * 3) + (commentCount * 2) + (viewCount * 1);
     }
 }
