@@ -1,5 +1,5 @@
 // CurationGetRes.java
-package BookPick.mvp.domain.curation.dto.get;
+package BookPick.mvp.domain.curation.dto.get.one;
 
 import BookPick.mvp.domain.curation.entity.Curation;
 import java.time.LocalDateTime;
@@ -18,7 +18,7 @@ public record CurationGetRes(
     public static CurationGetRes from(Curation curation) {
         return new CurationGetRes(
                 curation.getId(),
-                curation.getUserId(),
+                curation.getUser().getId(),
                 new ThumbnailInfo(curation.getThumbnailUrl(), curation.getThumbnailColor()),
                 new BookInfo(curation.getBookTitle(), curation.getBookAuthor(), curation.getBookIsbn()),
                 curation.getReview(),

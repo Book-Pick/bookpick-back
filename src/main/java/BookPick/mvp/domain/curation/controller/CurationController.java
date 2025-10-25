@@ -5,15 +5,16 @@ import BookPick.mvp.domain.auth.service.MyUserDetailsService.*;
 import BookPick.mvp.domain.curation.SortType;
 import BookPick.mvp.domain.curation.dto.create.CurationCreateReq;
 import BookPick.mvp.domain.curation.dto.create.CurationCreateRes;
-import BookPick.mvp.domain.curation.dto.get.CurationGetRes;
+import BookPick.mvp.domain.curation.dto.get.list.CurationListGetRes;
+import BookPick.mvp.domain.curation.dto.get.one.CurationGetRes;
 import BookPick.mvp.domain.curation.dto.update.CurationUpdateReq;
 import BookPick.mvp.domain.curation.dto.update.CurationUpdateRes;
 import BookPick.mvp.domain.curation.dto.delete.CurationDeleteRes;
 import BookPick.mvp.domain.curation.service.CurationService;
 import BookPick.mvp.global.api.ApiResponse;
 import BookPick.mvp.global.api.SuccessCode;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
-import jakarta.websocket.server.PathParam;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -41,23 +42,33 @@ public class CurationController {
     // -- 큐레이션 단건 조회 --
     @GetMapping("/{curationId}")
     public ResponseEntity<ApiResponse<CurationGetRes>> getCuration(
-            @PathVariable Long curationId) {
-        CurationGetRes res = curationService.findCuration(curationId);
+            @PathVariable Long curationId,
+            HttpServletRequest req) {
+        CurationGetRes res = curationService.findCuration(curationId, req);
 
         return ResponseEntity.ok()
                 .body(ApiResponse.success(SuccessCode.CURATION_GET_SUCCESS, res));
     }
 
 
-    // -- 큐레이션 리스트 조회 최신순 --
-    //    /sort=latest&page=0&size=20")
-    @GetMapping
-    public ResponseEntity<ApiResponse<CuratoinListGetRes>> getCurationList(@RequestParam String sort, @RequestParam String size) {
-        if(sort.equals(SortType.SORT_LATEST.getValue())){
-            curationService.getCuratoinList(SortType);
+    // CurationController.java
+     // GET /api/v1/curations
+    // GET /api/v1/curations?sort=popular
+    // GET /api/v1/curations?sort=latest&cursor=300&size=10
 
-        }
+    @GetMapping
+    public ResponseEntity<ApiResponse<CurationListGetRes>> getCurationList(
+            @RequestParam(defaultValue = "latest") String sort,
+            @RequestParam(required = false) Long cursor,
+            @RequestParam(defaultValue = "10") int size) {
+
+        CurationListGetRes curationListGetRes = curationService.getCurationList(sort, cursor, size);
+
+        return ResponseEntity.ok()
+                .body(ApiResponse.success(SuccessCode.CURATION_LIST_GET_SUCCESS, curationListGetRes));
     }
+
+
 
 
     // -- 큐레이션 수정 --
