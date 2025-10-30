@@ -48,8 +48,8 @@ dependencies {
 
     // JWT (JJWT 0.12.x)
     implementation 'io.jsonwebtoken:jjwt-api:0.12.5'
-    runtimeOnly   'io.jsonwebtoken:jjwt-impl:0.12.5'
-    runtimeOnly   'io.jsonwebtoken:jjwt-gson:0.12.5' // Gson 사용 중. Jackson 쓰려면 jjwt-jackson로 교체
+    runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.12.5'
+    runtimeOnly 'io.jsonwebtoken:jjwt-gson:0.12.5' // Gson 사용 중. Jackson 쓰려면 jjwt-jackson로 교체
 
     // DB
     runtimeOnly 'com.mysql:mysql-connector-j'
@@ -62,6 +62,12 @@ dependencies {
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'org.springframework.security:spring-security-test'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+
+
+}
+
+test {
+    useJUnitPlatform()
 }
 
 tasks.named('test') {
