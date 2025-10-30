@@ -1,11 +1,10 @@
-package BookPick.mvp.domain.ReadingPreference.dto.Get;
+package BookPick.mvp.domain.preference.dto.Update;
 
-import BookPick.mvp.domain.ReadingPreference.entity.ReadingPreference;
+import BookPick.mvp.domain.preference.entity.ReadingPreference;
 
 import java.util.List;
 
-// -- 독서 취향 조회 응답 --
-public record ReadingPreferenceGetRes(
+public record ReadingPreferenceUpdateRes(
         Long preferenceId,
         String mbti,
         List<String> favoriteBooks,        // 좋아하는 책
@@ -14,9 +13,9 @@ public record ReadingPreferenceGetRes(
         List<String> genres,      // 선호 장르
         List<String> keywords,              // 키워드
         List<String> trends
-){
-    static public ReadingPreferenceGetRes from(ReadingPreference rp){
-        return new ReadingPreferenceGetRes(
+) {
+    static public ReadingPreferenceUpdateRes from(ReadingPreference rp){
+        return new ReadingPreferenceUpdateRes(
                 rp.getId(),
                 rp.getMbti(),
                 rp.getFavoriteBooks(),
@@ -28,6 +27,3 @@ public record ReadingPreferenceGetRes(
         );
     }
 }
-
-
-

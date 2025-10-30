@@ -1,4 +1,4 @@
-package BookPick.mvp.domain.ReadingPreference.dto.Update;
+package BookPick.mvp.domain.preference.dto.Update;
 
 import java.util.List;
 

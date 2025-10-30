@@ -1,9 +1,6 @@
-package BookPick.mvp.domain.ReadingPreference.dto.Delete;
-
-import BookPick.mvp.domain.ReadingPreference.entity.ReadingPreference;
+package BookPick.mvp.domain.preference.dto.Delete;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 public record ReadingPreferenceDeleteRes(
         Long preferenceId,

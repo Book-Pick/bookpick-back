@@ -1,6 +1,6 @@
-package BookPick.mvp.domain.ReadingPreference.entity;
+package BookPick.mvp.domain.preference.entity;
 
-import BookPick.mvp.domain.ReadingPreference.dto.Update.ReadingPreferenceUpdateReq;
+import BookPick.mvp.domain.preference.dto.Update.ReadingPreferenceUpdateReq;
 import BookPick.mvp.domain.user.entity.User;
 import jakarta.persistence.*;
 import lombok.*;
@@ -36,7 +36,7 @@ public class ReadingPreference {
     private List<String> moods;
 
     @ElementCollection
-    @CollectionTable(name = "preference_reading_habits", joinColumns = @JoinColumn(name = "preference_id"))
+    @CollectionTable(name = "preference_styles", joinColumns = @JoinColumn(name = "preference_id"))
     @Column(name = "habit")
     private List<String> readingHabits;
 

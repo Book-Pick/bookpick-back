@@ -89,11 +89,6 @@ public class MyUserDetailsService implements UserDetailsService {
         static public CustomUserDetails fromJwt(Long userId, String email, Collection<? extends GrantedAuthority> authorities){
             return new CustomUserDetails(userId, email, authorities);
         }
-
-
-
-
-
     }
 }
 

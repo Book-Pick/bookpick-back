@@ -46,25 +46,25 @@ public class JwtFilter extends OncePerRequestFilter {
             return;
         }
 
-            Claims claims = JwtUtil.extractToken(token);    // 토큰 까기 (토큰 진위여부 검증 해당 메서드에서 진행)
+        Claims claims = JwtUtil.extractToken(token);    // 토큰 까기 (토큰 진위여부 검증 해당 메서드에서 진행)
 
-            Long userId = claims.get("userId", Number.class).longValue();
-            String email = claims.get("email").toString();
-
-
-            var authorities = Arrays.stream(
-                    claims.get("authorities").toString().split(",")
-            ).map(SimpleGrantedAuthority::new).toList();
+        Long userId = claims.get("userId", Number.class).longValue();
+        String email = claims.get("email").toString();
 
 
-            CustomUserDetails customUserDetails = CustomUserDetails.fromJwt(userId, email, authorities);
+        var authorities = Arrays.stream(
+                claims.get("authorities").toString().split(",")
+        ).map(SimpleGrantedAuthority::new).toList();
 
-            var auth = new UsernamePasswordAuthenticationToken(
-                    customUserDetails, null, customUserDetails.getAuthorities()
-            );
-            auth.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));     // 추가 정보 저장 (어디서 접속했는지)
 
-            SecurityContextHolder.getContext().setAuthentication(auth);
+        CustomUserDetails customUserDetails = CustomUserDetails.fromJwt(userId, email, authorities);
+
+        var auth = new UsernamePasswordAuthenticationToken(
+                customUserDetails, null, customUserDetails.getAuthorities()
+        );
+        auth.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));     // 추가 정보 저장 (어디서 접속했는지)
+
+        SecurityContextHolder.getContext().setAuthentication(auth);
 
 
         filterChain.doFilter(request, response);

@@ -1,14 +1,12 @@
-package BookPick.mvp.domain.ReadingPreference.controller;
+package BookPick.mvp.domain.preference.controller;
 
-import BookPick.mvp.domain.ReadingPreference.dto.Create.ReadingPreferenceCreateReq;
-import BookPick.mvp.domain.ReadingPreference.dto.Create.ReadingPreferenceCreateRes;
-import BookPick.mvp.domain.ReadingPreference.dto.Create.ReadingPreferenceCreateRes.*;
-import BookPick.mvp.domain.ReadingPreference.dto.Delete.ReadingPreferenceDeleteRes;
-import BookPick.mvp.domain.ReadingPreference.dto.Get.ReadingPreferenceGetReq;
-import BookPick.mvp.domain.ReadingPreference.dto.Get.ReadingPreferenceGetRes;
-import BookPick.mvp.domain.ReadingPreference.dto.Update.ReadingPreferenceUpdateReq;
-import BookPick.mvp.domain.ReadingPreference.dto.Update.ReadingPreferenceUpdateRes;
-import BookPick.mvp.domain.ReadingPreference.service.ReadingPreferenceService;
+import BookPick.mvp.domain.preference.dto.Create.ReadingPreferenceCreateReq;
+import BookPick.mvp.domain.preference.dto.Create.ReadingPreferenceCreateRes;
+import BookPick.mvp.domain.preference.dto.Delete.ReadingPreferenceDeleteRes;
+import BookPick.mvp.domain.preference.dto.Get.ReadingPreferenceGetRes;
+import BookPick.mvp.domain.preference.dto.Update.ReadingPreferenceUpdateReq;
+import BookPick.mvp.domain.preference.dto.Update.ReadingPreferenceUpdateRes;
+import BookPick.mvp.domain.preference.service.ReadingPreferenceService;
 import BookPick.mvp.domain.auth.service.MyUserDetailsService.*;
 import BookPick.mvp.global.api.ApiResponse;
 import BookPick.mvp.global.api.SuccessCode;

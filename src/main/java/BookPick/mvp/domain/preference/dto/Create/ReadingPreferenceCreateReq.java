@@ -1,4 +1,4 @@
-package BookPick.mvp.domain.ReadingPreference.dto.Create;
+package BookPick.mvp.domain.preference.dto.Create;
 
 import java.util.List;
 

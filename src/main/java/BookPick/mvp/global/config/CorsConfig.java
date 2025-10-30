@@ -14,7 +14,7 @@ public class CorsConfig {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
                 registry.addMapping("/**")
-                        .allowedOrigins("*")
+                        .allowedOrigins("https://bookpick-front.vercel.app")
                         .allowedMethods("GET","POST","PUT","DELETE","PATCH","OPTIONS")
                         .allowedHeaders("*")
                         .allowCredentials(true);
@@ -22,3 +22,6 @@ public class CorsConfig {
         };
     }
 }
+
+// 오리진 모두 허용
+// evil에서 요
