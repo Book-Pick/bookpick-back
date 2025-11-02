@@ -44,7 +44,7 @@ public class AuthService {
         // 2. 신규 유저 생성
         User user = User.builder()
                 .email(req.email())
-                .password(passwordEncoder.encode(req.passWord()))
+                .password(passwordEncoder.encode(req.password()))
                 .role(Roles.ROLE_USER)
                 .build();
 
@@ -59,7 +59,7 @@ public class AuthService {
     // access Token O, refresh X
     @Transactional
     public LoginRes login(LoginReq req, HttpServletResponse res) {
-        UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(req.email(), req.passWord());   // 임시로 이메일과 아이디가 담김
+        UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(req.email(), req.password());   // 임시로 이메일과 아이디가 담김
 
         try {
             // getObject : AuthenticationManager 객체 반환
