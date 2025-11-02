@@ -62,8 +62,6 @@ public class AuthService {
         UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(req.email(), req.passWord());   // 임시로 이메일과 아이디가 담김
 
         try {
-            // getObject : AuthenticationManager 객체 반환
-            // .authenticate : Authenticate를 상속한 구현체의 인스턴스를 검증한다.
             Authentication auth = authenticationManagerBuilder.getObject().authenticate(authToken);        // -> UserDetailsService.loadUserByUsername(), 비밀 번호 및 아이디 검증
 
             firstLoginCheck(req.email());
