@@ -1,5 +1,5 @@
 // CurationAccessDeniedException.java
-package BookPick.mvp.domain.curation.converter.exception;
+package BookPick.mvp.domain.curation.exception;
 
 import BookPick.mvp.global.api.ErrorCode;
 import BookPick.mvp.global.exception.BusinessException;
