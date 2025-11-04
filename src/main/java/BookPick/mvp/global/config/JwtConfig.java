@@ -13,7 +13,7 @@ import javax.crypto.SecretKey;
 public class JwtConfig {
 
     @Value("${jwt.access.secret}")
-    private static String accessSecret;
+    private  String accessSecret;
     @Value("${jwt.access.expiration}")
     private long accessSecretExp;
 

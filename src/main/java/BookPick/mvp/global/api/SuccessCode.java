@@ -25,9 +25,9 @@ public enum SuccessCode {
 
     // -- Book --
     BOOK_LIST_READ_SUCCESS(HttpStatus.OK, "책 목록을 성공적으로 조회하였습니다."),
+    READING_PREFERENCE_REGISTER_SUCCESS(HttpStatus.CREATED, "독서 취향을 성공적으로 등록하였습니다."),
 
     // -- Reading Preference --
-    READING_PREFERENCE_REGISTER_SUCCESS(HttpStatus.CREATED, "독서 취향을 성공적으로 등록하였습니다."),
     READING_PREFERENCE_READ_SUCCESS(HttpStatus.CREATED, "독서 취향을 성공적으로 조회하였습니다."),
     READING_PREFERENCE_UPDATE_SUCCESS(HttpStatus.CREATED, "독서 취향을 성공적으로 수정하였습니다."),
     READING_PREFERENCE_DELETE_SUCCESS(HttpStatus.CREATED, "독서 취향을 성공적으로 삭제하였습니다."),

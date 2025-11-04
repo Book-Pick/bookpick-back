@@ -1,10 +1,8 @@
 package BookPick.mvp.global.config;
 
-import BookPick.mvp.domain.auth.exception.JwtTokenExpiredException;
-import BookPick.mvp.domain.auth.service.MyUserDetailsService.*;
+import BookPick.mvp.domain.auth.service.CustomUserDetails;
 import BookPick.mvp.global.util.JwtUtil;
 import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.ExpiredJwtException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;

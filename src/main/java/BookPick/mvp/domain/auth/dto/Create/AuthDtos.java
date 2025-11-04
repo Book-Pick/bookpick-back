@@ -1,7 +1,7 @@
 package BookPick.mvp.domain.auth.dto.Create;
 
 
-import BookPick.mvp.domain.auth.service.MyUserDetailsService.*;
+import BookPick.mvp.domain.auth.service.CustomUserDetails;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import jakarta.validation.constraints.Email;
