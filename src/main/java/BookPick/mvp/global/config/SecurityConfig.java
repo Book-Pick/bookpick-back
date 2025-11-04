@@ -3,6 +3,7 @@ package BookPick.mvp.global.config;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -40,6 +41,7 @@ public class SecurityConfig {
                         .requestMatchers("/**").permitAll()
                         .requestMatchers("/api/v1/signup", "/api/v1/login", "/api/v1/logout").permitAll()
                         .requestMatchers("/api/v1/users/*/preferences").permitAll()
+                        .requestMatchers(HttpMethod.GET,"/api/v1/curations/*/comments").permitAll()
                         .requestMatchers("/v3/api-docs/**", "/swagger-ui/**", "/swagger-resources/**").permitAll()
                         .requestMatchers("/error").permitAll()
                         .anyRequest().authenticated()

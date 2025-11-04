@@ -1,7 +1,7 @@
 // CurationController.java에 추가
 package BookPick.mvp.domain.curation.controller;
 
-import BookPick.mvp.domain.auth.service.MyUserDetailsService.*;
+import BookPick.mvp.domain.auth.service.CustomUserDetails;
 import BookPick.mvp.domain.curation.SortType;
 import BookPick.mvp.domain.curation.dto.create.CurationCreateReq;
 import BookPick.mvp.domain.curation.dto.create.CurationCreateRes;
@@ -11,14 +11,11 @@ import BookPick.mvp.domain.curation.dto.update.CurationUpdateReq;
 import BookPick.mvp.domain.curation.dto.update.CurationUpdateRes;
 import BookPick.mvp.domain.curation.dto.delete.CurationDeleteRes;
 import BookPick.mvp.domain.curation.service.CurationService;
-import BookPick.mvp.global.HyperParam.Defaults;
 import BookPick.mvp.global.api.ApiResponse;
 import BookPick.mvp.global.api.SuccessCode;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;

@@ -22,7 +22,7 @@ public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "userId")
+    @Column(name = "user_Id")
     private Long id; // 내부 식별자 (PK)
 
     @Column(name = "login_email", nullable = false, unique = true, length = 255)

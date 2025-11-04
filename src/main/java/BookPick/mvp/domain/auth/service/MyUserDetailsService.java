@@ -4,25 +4,16 @@ package BookPick.mvp.domain.auth.service;
 import BookPick.mvp.domain.auth.Roles;
 import BookPick.mvp.domain.user.exception.UserNotFoundException;
 import BookPick.mvp.domain.user.repository.UserRepository;
-import lombok.Builder;
-import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import lombok.Setter;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import javax.management.relation.Role;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
-
-import static org.apache.coyote.http11.Constants.a;
 
 
 // 스프링 시큐리티에서 자동으로 호출
@@ -59,36 +50,5 @@ public class MyUserDetailsService implements UserDetailsService {
 
     }
 
-    @Getter
-    @Setter
-    public static class CustomUserDetails extends User {
-        private Long id;
-        private String nickname;
-        private String bio;
-        private String profileImageUrl;
-        private boolean isFirstLogin;
-
-        public CustomUserDetails(
-                BookPick.mvp.domain.user.entity.User user,
-                Collection<? extends GrantedAuthority> authorities
-        ) {
-            super(user.getEmail(), user.getPassword(), authorities);
-            this.bio = user.getBio();
-            this.profileImageUrl = user.getProfileImageUrl();
-        }
-
-        public CustomUserDetails(
-                Long userId,
-                String email,
-                Collection<? extends GrantedAuthority> authorities
-        ){
-            super(email, "", authorities);
-            this.id=userId;
-        }
-
-        static public CustomUserDetails fromJwt(Long userId, String email, Collection<? extends GrantedAuthority> authorities){
-            return new CustomUserDetails(userId, email, authorities);
-        }
-    }
 }
 

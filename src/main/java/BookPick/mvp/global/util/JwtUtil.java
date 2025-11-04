@@ -2,7 +2,7 @@ package BookPick.mvp.global.util;
 
 import BookPick.mvp.domain.auth.exception.InvalidTokenTypeException;
 import BookPick.mvp.domain.auth.exception.JwtTokenExpiredException;
-import BookPick.mvp.domain.auth.service.MyUserDetailsService.*;
+import BookPick.mvp.domain.auth.service.CustomUserDetails;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.io.Decoders;
@@ -28,7 +28,7 @@ public class JwtUtil {
             ));
 
     // (추가) 토큰 수명 상수
-    private static final long ACCESS_TTL_MS  = 1000L * 60 * 60;          // 1시간
+    private static final long ACCESS_TTL_MS = 1000L * 60 * 60;          // 1시간
     private static final long REFRESH_TTL_MS = 1000L * 60 * 60 * 24 * 14; // 14일
 
     // 2. JWT 생성
@@ -36,9 +36,8 @@ public class JwtUtil {
         CustomUserDetails usr = (CustomUserDetails) auth.getPrincipal();
 
         String authorities = auth.getAuthorities().stream()                 //getAuthorities -> List<auth객체> return
-                .map(a->a.getAuthority())   // getAuthority() -> String return
+                .map(a -> a.getAuthority())   // getAuthority() -> String return
                 .collect(Collectors.joining(","));
-
 
 
         String jwt = Jwts.builder()
@@ -46,7 +45,7 @@ public class JwtUtil {
                 .claim("email", usr.getUsername())
                 .claim("authorities", authorities)
                 .issuedAt(new Date(System.currentTimeMillis()))
-                .expiration(new Date(System.currentTimeMillis() + 1000*60*60))  // expiration : 만료
+                .expiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60))  // expiration : 만료
                 .signWith(key)
                 .compact();
         return jwt;
@@ -70,20 +69,17 @@ public class JwtUtil {
     //3. JWT 오픈
     public static Claims extractToken(String token) {
 
-        try{
+        try {
             Claims claims = Jwts.parser().verifyWith(key).build()
-                .parseSignedClaims(token).getPayload();
-        return claims;
+                    .parseSignedClaims(token).getPayload();
+            return claims;
         } catch (ExpiredJwtException e) {
-        throw new JwtTokenExpiredException();
-    } catch (JwtException | IllegalArgumentException e) {
-        throw new InvalidTokenTypeException();
+            throw new JwtTokenExpiredException();
+        } catch (JwtException | IllegalArgumentException e) {
+            throw new InvalidTokenTypeException();
+        }
     }
-
-    }
-
-
-    }
+}
 
 
 

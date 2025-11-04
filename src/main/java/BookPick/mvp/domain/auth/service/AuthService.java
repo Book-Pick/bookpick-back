@@ -11,7 +11,6 @@ import BookPick.mvp.global.util.JwtUtil;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -70,7 +69,7 @@ public class AuthService {
             String refreshToken = JwtUtil.createRefreshToken(auth);  // Refresh X
 
 
-            MyUserDetailsService.CustomUserDetails customUserDetails = (MyUserDetailsService.CustomUserDetails) auth.getPrincipal();
+            CustomUserDetails customUserDetails = (CustomUserDetails) auth.getPrincipal();
 
             return LoginRes.from(customUserDetails, "Bearer " + accessToken);
 
