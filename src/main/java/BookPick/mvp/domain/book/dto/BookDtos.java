@@ -8,7 +8,8 @@ public class BookDtos {
 
     // -- R --
     public record BookSearchReq(
-            String keyword
+            String keyword,
+            Integer page
     ){}
     public record BookSearchRes(
         String title,
