@@ -1,7 +1,7 @@
 // CurationService.java
 package BookPick.mvp.domain.curation.service;
 
-import BookPick.mvp.domain.curation.SortType;
+import BookPick.mvp.domain.curation.enums.SortType;
 import BookPick.mvp.domain.curation.dto.create.CurationCreateReq;
 import BookPick.mvp.domain.curation.dto.create.CurationCreateRes;
 import BookPick.mvp.domain.curation.dto.get.list.CurationContentRes;
@@ -11,7 +11,7 @@ import BookPick.mvp.domain.curation.dto.get.one.CurationGetRes;
 import BookPick.mvp.domain.curation.dto.update.CurationUpdateReq;
 import BookPick.mvp.domain.curation.dto.update.CurationUpdateRes;
 import BookPick.mvp.domain.curation.dto.delete.CurationDeleteRes;
-import BookPick.mvp.domain.curation.entity.Curation;
+import BookPick.mvp.domain.curation.model.Curation;
 import BookPick.mvp.domain.curation.exception.CurationAccessDeniedException;
 import BookPick.mvp.domain.curation.exception.CurationNotFoundException;
 import BookPick.mvp.domain.curation.repository.CurationRepository;

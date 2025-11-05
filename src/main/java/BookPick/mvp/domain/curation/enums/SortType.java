@@ -1,5 +1,5 @@
 // SortType.java
-package BookPick.mvp.domain.curation;
+package BookPick.mvp.domain.curation.enums;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

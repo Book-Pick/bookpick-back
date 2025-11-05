@@ -1,10 +1,10 @@
 package BookPick.mvp.domain.curation.service.Handler;
 
 
-import BookPick.mvp.domain.curation.SortType;
+import BookPick.mvp.domain.curation.enums.SortType;
 import BookPick.mvp.domain.curation.dto.get.list.CurationContentRes;
 import BookPick.mvp.domain.curation.dto.get.list.CursorPage;
-import BookPick.mvp.domain.curation.entity.Curation;
+import BookPick.mvp.domain.curation.model.Curation;
 import BookPick.mvp.domain.curation.service.fetcher.CurationFetcher;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;

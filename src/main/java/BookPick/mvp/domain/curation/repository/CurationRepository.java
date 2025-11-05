@@ -1,13 +1,11 @@
 package BookPick.mvp.domain.curation.repository;
 
-import BookPick.mvp.domain.curation.entity.Curation;
-import org.springframework.data.domain.Page;
+import BookPick.mvp.domain.curation.model.Curation;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 public interface CurationRepository extends JpaRepository<Curation, Long> {

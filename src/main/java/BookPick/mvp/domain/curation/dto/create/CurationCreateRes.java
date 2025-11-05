@@ -1,6 +1,6 @@
 package BookPick.mvp.domain.curation.dto.create;
 
-import BookPick.mvp.domain.curation.entity.Curation;
+import BookPick.mvp.domain.curation.model.Curation;
 
 public record CurationCreateRes(
         Long id

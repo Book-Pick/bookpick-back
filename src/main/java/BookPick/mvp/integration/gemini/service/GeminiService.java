@@ -1,7 +1,7 @@
 package BookPick.mvp.integration.gemini.service;
 
 
-import BookPick.mvp.domain.curation.entity.Curation;
+import BookPick.mvp.domain.curation.model.Curation;
 import BookPick.mvp.domain.curation.repository.CurationRepository;
 import BookPick.mvp.integration.gemini.client.GeminiClient;
 import BookPick.mvp.integration.gemini.dto.CurationMatchResult;

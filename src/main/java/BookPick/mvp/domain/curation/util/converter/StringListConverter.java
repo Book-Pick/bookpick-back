@@ -1,5 +1,5 @@
 // StringListConverter.java
-package BookPick.mvp.domain.curation.converter;
+package BookPick.mvp.domain.curation.util.converter;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;

@@ -1,7 +1,7 @@
 package BookPick.mvp.domain.curation.service.provider;
 
 
-import BookPick.mvp.domain.curation.entity.Curation;
+import BookPick.mvp.domain.curation.model.Curation;
 import BookPick.mvp.domain.curation.repository.CurationRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
