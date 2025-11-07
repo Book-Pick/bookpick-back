@@ -1,5 +1,6 @@
 package BookPick.mvp.domain.preference.controller;
 
+import BookPick.mvp.domain.auth.service.CustomUserDetails;
 import BookPick.mvp.domain.preference.dto.Create.ReadingPreferenceCreateReq;
 import BookPick.mvp.domain.preference.dto.Create.ReadingPreferenceCreateRes;
 import BookPick.mvp.domain.preference.dto.Delete.ReadingPreferenceDeleteRes;
@@ -7,9 +8,8 @@ import BookPick.mvp.domain.preference.dto.Get.ReadingPreferenceGetRes;
 import BookPick.mvp.domain.preference.dto.Update.ReadingPreferenceUpdateReq;
 import BookPick.mvp.domain.preference.dto.Update.ReadingPreferenceUpdateRes;
 import BookPick.mvp.domain.preference.service.ReadingPreferenceService;
-import BookPick.mvp.domain.auth.service.MyUserDetailsService.*;
 import BookPick.mvp.global.api.ApiResponse;
-import BookPick.mvp.global.api.SuccessCode;
+import BookPick.mvp.global.api.SuccessCode.SuccessCode;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;

@@ -18,7 +18,7 @@ public interface CurationRepository extends JpaRepository<Curation, Long> {
 
 
     @Query("SELECT c FROM Curation c WHERE c.id <= :cursor ORDER BY c.createdAt DESC, c.id DESC")
-    List<Curation> findCurations(@Param("cursor") Long cursor, Pageable pageable);
+    List<Curation> findLatestCurations(@Param("cursor") Long cursor, Pageable pageable);
 
     @Query("SELECT c FROM Curation c " +
             "WHERE (:cursor IS NULL) " +

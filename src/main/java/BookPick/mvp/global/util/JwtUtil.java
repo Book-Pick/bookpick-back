@@ -2,7 +2,7 @@ package BookPick.mvp.global.util;
 
 import BookPick.mvp.domain.auth.exception.InvalidTokenTypeException;
 import BookPick.mvp.domain.auth.exception.JwtTokenExpiredException;
-import BookPick.mvp.domain.auth.service.MyUserDetailsService.*;
+import BookPick.mvp.domain.auth.service.CustomUserDetails;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.io.Decoders;

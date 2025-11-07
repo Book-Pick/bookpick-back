@@ -1,7 +1,7 @@
 package BookPick.mvp.global.exception.custom;
 
 
-import BookPick.mvp.global.api.ErrorCode;
+import BookPick.mvp.global.api.ErrorCode.ErrorCode;
 import lombok.Getter;
 import lombok.Setter;
 
