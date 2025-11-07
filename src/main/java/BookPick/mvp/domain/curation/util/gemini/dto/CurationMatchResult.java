@@ -1,8 +1,11 @@
-package BookPick.mvp.integration.gemini.dto;
+package BookPick.mvp.domain.curation.util.gemini.dto;
 
 import BookPick.mvp.domain.curation.model.Curation;
 import lombok.Builder;
 import lombok.Getter;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @Builder
@@ -13,6 +16,7 @@ public class CurationMatchResult {
     private String matchedKeyword;
     private String matchedStyle;
     private int totalMatchCount;
+    private String matched;
 
     public static CurationMatchResult of(Curation curation,
                                          String recommendedMood,
@@ -25,30 +29,37 @@ public class CurationMatchResult {
         String matchedKeyword = null;
         String matchedStyle = null;
         int matchCount = 0;
+        List<String> matchedItems = new ArrayList<>();
 
         // Mood 매칭
         if (curation.getMoods() != null && curation.getMoods().contains(recommendedMood)) {
             matchedMood = recommendedMood;
+            matchedItems.add(recommendedMood);
             matchCount++;
         }
 
         // Genre 매칭
         if (curation.getGenres() != null && curation.getGenres().contains(recommendedGenre)) {
             matchedGenre = recommendedGenre;
+            matchedItems.add(recommendedGenre);
             matchCount++;
         }
 
         // Keyword 매칭
         if (curation.getKeywords() != null && curation.getKeywords().contains(recommendedKeyword)) {
             matchedKeyword = recommendedKeyword;
+            matchedItems.add(recommendedKeyword);
             matchCount++;
         }
 
         // Style 매칭
         if (curation.getStyles() != null && curation.getStyles().contains(recommendedStyle)) {
             matchedStyle = recommendedStyle;
+            matchedItems.add(recommendedStyle);
             matchCount++;
         }
+
+        String matchedString = String.join(", ", matchedItems);
 
         return CurationMatchResult.builder()
                 .curation(curation)
@@ -57,6 +68,7 @@ public class CurationMatchResult {
                 .matchedKeyword(matchedKeyword)
                 .matchedStyle(matchedStyle)
                 .totalMatchCount(matchCount)
+                .matched(matchedString)
                 .build();
     }
 
