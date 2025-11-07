@@ -59,6 +59,7 @@ public class GeminiService {
         return curations.stream()
                 .map(curation -> CurationMatchResult.of(
                         curation,
+                        curation.getUser(),
                         recommendedMood,
                         recommendedGenre,
                         recommendedKeyword,

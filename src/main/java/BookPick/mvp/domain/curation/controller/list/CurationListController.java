@@ -23,7 +23,7 @@ public class CurationListController {
     private final CurationListService curationListService;
 
 
-    @Operation(summary = "큐레이션 최신순 목록  조회", description = "큐레이션 목록을 페이징 조회", tags = {"Curation"})
+    @Operation(summary = "큐레이션 목록  조회", description = "최신순 / 인기순 / 사용자 취향 유사도 순", tags = {"Curation"})
     @GetMapping
     public ResponseEntity<ApiResponse<CurationListGetRes>> CurationsGet(
             @RequestParam(defaultValue = "latest") String sort,

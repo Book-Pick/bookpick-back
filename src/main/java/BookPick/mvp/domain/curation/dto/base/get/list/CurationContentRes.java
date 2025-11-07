@@ -1,7 +1,9 @@
 package BookPick.mvp.domain.curation.dto.base.get.list;
 
+import BookPick.mvp.domain.curation.dto.prefer.ReadingPreferenceInfo;
 import BookPick.mvp.domain.curation.model.Curation;
 import BookPick.mvp.domain.curation.util.gemini.dto.CurationMatchResult;
+import BookPick.mvp.domain.user.entity.User;
 
 public record CurationContentRes(
         Long curationId,
@@ -14,7 +16,7 @@ public record CurationContentRes(
         int likeCount,
         int commentCount,
         int viewCount,
-        Double similarity,
+        Integer similarity,
         String matched,
         Integer popularityScore,
         String createdAt
@@ -24,35 +26,48 @@ public record CurationContentRes(
                 curation.getId(),
                 curation.getBookTitle(),
                 curation.getUser().getId(),
-                "닉네임", // TODO: User 조인 필요
+                curation.getUser().getNickname(),
                 new ThumbnailRes(curation.getThumbnailUrl(), curation.getThumbnailColor()),
                 curation.getReview(), new BookRes(curation.getBookTitle(), curation.getBookAuthor()),
-                0, // TODO: 좋아요 수
-                0, // TODO: 댓글 수
-                0, // TODO: 조회수
+                curation.getLikeCount(),
+                curation.getCommentCount(),
+                curation.getViewCount(),
                 null,
                 null,
-                curation.getPopularityScore(), // TODO: popularityScore 계산
+                curation.getPopularityScore(),
                 curation.getCreatedAt().toString()
         );
     }
 
-    public static CurationContentRes from(CurationMatchResult matchResult) {
+    public static CurationContentRes from(CurationMatchResult matchResult, ReadingPreferenceInfo preferenceInfo) {
         Curation curation = matchResult.getCuration();
         return new CurationContentRes(
                 curation.getId(),
                 curation.getBookTitle(),
                 curation.getUser().getId(),
-                "닉네임", // TODO: User 조인 필요
+                matchResult.getUser().getNickname(),
                 new ThumbnailRes(curation.getThumbnailUrl(), curation.getThumbnailColor()),
                 curation.getReview(), new BookRes(curation.getBookTitle(), curation.getBookAuthor()),
-                0, // TODO: 좋아요 수
-                0, // TODO: 댓글 수
-                0, // TODO: 조회수
-                null, // TODO: similarity
+                curation.getLikeCount(),
+                curation.getCommentCount(),
+                curation.getViewCount(),
+                getSimilarity(matchResult, preferenceInfo),
                 matchResult.getMatched(),
                 curation.getPopularityScore(),
                 curation.getCreatedAt().toString()
         );
+    }
+
+    // 1. 유사도 계산법                                 100%
+    // 1) 작가                                        19%
+    // 2) Matched -> 이거 , 로 분리해서 개수 Count        하나당 20%
+
+     static Integer getSimilarity(CurationMatchResult matchResult, ReadingPreferenceInfo preferenceInfo){
+        Integer similarity = 0;
+        User user = matchResult.getUser();
+        String userPrferAuthor = preferenceInfo.
+        String userPrferAuthor = matchResult.getCuration().getBookAuthor();
+        if(matchResult.getCuration().getBookAuthor().equals(user)
+        return null;
     }
 }

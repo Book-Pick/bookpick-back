@@ -1,6 +1,7 @@
 package BookPick.mvp.domain.curation.util.gemini.dto;
 
 import BookPick.mvp.domain.curation.model.Curation;
+import BookPick.mvp.domain.user.entity.User;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -11,6 +12,7 @@ import java.util.List;
 @Builder
 public class CurationMatchResult {
     private Curation curation;
+    private User user;
     private String matchedMood;
     private String matchedGenre;
     private String matchedKeyword;
@@ -19,6 +21,7 @@ public class CurationMatchResult {
     private String matched;
 
     public static CurationMatchResult of(Curation curation,
+                                         User user,
                                          String recommendedMood,
                                          String recommendedGenre,
                                          String recommendedKeyword,
@@ -63,6 +66,7 @@ public class CurationMatchResult {
 
         return CurationMatchResult.builder()
                 .curation(curation)
+                .user(user)
                 .matchedMood(matchedMood)
                 .matchedGenre(matchedGenre)
                 .matchedKeyword(matchedKeyword)

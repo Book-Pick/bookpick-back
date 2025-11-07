@@ -42,8 +42,9 @@ public class CurationListService {
             Long nextCursor = hasNext ? paginated.get(size).getCuration().getId() : null;
 
             List<CurationContentRes> content = contentResults.stream()
-                    .map(CurationContentRes::from)
+                    .map(result -> CurationContentRes.from(result, preferenceInfo))
                     .collect(Collectors.toList());
+
 
             return CurationListGetRes.from(sortType, content, hasNext, nextCursor);
         }
