@@ -1,5 +1,5 @@
 // CurationGetRes.java
-package BookPick.mvp.domain.curation.dto.get.one;
+package BookPick.mvp.domain.curation.dto.base.get.one;
 
 import BookPick.mvp.domain.curation.model.Curation;
 import java.time.LocalDateTime;
