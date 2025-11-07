@@ -1,4 +1,4 @@
-package BookPick.mvp.domain.curation.dto.create;
+package BookPick.mvp.domain.curation.dto.base.create;
 
 import BookPick.mvp.domain.curation.model.Curation;
 

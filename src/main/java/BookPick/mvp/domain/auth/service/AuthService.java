@@ -11,7 +11,6 @@ import BookPick.mvp.global.util.JwtUtil;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -44,7 +43,7 @@ public class AuthService {
         // 2. 신규 유저 생성
         User user = User.builder()
                 .email(req.email())
-                .password(passwordEncoder.encode(req.passWord()))
+                .password(passwordEncoder.encode(req.password()))
                 .role(Roles.ROLE_USER)
                 .build();
 
@@ -59,7 +58,7 @@ public class AuthService {
     // access Token O, refresh X
     @Transactional
     public LoginRes login(LoginReq req, HttpServletResponse res) {
-        UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(req.email(), req.passWord());   // 임시로 이메일과 아이디가 담김
+        UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(req.email(), req.password());   // 임시로 이메일과 아이디가 담김
 
         try {
             Authentication auth = authenticationManagerBuilder.getObject().authenticate(authToken);        // -> UserDetailsService.loadUserByUsername(), 비밀 번호 및 아이디 검증
@@ -70,7 +69,7 @@ public class AuthService {
             String refreshToken = JwtUtil.createRefreshToken(auth);  // Refresh X
 
 
-            MyUserDetailsService.CustomUserDetails customUserDetails = (MyUserDetailsService.CustomUserDetails) auth.getPrincipal();
+            CustomUserDetails customUserDetails = (CustomUserDetails) auth.getPrincipal();
 
             return LoginRes.from(customUserDetails, "Bearer " + accessToken);
 

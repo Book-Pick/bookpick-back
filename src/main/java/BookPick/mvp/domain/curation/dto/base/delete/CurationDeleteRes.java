@@ -1,5 +1,5 @@
 // CurationDeleteRes.java
-package BookPick.mvp.domain.curation.dto.delete;
+package BookPick.mvp.domain.curation.dto.base.delete;
 
 import java.time.LocalDateTime;
 

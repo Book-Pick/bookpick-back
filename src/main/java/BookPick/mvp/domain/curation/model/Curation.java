@@ -1,6 +1,6 @@
 package BookPick.mvp.domain.curation.model;
 
-import BookPick.mvp.domain.curation.dto.update.CurationUpdateReq;
+import BookPick.mvp.domain.curation.dto.base.update.CurationUpdateReq;
 import BookPick.mvp.domain.user.entity.User;
 import jakarta.persistence.*;
 import lombok.AccessLevel;

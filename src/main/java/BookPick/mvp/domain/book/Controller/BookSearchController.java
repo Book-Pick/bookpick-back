@@ -3,7 +3,7 @@ package BookPick.mvp.domain.book.Controller;
 import BookPick.mvp.domain.book.dto.BookDtos.*;
 import BookPick.mvp.domain.book.service.BookSearchService;
 import BookPick.mvp.global.api.ApiResponse;
-import BookPick.mvp.global.api.SuccessCode;
+import BookPick.mvp.global.api.SuccessCode.SuccessCode;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;

@@ -1,18 +1,16 @@
-// CurationController.java에 추가
-package BookPick.mvp.domain.curation.controller;
+// CurationListController.java에 추가
+package BookPick.mvp.domain.curation.controller.base;
 
-import BookPick.mvp.domain.auth.service.MyUserDetailsService.*;
-import BookPick.mvp.domain.curation.enums.SortType;
-import BookPick.mvp.domain.curation.dto.create.CurationCreateReq;
-import BookPick.mvp.domain.curation.dto.create.CurationCreateRes;
-import BookPick.mvp.domain.curation.dto.get.list.CurationListGetRes;
-import BookPick.mvp.domain.curation.dto.get.one.CurationGetRes;
-import BookPick.mvp.domain.curation.dto.update.CurationUpdateReq;
-import BookPick.mvp.domain.curation.dto.update.CurationUpdateRes;
-import BookPick.mvp.domain.curation.dto.delete.CurationDeleteRes;
-import BookPick.mvp.domain.curation.service.CurationService;
+import BookPick.mvp.domain.auth.service.CustomUserDetails;
+import BookPick.mvp.domain.curation.dto.base.create.CurationCreateReq;
+import BookPick.mvp.domain.curation.dto.base.create.CurationCreateRes;
+import BookPick.mvp.domain.curation.dto.base.get.one.CurationGetRes;
+import BookPick.mvp.domain.curation.dto.base.update.CurationUpdateReq;
+import BookPick.mvp.domain.curation.dto.base.update.CurationUpdateRes;
+import BookPick.mvp.domain.curation.dto.base.delete.CurationDeleteRes;
+import BookPick.mvp.domain.curation.service.base.CurationService;
 import BookPick.mvp.global.api.ApiResponse;
-import BookPick.mvp.global.api.SuccessCode;
+import BookPick.mvp.global.api.SuccessCode.SuccessCode;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -50,17 +48,7 @@ public class CurationController {
                 .body(ApiResponse.success(SuccessCode.CURATION_GET_SUCCESS, res));
     }
 
-    @Operation(summary = "큐레이션 목록 조회", description = "큐레이션 목록을 페이징 조회", tags = {"Curation"})
-    @GetMapping
-    public ResponseEntity<ApiResponse<CurationListGetRes>> getCurationList(
-            @RequestParam(defaultValue = "latest") String sort,
-            @RequestParam(required = false) Long cursor,
-            @RequestParam(defaultValue = "10") int size) {
-        SortType sortType = SortType.fromValue(sort);
-        CurationListGetRes curationListGetRes = curationService.getCurationList(sortType, cursor, size);
-        return ResponseEntity.ok()
-                .body(ApiResponse.success(SuccessCode.CURATION_LIST_GET_SUCCESS, curationListGetRes));
-    }
+
 
     @Operation(summary = "큐레이션 수정", description = "큐레이션 정보를 수정", tags = {"Curation"})
     @PatchMapping("/{curationId}")

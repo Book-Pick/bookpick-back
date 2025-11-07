@@ -1,4 +1,4 @@
-package BookPick.mvp.integration.gemini.prompt;
+package BookPick.mvp.domain.curation.util.gemini.prompt;
 import lombok.Builder;
 import lombok.Getter;
 
