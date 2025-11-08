@@ -10,7 +10,7 @@ import BookPick.mvp.domain.comment.dto.update.CommentUpdateReq;
 import BookPick.mvp.domain.comment.dto.update.CommentUpdateRes;
 import BookPick.mvp.domain.comment.service.CommentService;
 import BookPick.mvp.global.api.ApiResponse;
-import BookPick.mvp.global.api.SuccessCode;
+import BookPick.mvp.global.api.SuccessCode.SuccessCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
