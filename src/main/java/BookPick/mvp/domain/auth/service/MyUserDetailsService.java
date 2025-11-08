@@ -39,7 +39,7 @@ public class MyUserDetailsService implements UserDetailsService {
         }
 
         // 프로바이더가 토큰으로 받은 비밀번호와 비교할 DB에서 조회한 User객체 반환 -> 해당 유저 객체의 비밀번호를 프로바이더가 사용한다.
-        CustomUserDetails customUserDetails = new CustomUserDetails(user, auth);  // email, passWord, authorities 등록
+        CustomUserDetails customUserDetails = new CustomUserDetails(user, auth);  // email, password, authorities 등록
         customUserDetails.setId(user.getId());
         customUserDetails.setNickname(user.getNickname());
         customUserDetails.setBio(user.getBio());

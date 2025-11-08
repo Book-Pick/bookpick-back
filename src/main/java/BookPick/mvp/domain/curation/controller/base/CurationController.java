@@ -2,6 +2,7 @@
 package BookPick.mvp.domain.curation.controller.base;
 
 import BookPick.mvp.domain.auth.service.CustomUserDetails;
+<<<<<<< HEAD:src/main/java/BookPick/mvp/domain/curation/controller/base/CurationController.java
 import BookPick.mvp.domain.curation.dto.base.create.CurationCreateReq;
 import BookPick.mvp.domain.curation.dto.base.create.CurationCreateRes;
 import BookPick.mvp.domain.curation.dto.base.get.one.CurationGetRes;
@@ -9,6 +10,17 @@ import BookPick.mvp.domain.curation.dto.base.update.CurationUpdateReq;
 import BookPick.mvp.domain.curation.dto.base.update.CurationUpdateRes;
 import BookPick.mvp.domain.curation.dto.base.delete.CurationDeleteRes;
 import BookPick.mvp.domain.curation.service.base.CurationService;
+=======
+import BookPick.mvp.domain.curation.SortType;
+import BookPick.mvp.domain.curation.dto.create.CurationCreateReq;
+import BookPick.mvp.domain.curation.dto.create.CurationCreateRes;
+import BookPick.mvp.domain.curation.dto.get.list.CurationListGetRes;
+import BookPick.mvp.domain.curation.dto.get.one.CurationGetRes;
+import BookPick.mvp.domain.curation.dto.update.CurationUpdateReq;
+import BookPick.mvp.domain.curation.dto.update.CurationUpdateRes;
+import BookPick.mvp.domain.curation.dto.delete.CurationDeleteRes;
+import BookPick.mvp.domain.curation.service.CurationService;
+>>>>>>> develop:src/main/java/BookPick/mvp/domain/curation/controller/CurationController.java
 import BookPick.mvp.global.api.ApiResponse;
 import BookPick.mvp.global.api.SuccessCode.SuccessCode;
 import jakarta.servlet.http.HttpServletRequest;
