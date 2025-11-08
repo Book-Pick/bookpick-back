@@ -26,6 +26,11 @@ public class ReadingPreference {
     private String mbti;
 
     @ElementCollection
+    @CollectionTable(name = "preference_authors", joinColumns = @JoinColumn(name = "preference_id"))
+    @Column(name = "authors")
+    private List<String> favoriteAuthors;
+
+    @ElementCollection
     @CollectionTable(name = "preference_favorite_books", joinColumns = @JoinColumn(name = "preference_id"))
     @Column(name = "book")
     private List<String> favoriteBooks;
@@ -57,6 +62,7 @@ public class ReadingPreference {
 
     public void update(ReadingPreferenceUpdateReq req) {
         if (req.mbti() != null) this.mbti = req.mbti();
+        if (req.favoriteAuthors() != null) this.favoriteAuthors = req.favoriteAuthors();
         if (req.favoriteBooks() != null) this.favoriteBooks = req.favoriteBooks();
         if (req.moods() != null) this.moods = req.moods();
         if (req.readingHabits() != null) this.readingHabits = req.readingHabits();

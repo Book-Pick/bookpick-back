@@ -30,22 +30,35 @@ public class CurationListService {
     public CurationListGetRes getCurations(SortType sortType, Long cursor, int size, Long userId) {
 
         if (sortType == SortType.SORT_SIMILARITY) {
+
+            // 1. 유저 독서 취향 반환
             ReadingPreferenceInfo preferenceInfo = readingPreferenceRepository.findByUserId(userId)
                     .map(ReadingPreferenceInfo::from)
                     .orElseThrow(UserReadingPreferenceNotExisted::new);
 
+            // 2. 매칭된 큐레이션 리스트트 조회
             List<CurationMatchResult> recommended = curationRecommendationService.recommend(preferenceInfo);
+
+            //3. 매칭된 큐레이션 페이지네이션
             List<CurationMatchResult> paginated = CurationMatchResultPagination.paginate(recommended, cursor, PageRequest.of(0, size + 1));
 
+            //4. 유저가 스크롤시, 다음 조회할 값있는지
             boolean hasNext = paginated.size() > size;
+
+            // 5. 콘텐츠가 더있으면 자르고 다음페이지에서 보여줌
+            //    더 없으면 그냥 보여줌
             List<CurationMatchResult> contentResults = hasNext ? paginated.subList(0, size) : paginated;
+
+            //6. 다음 커서 반환
             Long nextCursor = hasNext ? paginated.get(size).getCuration().getId() : null;
 
+
+            //7. 큐레이션 단건 응답 포멧 반환
             List<CurationContentRes> content = contentResults.stream()
                     .map(result -> CurationContentRes.from(result, preferenceInfo))
                     .collect(Collectors.toList());
 
-
+            //8. 큐레이션 리스트로 감싸기
             return CurationListGetRes.from(sortType, content, hasNext, nextCursor);
         }
 

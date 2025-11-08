@@ -5,6 +5,10 @@ import org.springframework.stereotype.Component;
 @Component
 public class SystemInstructionPromptTemplate {
 
+
+    // 1. 유저의 독서 취향을 가지고
+    // 2. 하나씩 뽑아라 아래 항목들중에서
+    // 3. 그리고 해당 키워드들을 가지고 큐레이션을 찾아서 유저한테 소개할 것이다.
     private static final String SYSTEM_PROMPT = """
             Based on the user's reading preferences, select exactly one item from each of Mood, Genre, Keyword, and ReadingStyle. 
             You must only choose from the provided lists. 
