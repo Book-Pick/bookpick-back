@@ -1,6 +1,6 @@
 package BookPick.mvp.domain.comment.entity;
 
-import BookPick.mvp.domain.curation.entity.Curation;
+import BookPick.mvp.domain.curation.model.Curation;
 import BookPick.mvp.domain.user.entity.User;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Size;
