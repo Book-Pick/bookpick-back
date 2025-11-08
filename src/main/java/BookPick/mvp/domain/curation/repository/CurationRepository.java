@@ -1,13 +1,11 @@
 package BookPick.mvp.domain.curation.repository;
 
-import BookPick.mvp.domain.curation.entity.Curation;
-import org.springframework.data.domain.Page;
+import BookPick.mvp.domain.curation.model.Curation;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 public interface CurationRepository extends JpaRepository<Curation, Long> {
@@ -20,7 +18,7 @@ public interface CurationRepository extends JpaRepository<Curation, Long> {
 
 
     @Query("SELECT c FROM Curation c WHERE c.id <= :cursor ORDER BY c.createdAt DESC, c.id DESC")
-    List<Curation> findCurations(@Param("cursor") Long cursor, Pageable pageable);
+    List<Curation> findLatestCurations(@Param("cursor") Long cursor, Pageable pageable);
 
     @Query("SELECT c FROM Curation c " +
             "WHERE (:cursor IS NULL) " +
@@ -29,5 +27,22 @@ public interface CurationRepository extends JpaRepository<Curation, Long> {
             "ORDER BY c.popularityScore DESC, c.id DESC")
     List<Curation> findCurationsByPopularity(@Param("cursor") Long cursor, Pageable pageable);
 
+    // Gemini 추천 결과로 큐레이션 찾기
+    @Query("""
+        SELECT DISTINCT c FROM Curation c
+        LEFT JOIN c.moods m
+        LEFT JOIN c.genres g
+        LEFT JOIN c.keywords k
+        LEFT JOIN c.styles s
+        WHERE c.deletedAt IS NULL
+        AND (m IN :moods OR g IN :genres OR k IN :keywords OR s IN :styles)
+        ORDER BY c.popularityScore DESC
+        """)
+    List<Curation> findByRecommendation(
+        @Param("moods") List<String> moods,
+        @Param("genres") List<String> genres,
+        @Param("keywords") List<String> keywords,
+        @Param("styles") List<String> styles
+    );
 }
 

@@ -36,7 +36,7 @@ public class BookSearchService {
         // 요청 URL 구성
         UriComponents uri = UriComponentsBuilder.fromHttpUrl(API_URL)
                 .queryParam("query", req.keyword())
-                .queryParam("page", 1)
+                .queryParam("page", req.page())
                 .queryParam("size", 10)
                 .build();
 
@@ -72,7 +72,7 @@ public class BookSearchService {
 
         // PageInfo 매핑 (현재 페이지는 Kakao API 요청 기준)
         PageInfo pageInfo = new PageInfo(
-                1,                                  // currentPage (요청 page)
+                req.page(),                                  // currentPage (요청 page)
                 (int) Math.ceil((double) totalCount / 10), // totalPages (총 페이지 수)
                 totalCount,                          // totalElements (총 아이템 수)
                 !isEnd                               // hasNext (다음 페이지 여부)

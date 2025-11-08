@@ -1,6 +1,8 @@
 package BookPick.mvp.global.api;
 
-import lombok.*;
+import BookPick.mvp.global.api.ErrorCode.ErrorCode;
+import BookPick.mvp.global.api.ErrorCode.ErrorCodeInterface;
+import BookPick.mvp.global.api.SuccessCode.SuccessCode;
 import org.springframework.http.HttpStatus;
 
 
@@ -24,7 +26,7 @@ public class ApiResponse<T> {
     }
 
     // -- Error --
-    public static <T> ApiResponse<T> error(ErrorCode errorCode) {
+    public static <T> ApiResponse<T> error(ErrorCodeInterface errorCode) {
         return new ApiResponse<T>(
                 errorCode.getStatus().value(),
                 errorCode.getMessage(),        // @Valid 같은 데서 넘어온 메시지

@@ -2,8 +2,8 @@ package BookPick.mvp.global.exception;
 
 
 import BookPick.mvp.global.api.ApiResponse;
-import BookPick.mvp.global.api.ErrorCode;
-import org.springframework.http.HttpStatus;
+import BookPick.mvp.global.api.ErrorCode.ErrorCode;
+import BookPick.mvp.global.api.ErrorCode.ErrorCodeInterface;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -14,7 +14,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(BusinessException.class)
     public ResponseEntity<ApiResponse<Void>> handleBusinessException(BusinessException e) {
-        ErrorCode errorCode = e.getErrorCode();
+        ErrorCodeInterface errorCode = e.getErrorCode();
 
         return ResponseEntity
                 .status(errorCode.getStatus())
