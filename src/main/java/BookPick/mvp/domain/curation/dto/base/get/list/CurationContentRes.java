@@ -6,6 +6,7 @@ import BookPick.mvp.domain.curation.util.gemini.dto.CurationMatchResult;
 import BookPick.mvp.domain.user.entity.User;
 
 import java.util.List;
+import java.util.Random;
 
 public record CurationContentRes(
         Long curationId,
@@ -69,6 +70,7 @@ public record CurationContentRes(
 
     static Integer getSimilarity(CurationMatchResult matchResult, ReadingPreferenceInfo preferenceInfo) {
         Integer similarity = 50;
+//        Random random = new Random();
         User user = matchResult.getUser();
 
 
@@ -86,6 +88,10 @@ public record CurationContentRes(
 
         // 3. 각 키워드들마다 매칭되는거 있으면 +10
         similarity += matchResult.getTotalMatchCount()*10;
+
+
+        //4. 1의 자리수 랜덤값으로 조정하여 다채롭게 (mvp단계 한정)
+//        similarity+=random.nextInt(10);
 
         return similarity;
     }

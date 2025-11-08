@@ -65,7 +65,7 @@ public class GeminiService {
                         recommendedKeyword,
                         recommendedStyle
                 ))
-                .sorted((a, b) -> Integer.compare(b.getTotalMatchCount(), a.getTotalMatchCount()))
+                .sorted((a, b) -> Integer.compare(b.getTotalMatchCount(), a.getTotalMatchCount())) // Todo 1. 현재 MatchCount가지고 정렬 -> 취향유사도 해당 로직에서 계산해서 정렬 필요
                 .collect(Collectors.toList());
     }
 }
