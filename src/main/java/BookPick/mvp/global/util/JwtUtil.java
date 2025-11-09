@@ -22,7 +22,7 @@ import io.jsonwebtoken.Jwts;
 @Component
 public class JwtUtil {
     // 1. 키발급
-    static final SecretKey key =
+    final SecretKey key =
             Keys.hmacShaKeyFor(Decoders.BASE64.decode(
                     "jwtpassword123jwtpassword123jwtpassword123jwtpassword123jwtpassword"
             ));
@@ -32,7 +32,7 @@ public class JwtUtil {
     private static final long REFRESH_TTL_MS = 1000L * 60 * 60 * 24 * 14; // 14일
 
     // 2. JWT 생성
-    public static String createAccessToken(Authentication auth) {
+    public String createAccessToken(Authentication auth) {
         CustomUserDetails usr = (CustomUserDetails) auth.getPrincipal();
 
         String authorities = auth.getAuthorities().stream()                 //getAuthorities -> List<auth객체> return
@@ -52,7 +52,7 @@ public class JwtUtil {
     }
 
     // ✅ 2-1. Refresh 토큰 생성 (여기 추가)
-    public static String createRefreshToken(Authentication auth) {
+    public String createRefreshToken(Authentication auth) {
         CustomUserDetails usr = (CustomUserDetails) auth.getPrincipal();
 
         // refresh 토큰에는 최소 정보만: subject/email + typ 정도만 권장
@@ -67,7 +67,7 @@ public class JwtUtil {
 
 
     //3. JWT 오픈
-    public static Claims extractToken(String token) {
+    public Claims extractToken(String token) {
 
         try {
             Claims claims = Jwts.parser().verifyWith(key).build()

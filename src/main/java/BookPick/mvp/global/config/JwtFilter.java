@@ -24,6 +24,7 @@ import java.util.Arrays;
 public class JwtFilter extends OncePerRequestFilter {
 
     private static final String BEARER = "Bearer";
+    private final JwtUtil jwtUtil;
 
 
     @Override
@@ -44,7 +45,7 @@ public class JwtFilter extends OncePerRequestFilter {
             return;
         }
 
-        Claims claims = JwtUtil.extractToken(token);    // 토큰 까기 (토큰 진위여부 검증 해당 메서드에서 진행)
+        Claims claims = jwtUtil.extractToken(token);    // 토큰 까기 (토큰 진위여부 검증 해당 메서드에서 진행)
 
         Long userId = claims.get("userId", Number.class).longValue();
         String email = claims.get("email").toString();

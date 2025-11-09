@@ -65,8 +65,8 @@ public class AuthService {
 
             firstLoginCheck(req.email());
 
-            String accessToken = JwtUtil.createAccessToken(auth);    // Access O
-            String refreshToken = JwtUtil.createRefreshToken(auth);  // Refresh X
+            String accessToken = jwtUtil.createAccessToken(auth);    // Access O
+            String refreshToken = jwtUtil.createRefreshToken(auth);  // Refresh X
 
 
             CustomUserDetails customUserDetails = (CustomUserDetails) auth.getPrincipal();
