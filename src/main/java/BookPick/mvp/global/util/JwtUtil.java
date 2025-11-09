@@ -70,9 +70,14 @@ public class JwtUtil {
     public Claims extractToken(String token) {
 
         try {
-            Claims claims = Jwts.parser().verifyWith(key).build()
-                    .parseSignedClaims(token).getPayload();
+            Claims claims = Jwts.parser()
+                    .verifyWith(key)
+                    .build()
+                    .parseSignedClaims(token)
+                    .getPayload();
             return claims;
+
+
         } catch (ExpiredJwtException e) {
             throw new JwtTokenExpiredException();
         } catch (JwtException | IllegalArgumentException e) {
