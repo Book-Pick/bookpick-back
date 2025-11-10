@@ -32,6 +32,7 @@ public class ReadingPreferenceController {
             @Valid @RequestBody ReadingPreferenceCreateReq req,
             @AuthenticationPrincipal CustomUserDetails currentUser) {
         ReadingPreferenceCreateRes res = readingPreferenceService.addReadingPreference(currentUser.getId(), req);
+
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(ApiResponse.success(SuccessCode.READING_PREFERENCE_REGISTER_SUCCESS, res));
     }
@@ -41,6 +42,7 @@ public class ReadingPreferenceController {
     public ResponseEntity<ApiResponse<ReadingPreferenceGetRes>> getDetails(
             @AuthenticationPrincipal CustomUserDetails currentUser) {
         ReadingPreferenceGetRes res = readingPreferenceService.findReadingPreference(currentUser.getId());
+
         return ResponseEntity.status(HttpStatus.OK)
                 .body(ApiResponse.success(SuccessCode.READING_PREFERENCE_READ_SUCCESS, res));
     }
@@ -51,6 +53,7 @@ public class ReadingPreferenceController {
             @Valid @RequestBody ReadingPreferenceUpdateReq req,
             @AuthenticationPrincipal CustomUserDetails currentUser) {
         ReadingPreferenceUpdateRes res = readingPreferenceService.modifyReadingPreference(currentUser.getId(), req);
+
         return ResponseEntity.status(HttpStatus.OK)
                 .body(ApiResponse.success(SuccessCode.READING_PREFERENCE_UPDATE_SUCCESS, res));
     }
@@ -60,6 +63,7 @@ public class ReadingPreferenceController {
     public ResponseEntity<ApiResponse<ReadingPreferenceDeleteRes>> delete(
             @AuthenticationPrincipal CustomUserDetails currentUser) {
         ReadingPreferenceDeleteRes res = readingPreferenceService.removeReadingPreference(currentUser.getId());
+
         return ResponseEntity.status(HttpStatus.OK)
                 .body(ApiResponse.success(SuccessCode.READING_PREFERENCE_DELETE_SUCCESS, res));
     }
