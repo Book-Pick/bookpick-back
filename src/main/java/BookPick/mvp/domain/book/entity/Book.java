@@ -1,0 +1,36 @@
+package BookPick.mvp.domain.book.entity;
+
+import BookPick.mvp.domain.author.entity.Author;
+import jakarta.persistence.*;
+import lombok.Builder;
+
+import java.util.HashSet;
+import java.util.Set;
+
+@Entity
+@Builder
+public class Book {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    private String title;
+
+    @ManyToMany
+    @JoinTable(
+            name = "book_id",
+            joinColumns = @JoinColumn(name = "book_id"),
+            inverseJoinColumns = @JoinColumn(name = "author_id")
+    )
+    private Set<Author> authors = new HashSet<>();      // 하나의 책마다 여러 작가들 존재
+
+    private String image;
+
+    private String isbn;
+
+
+    public Book() {
+
+    }
+}
