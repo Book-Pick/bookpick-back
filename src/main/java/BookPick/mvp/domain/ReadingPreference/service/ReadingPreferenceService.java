@@ -1,15 +1,15 @@
-package BookPick.mvp.domain.preference.service;
+package BookPick.mvp.domain.ReadingPreference.service;
 
-import BookPick.mvp.domain.preference.Exception.AlreadyRegisteredReadingPreferenceException;
-import BookPick.mvp.domain.preference.Exception.UserReadingPreferenceNotExisted;
-import BookPick.mvp.domain.preference.dto.Create.ReadingPreferenceCreateReq;
-import BookPick.mvp.domain.preference.dto.Create.ReadingPreferenceCreateRes;
-import BookPick.mvp.domain.preference.dto.Delete.ReadingPreferenceDeleteRes;
-import BookPick.mvp.domain.preference.dto.Get.ReadingPreferenceGetRes;
-import BookPick.mvp.domain.preference.dto.Update.ReadingPreferenceUpdateReq;
-import BookPick.mvp.domain.preference.dto.Update.ReadingPreferenceUpdateRes;
-import BookPick.mvp.domain.preference.entity.ReadingPreference;
-import BookPick.mvp.domain.preference.repository.ReadingPreferenceRepository;
+import BookPick.mvp.domain.ReadingPreference.Exception.AlreadyRegisteredReadingPreferenceException;
+import BookPick.mvp.domain.ReadingPreference.Exception.UserReadingPreferenceNotExisted;
+import BookPick.mvp.domain.ReadingPreference.dto.Create.ReadingPreferenceCreateReq;
+import BookPick.mvp.domain.ReadingPreference.dto.Create.ReadingPreferenceCreateRes;
+import BookPick.mvp.domain.ReadingPreference.dto.Delete.ReadingPreferenceDeleteRes;
+import BookPick.mvp.domain.ReadingPreference.dto.Get.ReadingPreferenceGetRes;
+import BookPick.mvp.domain.ReadingPreference.dto.Update.ReadingPreferenceUpdateReq;
+import BookPick.mvp.domain.ReadingPreference.dto.Update.ReadingPreferenceUpdateRes;
+import BookPick.mvp.domain.ReadingPreference.entity.ReadingPreference;
+import BookPick.mvp.domain.ReadingPreference.repository.ReadingPreferenceRepository;
 import BookPick.mvp.domain.user.entity.User;
 import BookPick.mvp.domain.user.exception.UserNotFoundException;
 import BookPick.mvp.domain.user.repository.UserRepository;

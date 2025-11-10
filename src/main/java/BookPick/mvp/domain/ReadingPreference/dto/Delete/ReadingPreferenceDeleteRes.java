@@ -1,4 +1,4 @@
-package BookPick.mvp.domain.preference.dto.Delete;
+package BookPick.mvp.domain.ReadingPreference.dto.Delete;
 
 import java.time.LocalDateTime;
 

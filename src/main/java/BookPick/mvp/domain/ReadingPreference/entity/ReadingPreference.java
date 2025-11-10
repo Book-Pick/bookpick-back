@@ -1,6 +1,6 @@
-package BookPick.mvp.domain.preference.entity;
+package BookPick.mvp.domain.ReadingPreference.entity;
 
-import BookPick.mvp.domain.preference.dto.Update.ReadingPreferenceUpdateReq;
+import BookPick.mvp.domain.ReadingPreference.dto.Update.ReadingPreferenceUpdateReq;
 import BookPick.mvp.domain.user.entity.User;
 import jakarta.persistence.*;
 import lombok.*;

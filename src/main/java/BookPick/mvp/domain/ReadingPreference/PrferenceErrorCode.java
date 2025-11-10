@@ -1,4 +1,4 @@
-package BookPick.mvp.domain.preference;
+package BookPick.mvp.domain.ReadingPreference;
 
 import BookPick.mvp.global.api.ErrorCode.ErrorCodeInterface;
 import lombok.AllArgsConstructor;

@@ -1,7 +1,7 @@
-package BookPick.mvp.domain.preference.dto.Create;
+package BookPick.mvp.domain.ReadingPreference.dto.Create;
 
 
-import BookPick.mvp.domain.preference.entity.ReadingPreference;
+import BookPick.mvp.domain.ReadingPreference.entity.ReadingPreference;
 
 public record ReadingPreferenceCreateRes(
             Long readingPreferenceId

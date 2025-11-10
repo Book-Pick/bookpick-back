@@ -1,6 +1,6 @@
-package BookPick.mvp.domain.preference.dto.Update;
+package BookPick.mvp.domain.ReadingPreference.dto.Update;
 
-import BookPick.mvp.domain.preference.entity.ReadingPreference;
+import BookPick.mvp.domain.ReadingPreference.entity.ReadingPreference;
 
 import java.util.List;
 

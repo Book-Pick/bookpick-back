@@ -1,6 +1,6 @@
-package BookPick.mvp.domain.preference.repository;
+package BookPick.mvp.domain.ReadingPreference.repository;
 
-import BookPick.mvp.domain.preference.entity.ReadingPreference;
+import BookPick.mvp.domain.ReadingPreference.entity.ReadingPreference;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;
