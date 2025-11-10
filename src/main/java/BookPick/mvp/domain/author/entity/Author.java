@@ -1,14 +1,16 @@
-package BookPick.mvp.domain.author.Entity;
+package BookPick.mvp.domain.author.entity;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.validation.constraints.NotNull;
+import lombok.Builder;
+import org.springframework.context.annotation.Bean;
 
 import java.time.LocalDateTime;
 
 @Entity
+@Builder
 public class Author {
 
     @Id
@@ -22,4 +24,8 @@ public class Author {
     private LocalDateTime updatedAt;
 
     private LocalDateTime deletedAt;
+
+    public Author() {
+
+    }
 }
