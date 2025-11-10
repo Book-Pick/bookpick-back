@@ -2,6 +2,7 @@ package BookPick.mvp.domain.book.entity;
 
 import BookPick.mvp.domain.author.entity.Author;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 
 import java.util.HashSet;
@@ -9,6 +10,7 @@ import java.util.Set;
 
 @Entity
 @Builder
+@AllArgsConstructor
 public class Book {
 
     @Id
