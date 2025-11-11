@@ -6,11 +6,12 @@ import BookPick.mvp.domain.book.dto.preference.BookDto;
 import BookPick.mvp.domain.book.entity.Book;
 
 import java.util.List;
+import java.util.Set;
 
 public record ReadingPreferenceReq(
         String mbti,
-        List<BookDto> favoriteBooks,        // 좋아하는 책
-        List<AuthorDto> favoriteAuthors,
+        Set<BookDto> favoriteBooks,        // 좋아하는 책
+        Set<AuthorDto> favoriteAuthors,
         List<String> moods,    // 독서 선호 분위기
         List<String> readingHabits,        // 독서 습관
         List<String> genres,      // 선호 장르

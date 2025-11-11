@@ -5,12 +5,13 @@ import BookPick.mvp.domain.author.entity.Author;
 import BookPick.mvp.domain.book.entity.Book;
 
 import java.util.List;
+import java.util.Set;
 
 public record ReadingPreferenceInfo(
         Long userId,
         String mbti,
-        List<Book> favoriteBooks,
-        List<Author> favoriteAuthors,
+        Set<Book> favoriteBooks,
+        Set<Author> favoriteAuthors,
         List<String> readingHabits,
         List<String> moods,
         List<String> genres,
