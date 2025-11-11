@@ -2,11 +2,15 @@ package BookPick.mvp.domain.ReadingPreference.entity;
 
 import BookPick.mvp.domain.ReadingPreference.dto.ReadingPreferenceReq;
 import BookPick.mvp.domain.author.entity.Author;
+import BookPick.mvp.domain.author.service.AuthorSaveService;
+import BookPick.mvp.domain.book.dto.preference.BookDto;
 import BookPick.mvp.domain.book.entity.Book;
+import BookPick.mvp.domain.book.service.BookSaveService;
 import BookPick.mvp.domain.user.entity.User;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
@@ -69,19 +73,68 @@ public class ReadingPreference {
     @Column(name = "trend")
     private List<String> trends;
 
-    public void update(ReadingPreferenceReq req) {
-        if (req.mbti() != null) this.mbti = req.mbti();
-        if (req.favoriteBooks() != null) this.favoriteBooks = req.favoriteBooks;
+    private LocalDateTime createdAt;
 
+    private LocalDateTime updatedAt;
 
-();
-        if (req.favoriteAuthors() != null) this.favoriteAuthors = req.favoriteAuthors();
-        if (req.moods() != null) this.moods = req.moods();
-        if (req.readingHabits() != null) this.readingHabits = req.readingHabits();
-        if (req.genres() != null) this.genres = req.genres();
-        if (req.keywords() != null) this.keywords = req.keywords();
-        if (req.trends() != null) this.trends = req.trends();
+    private LocalDateTime deletedAt;
+
+    public void update(ReadingPreferenceReq req, AuthorSaveService authorSaveService, BookSaveService bookSaveService) {
+    if (req.mbti() != null) this.mbti = req.mbti();
+
+    // favoriteBooks 처리
+    if (req.favoriteBooks() != null) {
+        this.favoriteBooks.clear();
+        List<Book> books = req.favoriteBooks().stream()
+                .map(dto -> {
+                    Book book = Book.from(dto);
+                    bookSaveService.saveBookIfNotExists(book); // DB에 없으면 저장
+                    return book;
+                })
+                .toList();
+        this.favoriteBooks.addAll(books);
     }
+
+    // favoriteAuthors 처리
+    if (req.favoriteAuthors() != null) {
+        this.favoriteAuthors.clear();
+        List<Author> authors = req.favoriteAuthors().stream()
+                .map(dto -> {
+                    Author author = Author.from(dto);
+                    authorSaveService.saveAuthorIfNotExists(author); // DB에 없으면 저장
+                    return author;
+                })
+                .toList();
+        this.favoriteAuthors.addAll(authors);
+    }
+
+    if (req.moods() != null) {
+        this.moods.clear();
+        this.moods.addAll(req.moods());
+    }
+
+    if (req.readingHabits() != null) {
+        this.readingHabits.clear();
+        this.readingHabits.addAll(req.readingHabits());
+    }
+
+    if (req.genres() != null) {
+        this.genres.clear();
+        this.genres.addAll(req.genres());
+    }
+
+    if (req.keywords() != null) {
+        this.keywords.clear();
+        this.keywords.addAll(req.keywords());
+    }
+
+    if (req.trends() != null) {
+        this.trends.clear();
+        this.trends.addAll(req.trends());
+    }
+}
+
+
 
 }
 
