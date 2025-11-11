@@ -1,6 +1,7 @@
 package BookPick.mvp.domain.ReadingPreference.entity;
 
 import BookPick.mvp.domain.ReadingPreference.dto.Update.ReadingPreferenceUpdateReq;
+import BookPick.mvp.domain.book.entity.Book;
 import BookPick.mvp.domain.user.entity.User;
 import jakarta.persistence.*;
 import lombok.*;
@@ -30,10 +31,14 @@ public class ReadingPreference {
     @Column(name = "authors")
     private List<String> favoriteAuthors;
 
-    @ElementCollection
-    @CollectionTable(name = "preference_favorite_books", joinColumns = @JoinColumn(name = "preference_id"))
-    @Column(name = "book")
-    private List<String> favoriteBooks;
+
+    @ManyToMany
+    @JoinTable(
+            name = "preference_favorite_books",
+            joinColumns = @JoinColumn(name = "preference_id"),
+            inverseJoinColumns = @JoinColumn(name = "book_id")
+    )
+    private List<Book> favoriteBooks;
 
     @ElementCollection
     @CollectionTable(name = "preference_moods", joinColumns = @JoinColumn(name = "preference_id"))

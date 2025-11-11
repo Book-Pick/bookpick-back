@@ -10,6 +10,9 @@ import BookPick.mvp.domain.ReadingPreference.dto.Update.ReadingPreferenceUpdateR
 import BookPick.mvp.domain.ReadingPreference.dto.Update.ReadingPreferenceUpdateRes;
 import BookPick.mvp.domain.ReadingPreference.entity.ReadingPreference;
 import BookPick.mvp.domain.ReadingPreference.repository.ReadingPreferenceRepository;
+import BookPick.mvp.domain.author.repository.AuthorRepository;
+import BookPick.mvp.domain.book.entity.Book;
+import BookPick.mvp.domain.book.repository.BookRepository;
 import BookPick.mvp.domain.user.entity.User;
 import BookPick.mvp.domain.user.exception.UserNotFoundException;
 import BookPick.mvp.domain.user.repository.UserRepository;
@@ -18,23 +21,50 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
 public class ReadingPreferenceService {
     private final ReadingPreferenceRepository readingPreferenceRepository;
     private final UserRepository userRepository;
+    private final BookRepository bookRepository;
+    private final AuthorRepository authorRepository;
+
 
     // -- 유저 독서 취향 등록 --
     @Transactional
     public ReadingPreferenceCreateRes addReadingPreference(Long userId, ReadingPreferenceCreateReq req) {
 
+        // 1. 유저 검색
         User user = userRepository.findById(userId)
                 .orElseThrow(UserNotFoundException::new);
 
+        // 2. 독서취향이 이미 존재하면 이미 존재하는 독서취향입니다.
+        // Todo 1. 독서취향 생성은 처음 회원가입시 바로 생성되고 null값 넣는 것으로 변경 필요
         if (readingPreferenceRepository.existsByUserId(userId)) {
             throw new AlreadyRegisteredReadingPreferenceException();
         }
+
+        // 3. 독서취향에서 책 꺼내서, 첵 db에 책 등록되어있지 않으면 저장. 등록되어있으면 가져오기
+        List<Book> preferedBooks = req.favoriteBooks();
+        for (Book preferedBook : preferedBooks){
+           Optional<Book> existingBook = bookRepository.findByTitle(preferedBook.getTitle());
+           if(existingBook==null){
+               bookRepository.save(preferedBook);
+           }
+           else{
+               
+           }
+        }
+
+
+        // 4. 독서취향에서 작가 꺼내서, 작가가 db에 등록되어있지 않으면 저장, 등록되어 있으면 가져오기
+        String userPreferAuthorName = req
+
+
+
 
 
         ReadingPreference readingPreference = ReadingPreference.builder()

@@ -4,6 +4,8 @@ import BookPick.mvp.domain.author.entity.Author;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -11,6 +13,8 @@ import java.util.Set;
 @Entity
 @Builder
 @AllArgsConstructor
+@Getter
+@Setter
 public class Book {
 
     @Id
