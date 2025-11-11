@@ -1,5 +1,6 @@
 package BookPick.mvp.domain.author.entity;
 
+import BookPick.mvp.domain.author.dto.preference.AuthorDto;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -36,4 +37,15 @@ public class Author {
     public Author() {
 
     }
+
+    public static Author from(AuthorDto dto) {
+        return Author.builder()
+                .name(dto.name())
+                .curated_count(0)    // 초기값 설정
+                .createdAt(null)
+                .updatedAt(null)
+                .deletedAt(null)
+                .build();
+    }
+
 }
