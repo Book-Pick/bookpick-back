@@ -6,6 +6,8 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.context.annotation.Bean;
 
 import java.time.LocalDateTime;
@@ -13,6 +15,8 @@ import java.time.LocalDateTime;
 @Entity
 @Builder
 @AllArgsConstructor
+@Getter
+@Setter
 public class Author {
 
     @Id
