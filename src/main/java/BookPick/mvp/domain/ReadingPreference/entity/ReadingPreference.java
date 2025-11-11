@@ -12,6 +12,7 @@ import lombok.*;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "user_reading_preference")
@@ -37,7 +38,7 @@ public class ReadingPreference {
             joinColumns = @JoinColumn(name = "preference_id"),
             inverseJoinColumns = @JoinColumn(name = "book_id")
     )
-    private List<Book> favoriteBooks;
+    private Set<Book> favoriteBooks;
 
     @ManyToMany
     @JoinTable(
@@ -45,7 +46,7 @@ public class ReadingPreference {
             joinColumns = @JoinColumn(name = "preference_id"),
             inverseJoinColumns = @JoinColumn(name = "author_id")
     )
-    private List<Author> favoriteAuthors;
+    private Set<Author> favoriteAuthors;
 
 
     @ElementCollection
