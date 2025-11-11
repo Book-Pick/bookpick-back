@@ -1,6 +1,7 @@
 package BookPick.mvp.domain.ReadingPreference.entity;
 
-import BookPick.mvp.domain.ReadingPreference.dto.Update.ReadingPreferenceUpdateReq;
+import BookPick.mvp.domain.ReadingPreference.dto.ReadingPreferenceReq;
+import BookPick.mvp.domain.author.entity.Author;
 import BookPick.mvp.domain.book.entity.Book;
 import BookPick.mvp.domain.user.entity.User;
 import jakarta.persistence.*;
@@ -26,12 +27,6 @@ public class ReadingPreference {
 
     private String mbti;
 
-    @ElementCollection
-    @CollectionTable(name = "preference_authors", joinColumns = @JoinColumn(name = "preference_id"))
-    @Column(name = "authors")
-    private List<String> favoriteAuthors;
-
-
     @ManyToMany
     @JoinTable(
             name = "preference_favorite_books",
@@ -39,6 +34,15 @@ public class ReadingPreference {
             inverseJoinColumns = @JoinColumn(name = "book_id")
     )
     private List<Book> favoriteBooks;
+
+    @ManyToMany
+    @JoinTable(
+            name = "preference_favorite_authors",
+            joinColumns = @JoinColumn(name = "preference_id"),
+            inverseJoinColumns = @JoinColumn(name = "author_id")
+    )
+    private List<Author> favoriteAuthors;
+
 
     @ElementCollection
     @CollectionTable(name = "preference_moods", joinColumns = @JoinColumn(name = "preference_id"))
@@ -65,10 +69,13 @@ public class ReadingPreference {
     @Column(name = "trend")
     private List<String> trends;
 
-    public void update(ReadingPreferenceUpdateReq req) {
+    public void update(ReadingPreferenceReq req) {
         if (req.mbti() != null) this.mbti = req.mbti();
+        if (req.favoriteBooks() != null) this.favoriteBooks = req.favoriteBooks;
+
+
+();
         if (req.favoriteAuthors() != null) this.favoriteAuthors = req.favoriteAuthors();
-        if (req.favoriteBooks() != null) this.favoriteBooks = req.favoriteBooks();
         if (req.moods() != null) this.moods = req.moods();
         if (req.readingHabits() != null) this.readingHabits = req.readingHabits();
         if (req.genres() != null) this.genres = req.genres();
@@ -76,6 +83,6 @@ public class ReadingPreference {
         if (req.trends() != null) this.trends = req.trends();
     }
 
-    }
+}
 
 
