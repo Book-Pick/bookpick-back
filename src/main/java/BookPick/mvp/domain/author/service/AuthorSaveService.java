@@ -1,5 +1,6 @@
 package BookPick.mvp.domain.author.service;
 
+import BookPick.mvp.domain.author.dto.preference.AuthorDto;
 import BookPick.mvp.domain.author.entity.Author;
 import BookPick.mvp.domain.author.repository.AuthorRepository;
 import lombok.RequiredArgsConstructor;
@@ -7,21 +8,49 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
+
 
 @Service
 @RequiredArgsConstructor
 public class AuthorSaveService {
     private final AuthorRepository authorRepository;
 
-    // 1.독서취향에서 작가 꺼내서, 작가가 db에 등록되어있지 않으면 저장
-    public void saveIfNotExists(List<Author> authors) {
-        List<Author> preferredAuthors = authors;
-        for (Author preferredAuthor : preferredAuthors) {
-            Optional<Author> existingAuthor = authorRepository.findByName(preferredAuthor.getName());
-            if (existingAuthor.isEmpty()) {
-                authorRepository.save(preferredAuthor);
-            }
+    // 1. Author 리스트
+    public void saveAuthorIfNotExists(Set<Author> authors) {
+        for (Author author : authors) {
+            saveAuthorIfNotExists(author); // 단건 메서드 재사용
         }
     }
 
+    // 2. Author 단건
+    public void saveAuthorIfNotExists(Author author) {
+        authorRepository.findByName(author.getName())
+                .orElseGet(() -> authorRepository.save(author));
+    }
+    // 3. String 리스트
+    public void saveAuthorIfNotExistsByName(Set<String> authorNames) {
+        for (String name : authorNames) {
+            saveAuthorIfNotExistsByName(name); // 단건 메서드 재사용
+        }
+    }
+
+    // 4. String 단건
+    public void saveAuthorIfNotExistsByName(String name) {
+        authorRepository.findByName(name)
+                .orElseGet(() -> authorRepository.save(new Author(null, name, 0, null, null, null)));
+    }
+
+    // 5.AuthorDto 리스트
+    public void saveAuthorIfNotExistsDto(Set<AuthorDto> authorDtos) {
+        for (AuthorDto dto : authorDtos) {
+            saveAuthorIfNotExistsDto(dto);
+        }
+    }
+
+    // 6.AuthorDto 단건
+    public void saveAuthorIfNotExistsDto(AuthorDto dto) {
+        authorRepository.findByName(dto.name())
+                .orElseGet(() -> authorRepository.save(new Author(null, dto.name(), 0, null, null, null)));
+    }
 }
