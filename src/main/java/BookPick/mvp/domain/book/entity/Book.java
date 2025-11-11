@@ -27,7 +27,7 @@ public class Book {
 
     @ManyToMany
     @JoinTable(
-            name = "book_id",
+            name = "book_author",
             joinColumns = @JoinColumn(name = "book_id"),
             inverseJoinColumns = @JoinColumn(name = "author_id")
     )
@@ -44,11 +44,21 @@ public class Book {
 
     public static Book from(BookDto bookDto) {
 
-        List<String> authors
 
         return Book.builder()
                 .title(bookDto.title())
-                .authors(new HashSet<>(bookDto.authors()))
+                .authors(null)
+                .image(bookDto.image())
+                .isbn(bookDto.isbn())
+                .build();
+    }
+
+    public static Book from(BookDto bookDto, Set<Author> authors) {
+
+
+        return Book.builder()
+                .title(bookDto.title())
+                .authors(authors)
                 .image(bookDto.image())
                 .isbn(bookDto.isbn())
                 .build();
