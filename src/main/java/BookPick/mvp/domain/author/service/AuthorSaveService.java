@@ -6,6 +6,8 @@ import BookPick.mvp.domain.author.repository.AuthorRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -29,28 +31,35 @@ public class AuthorSaveService {
                 .orElseGet(() -> authorRepository.save(author));
     }
     // 3. String 리스트
-    public void saveAuthorIfNotExistsByName(Set<String> authorNames) {
+    public Set<Author> saveAuthorsIfNotExistsByName(Set<String> authorNames) {
+        Set<Author> authors= new HashSet<>();
+
         for (String name : authorNames) {
-            saveAuthorIfNotExistsByName(name); // 단건 메서드 재사용
+            authors.add( saveAuthorIfNotExistsByName(name)); // 단건 메서드 재사용
         }
+
+        return authors;
     }
 
     // 4. String 단건
-    public void saveAuthorIfNotExistsByName(String name) {
-        authorRepository.findByName(name)
-                .orElseGet(() -> authorRepository.save(new Author(null, name, 0, null, null, null)));
+    public Author saveAuthorIfNotExistsByName(String name) {
+        return  authorRepository.findByName(name)
+                .orElseGet(() -> authorRepository.save(new Author(null, name, 0, LocalDateTime.now(), null, null)));
     }
 
     // 5.AuthorDto 리스트
-    public void saveAuthorIfNotExistsDto(Set<AuthorDto> authorDtos) {
+    public Set<Author> saveAuthorIfNotExistsDto(Set<AuthorDto> authorDtos) {
+        Set<Author> authors = new HashSet<>();
         for (AuthorDto dto : authorDtos) {
-            saveAuthorIfNotExistsDto(dto);
+            authors.add(saveAuthorIfNotExistsDto(dto));
         }
+
+        return authors;
     }
 
     // 6.AuthorDto 단건
-    public void saveAuthorIfNotExistsDto(AuthorDto dto) {
-        authorRepository.findByName(dto.name())
+    public Author saveAuthorIfNotExistsDto(AuthorDto dto) {
+        return authorRepository.findByName(dto.name())
                 .orElseGet(() -> authorRepository.save(new Author(null, dto.name(), 0, null, null, null)));
     }
 }
