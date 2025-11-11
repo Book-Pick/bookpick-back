@@ -9,6 +9,7 @@ import BookPick.mvp.domain.book.repository.BookRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -21,7 +22,8 @@ public class BookSaveService {
     private final AuthorSaveService authorSaveService;
 
     // 1. Book 리스트
-    public void saveBookIfNotExists(List<Book> books) {
+    public void saveBookIfNotExists(Set<Book> books) {
+
         for (Book book : books) {
             saveBookIfNotExists(book); // 단건 재사용
         }
@@ -37,20 +39,24 @@ public class BookSaveService {
     }
 
     // 3. BookDto 리스트
-    public void saveBookIfNotExistsDto(List<BookDto> bookDtos) {
+    public Set<Book> saveBookIfNotExistsDto(Set<BookDto> bookDtos) {
+        Set<Book> books= new HashSet<>();
         for (BookDto dto : bookDtos) {
-            saveBookIfNotExistsDto(dto);
+            books.add(saveBookIfNotExistsDto(dto));
         }
+
+        return books;
     }
 
     // 4. BookDto 단건
-    public void saveBookIfNotExistsDto(BookDto dto) {
-        bookRepository.findByTitle(dto.title())
-                .orElseGet(() -> {
+    public Book saveBookIfNotExistsDto(BookDto dto) {
+
+        return bookRepository.findByTitle(dto.title())
+                .orElseGet(() -> {      // 책이 없으면
                     // authors 저장
-                    authorSaveService.saveAuthorIfNotExistsByName(dto.authors());
+                    Set<Author> authors = authorSaveService.saveAuthorsIfNotExistsByName(dto.authors());
                     // Book 객체 변환 후 저장
-                    Book book = Book.from(dto);
+                    Book book = Book.from(dto, authors);
                     return bookRepository.save(book);
                 });
     }

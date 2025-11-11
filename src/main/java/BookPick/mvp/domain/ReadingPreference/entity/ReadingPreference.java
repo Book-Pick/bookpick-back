@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.Set;
 
 @Entity
-@Table(name = "user_reading_preference")
+@Table(name = "reading_preference")
 @Getter
 @Builder
 @NoArgsConstructor
@@ -34,7 +34,7 @@ public class ReadingPreference {
 
     @ManyToMany
     @JoinTable(
-            name = "preference_favorite_books",
+            name = "preference_books",
             joinColumns = @JoinColumn(name = "preference_id"),
             inverseJoinColumns = @JoinColumn(name = "book_id")
     )
@@ -42,7 +42,7 @@ public class ReadingPreference {
 
     @ManyToMany
     @JoinTable(
-            name = "preference_favorite_authors",
+            name = "preference_authors",
             joinColumns = @JoinColumn(name = "preference_id"),
             inverseJoinColumns = @JoinColumn(name = "author_id")
     )

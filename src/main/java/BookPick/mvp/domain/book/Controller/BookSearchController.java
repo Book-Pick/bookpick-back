@@ -2,7 +2,7 @@ package BookPick.mvp.domain.book.Controller;
 
 import BookPick.mvp.domain.book.dto.search.BookSearchPageRes;
 import BookPick.mvp.domain.book.dto.search.BookSearchReq;
-import BookPick.mvp.domain.book.service.BookSearchService;
+import BookPick.mvp.domain.book.util.kakaoApi.BookSearchService;
 import BookPick.mvp.global.api.ApiResponse;
 import BookPick.mvp.global.api.SuccessCode.SuccessCode;
 import io.swagger.v3.oas.annotations.Operation;
