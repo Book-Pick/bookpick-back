@@ -1,12 +1,9 @@
 package BookPick.mvp.domain.ReadingPreference.controller;
 
+import BookPick.mvp.domain.ReadingPreference.dto.ETC.Delete.ReadingPreferenceDeleteRes;
+import BookPick.mvp.domain.ReadingPreference.dto.ReadingPreferenceReq;
+import BookPick.mvp.domain.ReadingPreference.dto.ReadingPreferenceRes;
 import BookPick.mvp.domain.auth.service.CustomUserDetails;
-import BookPick.mvp.domain.ReadingPreference.dto.Create.ReadingPreferenceCreateReq;
-import BookPick.mvp.domain.ReadingPreference.dto.Create.ReadingPreferenceCreateRes;
-import BookPick.mvp.domain.ReadingPreference.dto.Delete.ReadingPreferenceDeleteRes;
-import BookPick.mvp.domain.ReadingPreference.dto.Get.ReadingPreferenceGetRes;
-import BookPick.mvp.domain.ReadingPreference.dto.Update.ReadingPreferenceUpdateReq;
-import BookPick.mvp.domain.ReadingPreference.dto.Update.ReadingPreferenceUpdateRes;
 import BookPick.mvp.domain.ReadingPreference.service.ReadingPreferenceService;
 import BookPick.mvp.global.api.ApiResponse;
 import BookPick.mvp.global.api.SuccessCode.SuccessCode;
@@ -28,10 +25,10 @@ public class ReadingPreferenceController {
 
     @Operation(summary = "독서 취향 생성", description = "사용자의 독서 취향을 등록합니다", tags = {"Reading Preference"})
     @PostMapping
-    public ResponseEntity<ApiResponse<ReadingPreferenceCreateRes>> create(
-            @Valid @RequestBody ReadingPreferenceCreateReq req,
+    public ResponseEntity<ApiResponse<ReadingPreferenceRes>> create(
+            @Valid @RequestBody ReadingPreferenceReq req,
             @AuthenticationPrincipal CustomUserDetails currentUser) {
-        ReadingPreferenceCreateRes res = readingPreferenceService.addReadingPreference(currentUser.getId(), req);
+        ReadingPreferenceRes res = readingPreferenceService.addReadingPreference(currentUser.getId(), req);
 
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(ApiResponse.success(SuccessCode.READING_PREFERENCE_REGISTER_SUCCESS, res));
@@ -39,9 +36,9 @@ public class ReadingPreferenceController {
 
     @Operation(summary = "독서 취향 조회", description = "사용자의 독서 취향 상세 조회", tags = {"Reading Preference"})
     @GetMapping
-    public ResponseEntity<ApiResponse<ReadingPreferenceGetRes>> getDetails(
+    public ResponseEntity<ApiResponse<ReadingPreferenceRes>> getDetails(
             @AuthenticationPrincipal CustomUserDetails currentUser) {
-        ReadingPreferenceGetRes res = readingPreferenceService.findReadingPreference(currentUser.getId());
+        ReadingPreferenceRes res = readingPreferenceService.findReadingPreference(currentUser.getId());
 
         return ResponseEntity.status(HttpStatus.OK)
                 .body(ApiResponse.success(SuccessCode.READING_PREFERENCE_READ_SUCCESS, res));
@@ -49,10 +46,10 @@ public class ReadingPreferenceController {
 
     @Operation(summary = "독서 취향 수정", description = "사용자의 독서 취향을 수정합니다", tags = {"Reading Preference"})
     @PatchMapping
-    public ResponseEntity<ApiResponse<ReadingPreferenceUpdateRes>> update(
-            @Valid @RequestBody ReadingPreferenceUpdateReq req,
+    public ResponseEntity<ApiResponse<ReadingPreferenceRes>> update(
+            @Valid @RequestBody ReadingPreferenceReq req,
             @AuthenticationPrincipal CustomUserDetails currentUser) {
-        ReadingPreferenceUpdateRes res = readingPreferenceService.modifyReadingPreference(currentUser.getId(), req);
+        ReadingPreferenceRes res = readingPreferenceService.modifyReadingPreference(currentUser.getId(), req);
 
         return ResponseEntity.status(HttpStatus.OK)
                 .body(ApiResponse.success(SuccessCode.READING_PREFERENCE_UPDATE_SUCCESS, res));

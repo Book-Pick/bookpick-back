@@ -1,6 +1,8 @@
 package BookPick.mvp.domain.book.service;
 
-import BookPick.mvp.domain.book.dto.BookDtos.*;
+import BookPick.mvp.domain.book.dto.search.BookSearchPageRes;
+import BookPick.mvp.domain.book.dto.search.BookSearchReq;
+import BookPick.mvp.domain.book.dto.search.BookSearchRes;
 import BookPick.mvp.global.dto.PageInfo;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
@@ -12,7 +14,6 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;

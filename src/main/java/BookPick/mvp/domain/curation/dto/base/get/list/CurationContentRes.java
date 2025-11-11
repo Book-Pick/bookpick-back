@@ -1,5 +1,6 @@
 package BookPick.mvp.domain.curation.dto.base.get.list;
 
+import BookPick.mvp.domain.author.entity.Author;
 import BookPick.mvp.domain.curation.dto.prefer.ReadingPreferenceInfo;
 import BookPick.mvp.domain.curation.model.Curation;
 import BookPick.mvp.domain.curation.util.gemini.dto.CurationMatchResult;
@@ -80,7 +81,7 @@ public record CurationContentRes(
 
 
         //2. 유저 독서취향의 작가들 안에 존재하면 +20
-        List<String> favoriteAuthors = preferenceInfo.favoriteAuthors();
+        List<Author> favoriteAuthors = preferenceInfo.favoriteAuthors();
 
         if(favoriteAuthors.contains(author)){
             similarity+=10;
