@@ -1,4 +1,4 @@
-package BookPick.mvp.domain.book.service;
+package BookPick.mvp.domain.book.util.kakaoApi;
 
 import BookPick.mvp.domain.book.dto.search.BookSearchPageRes;
 import BookPick.mvp.domain.book.dto.search.BookSearchReq;
