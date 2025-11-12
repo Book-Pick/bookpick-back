@@ -30,7 +30,7 @@ public enum ErrorCode implements ErrorCodeInterface {
 
     // -- Reading Preference --
     READING_PREFERENCE_ALREADY_RESiGSTER(HttpStatus.CONFLICT, "이미 독서 취향이 존재합니다."),
-    READING_PREFERENCE_NOT_EXISTED(HttpStatus.NOT_FOUND, "사용자의 독서 취향이 존재하지 않습니다."),
+    READING_PREFERENCE_NOT_EXISTED(HttpStatus.OK, "사용자의 독서 취향이 존재하지 않습니다."),        // 독서취향이 존재하지 않더라도 문제가 없어서 OK
 
     // -- Curation --
     CURATION_NOT_FOUND(HttpStatus.NOT_FOUND, "해당 큐레이션을 찾을 수 없습니다."),
