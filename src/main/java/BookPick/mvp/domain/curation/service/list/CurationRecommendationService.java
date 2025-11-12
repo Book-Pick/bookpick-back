@@ -1,6 +1,5 @@
 package BookPick.mvp.domain.curation.service.list;
 
-import BookPick.mvp.domain.curation.model.Curation;
 import BookPick.mvp.domain.curation.dto.prefer.ReadingPreferenceInfo;
 import BookPick.mvp.domain.curation.util.gemini.dto.CurationMatchResult;
 import BookPick.mvp.domain.curation.util.gemini.prompt.ContentPromptTemplate;

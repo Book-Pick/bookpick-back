@@ -1,4 +1,4 @@
-package BookPick.mvp.domain.curation.model;
+package BookPick.mvp.domain.curation.entity;
 
 import BookPick.mvp.domain.curation.dto.base.update.CurationUpdateReq;
 import BookPick.mvp.domain.user.entity.User;

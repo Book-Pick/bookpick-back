@@ -1,7 +1,7 @@
 // CurationUpdateRes.java
 package BookPick.mvp.domain.curation.dto.base.update;
 
-import BookPick.mvp.domain.curation.model.Curation;
+import BookPick.mvp.domain.curation.entity.Curation;
 
 public record CurationUpdateRes(
         Long id
