@@ -16,6 +16,6 @@ public record ReadingPreferenceReq(
         List<String> readingHabits,        // 독서 습관
         List<String> genres,      // 선호 장르
         List<String> keywords,              // 키워드
-        List<String> trends              //
+        List<String> readingStyles              //
 ) {
     }

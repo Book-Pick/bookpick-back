@@ -55,8 +55,8 @@ public class ReadingPreference {
     private List<String> moods;
 
     @ElementCollection
-    @CollectionTable(name = "preference_styles", joinColumns = @JoinColumn(name = "preference_id"))
-    @Column(name = "habit")
+    @CollectionTable(name = "preference_readinghabits", joinColumns = @JoinColumn(name = "preference_id"))
+    @Column(name = "reading_habits")
     private List<String> readingHabits;
 
     @ElementCollection
@@ -70,9 +70,9 @@ public class ReadingPreference {
     private List<String> keywords;
 
     @ElementCollection
-    @CollectionTable(name = "preference_trends", joinColumns = @JoinColumn(name = "preference_id"))
-    @Column(name = "trend")
-    private List<String> trends;
+    @CollectionTable(name = "preference_readingstyles", joinColumns = @JoinColumn(name = "preference_id"))
+    @Column(name = "reading_style")
+    private List<String> readingStyles;
 
     private LocalDateTime createdAt;
 
@@ -129,9 +129,9 @@ public class ReadingPreference {
         this.keywords.addAll(req.keywords());
     }
 
-    if (req.trends() != null) {
-        this.trends.clear();
-        this.trends.addAll(req.trends());
+    if (req.readingStyles() != null) {
+        this.readingStyles.clear();
+        this.readingStyles.addAll(req.readingStyles());
     }
 }
 

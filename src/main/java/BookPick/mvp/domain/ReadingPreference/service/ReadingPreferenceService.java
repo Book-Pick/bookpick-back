@@ -67,7 +67,7 @@ public class ReadingPreferenceService {
                 .moods(req.moods())
                 .readingHabits(req.readingHabits())
                 .genres(req.genres())
-                .trends(req.trends())
+                .readingStyles(req.readingStyles())
                 .keywords(req.keywords())
                 .build();
 
