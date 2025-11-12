@@ -48,7 +48,7 @@ public class User {
     @Column(name = "profile_image_url", length = 500)
     private String profileImageUrl; // 프로필 사진 경로
 
-    @Column(name ="is_first_login", nullable = false)
+    @Column(name = "is_first_login", nullable = false)
     @Builder.Default
     private boolean isFirstLogin = true;
 
@@ -61,8 +61,12 @@ public class User {
     private LocalDateTime updatedAt; // 수정 시각
 
 
-    public void isNotFirstLogin(){
-        this.isFirstLogin=false;
+    @Column(name = "deleted_at", nullable = false)
+    private LocalDateTime deletedAt; // 삭제 시각
+
+
+    public void isNotFirstLogin() {
+        this.isFirstLogin = false;
     }
 
 
