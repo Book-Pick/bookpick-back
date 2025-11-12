@@ -8,6 +8,7 @@ import java.util.List;
 public record CurationGetRes(
         Long id,
         Long userId,
+        String title,
         ThumbnailInfo thumbnail,
         BookInfo book,
         String review,
@@ -19,6 +20,7 @@ public record CurationGetRes(
         return new CurationGetRes(
                 curation.getId(),
                 curation.getUser().getId(),
+                curation.getTitle(),
                 new ThumbnailInfo(curation.getThumbnailUrl(), curation.getThumbnailColor()),
                 new BookInfo(curation.getBookTitle(), curation.getBookAuthor(), curation.getBookIsbn()),
                 curation.getReview(),

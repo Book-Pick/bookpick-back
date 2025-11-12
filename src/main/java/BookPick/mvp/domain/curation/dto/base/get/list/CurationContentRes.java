@@ -27,7 +27,7 @@ public record CurationContentRes(
     public static CurationContentRes from(Curation curation) {
         return new CurationContentRes(
                 curation.getId(),
-                curation.getBookTitle(),
+                curation.getTitle(),
                 curation.getUser().getId(),
                 curation.getUser().getNickname(),
                 new ThumbnailRes(curation.getThumbnailUrl(), curation.getThumbnailColor()),
@@ -46,7 +46,7 @@ public record CurationContentRes(
         Curation curation = matchResult.getCuration();
         return new CurationContentRes(
                 curation.getId(),
-                curation.getBookTitle(),
+                curation.getTitle(),
                 curation.getUser().getId(),
                 matchResult.getUser().getNickname(),
                 new ThumbnailRes(curation.getThumbnailUrl(), curation.getThumbnailColor()),

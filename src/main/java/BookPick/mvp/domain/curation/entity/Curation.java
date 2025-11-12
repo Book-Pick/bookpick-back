@@ -3,10 +3,7 @@ package BookPick.mvp.domain.curation.entity;
 import BookPick.mvp.domain.curation.dto.base.update.CurationUpdateReq;
 import BookPick.mvp.domain.user.entity.User;
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -14,12 +11,14 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import java.time.LocalDateTime;
 import java.util.List;
 
+@Builder
 @Entity
 @Getter
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @EntityListeners(AuditingEntityListener.class)
 @Table(name = "curation")
+@AllArgsConstructor
 public class Curation {
+    
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -29,9 +28,15 @@ public class Curation {
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
+    private String title;
+
+
+    // Todo 2. 추후 썸네일 클래스로 변경 필요
     private String thumbnailUrl;
     private String thumbnailColor;
 
+
+    // Todo 1. 추후 Book 클래스로 변경 필요
     @Column(nullable = false)
     private String bookTitle;
     private String bookAuthor;
@@ -83,26 +88,13 @@ public class Curation {
 
     private LocalDateTime deletedAt;
 
+    public Curation() {
 
-    @Builder
-    public Curation(User user, String thumbnailUrl, String thumbnailColor,
-                    String bookTitle, String bookAuthor, String bookIsbn,
-                    String review, List<String> moods, List<String> genres,
-                    List<String> keywords, List<String> styles) {
-        this.user = user;
-        this.thumbnailUrl = thumbnailUrl;
-        this.thumbnailColor = thumbnailColor;
-        this.bookTitle = bookTitle;
-        this.bookAuthor = bookAuthor;
-        this.bookIsbn = bookIsbn;
-        this.review = review;
-        this.moods = moods;
-        this.genres = genres;
-        this.keywords = keywords;
-        this.styles = styles;
     }
 
+
     public void update(CurationUpdateReq req) {
+        this.title = req.title();
         this.thumbnailUrl = req.thumbnail().imageUrl();
         this.thumbnailColor = req.thumbnail().imageColor();
         this.bookTitle = req.book().title();
