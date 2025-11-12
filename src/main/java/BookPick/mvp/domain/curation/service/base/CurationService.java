@@ -44,6 +44,7 @@ public class CurationService {
 
         Curation curation = Curation.builder()
                 .user(user)
+                .title(req.title())
                 .thumbnailUrl(req.thumbnail().imageUrl())
                 .thumbnailColor(req.thumbnail().imageColor())
                 .bookTitle(req.book().title())
