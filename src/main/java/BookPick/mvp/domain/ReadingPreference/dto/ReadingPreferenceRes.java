@@ -17,7 +17,7 @@ public record ReadingPreferenceRes(
         List<String> readingHabits,        // 독서 습관
         List<String> genres,      // 선호 장르
         List<String> keywords,              // 키워드
-        List<String> trends              //
+        List<String> readingStyles              //
 ) {
 
     static public ReadingPreferenceRes from(ReadingPreference rp) {
@@ -30,7 +30,7 @@ public record ReadingPreferenceRes(
                 rp.getReadingHabits(),
                 rp.getGenres(),
                 rp.getKeywords(),
-                rp.getTrends()
+                rp.getReadingStyles()
         );
 
     }

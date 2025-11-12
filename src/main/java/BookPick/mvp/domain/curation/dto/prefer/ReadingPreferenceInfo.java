@@ -16,7 +16,7 @@ public record ReadingPreferenceInfo(
         List<String> moods,
         List<String> genres,
         List<String> keywords,
-        List<String> trends
+        List<String> readingStyles
        ) {
 
     // 엔티티 → DTO 변환
@@ -30,7 +30,7 @@ public record ReadingPreferenceInfo(
                 preference.getReadingHabits(),
                 preference.getGenres(),
                 preference.getKeywords(),
-                preference.getTrends()
+                preference.getReadingStyles()
         );
     }
 

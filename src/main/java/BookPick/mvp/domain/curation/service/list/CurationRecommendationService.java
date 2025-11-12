@@ -28,7 +28,7 @@ public class CurationRecommendationService {
                         .readingMethod(String.join(", ", preferenceInfo.readingHabits()))
                         .genre(String.join(", ", preferenceInfo.genres()))
                         .keyword(String.join(", ", preferenceInfo.keywords()))
-                        .readingStyle(String.join(", ", preferenceInfo.trends()))
+                        .readingStyle(String.join(", ", preferenceInfo.readingStyles()))
                         .build()
         );
     }
