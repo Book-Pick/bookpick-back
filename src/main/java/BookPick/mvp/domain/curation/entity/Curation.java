@@ -18,7 +18,7 @@ import java.util.List;
 @Table(name = "curation")
 @AllArgsConstructor
 public class Curation {
-    
+
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -66,15 +66,22 @@ public class Curation {
     @Column(name = "style")
     private List<String> styles;
 
+
+
+    @Builder.Default
     @Column(name = "like_count")
     private Integer likeCount = 0;
 
+    @Builder.Default
     @Column(name = "view_count")
     private Integer viewCount = 0;
 
+    @Builder.Default
     @Column(name = "comment_count")
     private Integer commentCount = 0;
 
+
+    @Builder.Default
     @Column(name = "popularity_score")
     private Integer popularityScore = 0;
 
