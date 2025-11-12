@@ -2,17 +2,14 @@ package BookPick.mvp.domain.ReadingPreference.service;
 
 import BookPick.mvp.domain.ReadingPreference.Exception.AlreadyRegisteredReadingPreferenceException;
 import BookPick.mvp.domain.ReadingPreference.Exception.UserReadingPreferenceNotExisted;
-import BookPick.mvp.domain.ReadingPreference.dto.Create.ReadingPreferenceCreateReq;
-import BookPick.mvp.domain.ReadingPreference.dto.Create.ReadingPreferenceCreateRes;
-import BookPick.mvp.domain.ReadingPreference.dto.Delete.ReadingPreferenceDeleteRes;
-import BookPick.mvp.domain.ReadingPreference.dto.Get.ReadingPreferenceGetRes;
-import BookPick.mvp.domain.ReadingPreference.dto.Update.ReadingPreferenceUpdateReq;
-import BookPick.mvp.domain.ReadingPreference.dto.Update.ReadingPreferenceUpdateRes;
+import BookPick.mvp.domain.ReadingPreference.dto.ETC.Delete.ReadingPreferenceDeleteRes;
+import BookPick.mvp.domain.ReadingPreference.dto.ReadingPreferenceReq;
+import BookPick.mvp.domain.ReadingPreference.dto.ReadingPreferenceRes;
 import BookPick.mvp.domain.ReadingPreference.entity.ReadingPreference;
 import BookPick.mvp.domain.ReadingPreference.repository.ReadingPreferenceRepository;
 import BookPick.mvp.domain.author.entity.Author;
-import BookPick.mvp.domain.author.repository.AuthorRepository;
 import BookPick.mvp.domain.author.service.AuthorSaveService;
+import BookPick.mvp.domain.book.dto.preference.BookDto;
 import BookPick.mvp.domain.book.entity.Book;
 import BookPick.mvp.domain.book.repository.BookRepository;
 import BookPick.mvp.domain.book.service.BookSaveService;
@@ -20,13 +17,12 @@ import BookPick.mvp.domain.user.entity.User;
 import BookPick.mvp.domain.user.exception.UserNotFoundException;
 import BookPick.mvp.domain.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
+import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
@@ -35,13 +31,12 @@ public class ReadingPreferenceService {
     private final UserRepository userRepository;
     private final BookSaveService bookSaveService;
     private final AuthorSaveService authorSaveService;
-
-
+    private final BookRepository bookRepository;
 
 
     // -- 유저 독서 취향 등록 --
     @Transactional
-    public ReadingPreferenceCreateRes addReadingPreference(Long userId, ReadingPreferenceCreateReq req) {
+    public ReadingPreferenceRes addReadingPreference(Long userId, ReadingPreferenceReq req) {
 
 
         // 1. 유저 검색
@@ -54,14 +49,21 @@ public class ReadingPreferenceService {
             throw new AlreadyRegisteredReadingPreferenceException();
         }
 
-        bookSaveService.saveIfNotExists(req.favoriteBooks());
-        authorSaveService.saveIfNotExists(req.favoriteAuthors());
+        // 3. 독서취향 기반 책 저장 (중복 체크)
+        Set<Book> savedBooks = bookSaveService.saveBookIfNotExistsDto(req.favoriteBooks());
+
+
+        // 4. 독서취향 기반 작가 저장 (중복 체크)
+        Set<Author> savedAuthors = authorSaveService.saveAuthorIfNotExistsDto(req.favoriteAuthors());
+
+        // 5. 책 찾고
 
 
         ReadingPreference readingPreference = ReadingPreference.builder()
                 .user(user)
                 .mbti(req.mbti())
-                .favoriteBooks(req.favoriteBooks())
+                .favoriteBooks(savedBooks)
+                .favoriteAuthors(savedAuthors)
                 .moods(req.moods())
                 .readingHabits(req.readingHabits())
                 .genres(req.genres())
@@ -72,34 +74,46 @@ public class ReadingPreferenceService {
         ReadingPreference saved = readingPreferenceRepository.save(readingPreference);
 
 
-        return ReadingPreferenceCreateRes.from(saved);
+        return ReadingPreferenceRes.from(saved);
     }
 
 
     // -- 유저 독서 취향 단건 조회 --
     @Transactional
-    public ReadingPreferenceGetRes findReadingPreference(Long userId) {
+    public ReadingPreferenceRes findReadingPreference(Long userId) {
         User user = userRepository.findById(userId)
                 .orElseThrow(UserNotFoundException::new);
 
         ReadingPreference result = readingPreferenceRepository.findByUserId(userId)
                 .orElseThrow(UserReadingPreferenceNotExisted::new);
 
-        return ReadingPreferenceGetRes.from(result);
+        return ReadingPreferenceRes.from(result);
     }
 
     // -- 본인 유저 독서 수정 --
     @Transactional
-    public ReadingPreferenceUpdateRes modifyReadingPreference(Long userId, ReadingPreferenceUpdateReq req) {
+    public ReadingPreferenceRes modifyReadingPreference(Long userId, ReadingPreferenceReq req) {
         User user = userRepository.findById(userId)
                 .orElseThrow(UserNotFoundException::new);
 
         ReadingPreference preference = readingPreferenceRepository.findByUserId(userId)
                 .orElseThrow(UserReadingPreferenceNotExisted::new);
 
-        preference.update(req);
 
-        return ReadingPreferenceUpdateRes.from(preference);
+//        // 1. 책 저장
+//        List<BookDto> bookDtos = req.favoriteBooks();
+//        for (BookDto bookDto : bookDtos){
+//
+//
+//            Book book  = bookRepository.findBy
+//        }
+
+        // 2. 작가 저장
+
+        // Todo 2. 구현 필요, Service 파라미터로 주면 안돼요!
+//        preference.update(req, authorSaveService, bookSaveService);
+
+        return ReadingPreferenceRes.from(preference);
     }
 
     // -- 본인 유저 독서 삭제 --

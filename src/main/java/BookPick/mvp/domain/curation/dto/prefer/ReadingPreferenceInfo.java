@@ -1,15 +1,17 @@
 package BookPick.mvp.domain.curation.dto.prefer;
 
 import BookPick.mvp.domain.ReadingPreference.entity.ReadingPreference;
+import BookPick.mvp.domain.author.entity.Author;
 import BookPick.mvp.domain.book.entity.Book;
 
 import java.util.List;
+import java.util.Set;
 
 public record ReadingPreferenceInfo(
         Long userId,
         String mbti,
-        List<String> favoriteAuthors,
-        List<Book> favoriteBooks,
+        Set<Book> favoriteBooks,
+        Set<Author> favoriteAuthors,
         List<String> readingHabits,
         List<String> moods,
         List<String> genres,
@@ -22,8 +24,8 @@ public record ReadingPreferenceInfo(
         return new ReadingPreferenceInfo(
                 preference.getUser().getId(),
                 preference.getMbti(),
-                preference.getFavoriteAuthors(),
                 preference.getFavoriteBooks(),
+                preference.getFavoriteAuthors(),
                 preference.getMoods(),
                 preference.getReadingHabits(),
                 preference.getGenres(),
