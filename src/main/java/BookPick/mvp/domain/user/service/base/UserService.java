@@ -1,18 +1,15 @@
 package BookPick.mvp.domain.user.service.base;
 
+import BookPick.mvp.domain.user.dto.base.UserReq;
+import BookPick.mvp.domain.user.dto.base.UserRes;
+import BookPick.mvp.domain.user.dto.base.delete.UserSoftDeleteRes;
+import BookPick.mvp.domain.user.entity.User;
+import BookPick.mvp.domain.user.exception.AlreadyDeletedException;
+import BookPick.mvp.domain.user.exception.UserNotFoundException;
+import BookPick.mvp.domain.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import springboot.kakao_boot_camp.domain.user.dto.base.create.UserCreateReq;
-import springboot.kakao_boot_camp.domain.user.dto.base.create.UserCreateRes;
-import springboot.kakao_boot_camp.domain.user.dto.base.read.UserGetRes;
-import springboot.kakao_boot_camp.domain.user.dto.base.soft.UserSoftDeleteRes;
-import springboot.kakao_boot_camp.domain.user.dto.base.update.UserUpdateReq;
-import springboot.kakao_boot_camp.domain.user.dto.base.update.UserUpdateRes;
-import springboot.kakao_boot_camp.domain.user.exception.AlreadyDeletedException;
-import springboot.kakao_boot_camp.domain.user.exception.UserNotFoundException;
-import springboot.kakao_boot_camp.domain.user.model.User;
-import springboot.kakao_boot_camp.domain.user.repository.UserRepository;
 
 import java.time.LocalDateTime;
 
@@ -22,38 +19,38 @@ public class UserService {
     final private UserRepository userRepository;
 
     // 1. 유저 생성            (관리자 권한)
-    public UserCreateRes CreateUser(UserCreateReq req) {
+    public UserRes CreateUser(UserReq req) {
 
         User user = User.builder()
                 .email(req.email())
-                .passWord(req.passWord())
-                .nickName(req.nickName())
-                .profileImage(req.profileImage())
+                .password(req.passWord())
+                .nickname(req.nickName())
+                .profileImageUrl(req.profileImage())
                 .role(req.role())
                 .build();
 
         User result = userRepository.save(user);
 
 
-        return UserCreateRes.from(result);
+        return UserRes.from(result);
     }
 
 
 
     // 2.1 개인 정보 조회  (개인 권한)
-    public UserGetRes userProfileGet(Long userId) {
+    public UserRes userProfileGet(Long userId) {
 
         User result = userRepository.findById(userId)
                 .orElseThrow(UserNotFoundException::new);
 
-        return UserGetRes.from(result);
+        return UserRes.from(result);
     }
 
 
 
     // 3.1 유저 수정
     @Transactional
-    public UserUpdateRes userProfileUpdate(Long userId, UserUpdateReq req) {
+    public UserRes userProfileUpdate(Long userId, UserReq req) {
 
         if (userId == null) {
             throw new UserNotFoundException();
@@ -63,10 +60,10 @@ public class UserService {
 
         // 더티 체킹
         if (req.email() != null) user.setEmail(req.email());
-        if (req.nickName() != null) user.setNickName(req.nickName());
-        if (req.profileImage() != null) user.setProfileImage(req.profileImage());
+        if (req.nickName() != null) user.setNickname(req.nickName());
+        if (req.profileImage() != null) user.setProfileImageUrl(req.profileImage());
 
-        return UserUpdateRes.from(user);
+        return UserRes.from(user);
 
     }
 

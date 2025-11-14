@@ -1,26 +1,27 @@
-package BookPick.mvp.domain.user.dto.base.update;
+package BookPick.mvp.domain.user.dto.base;
 
-import springboot.kakao_boot_camp.domain.user.enums.UserRole;
-import springboot.kakao_boot_camp.domain.user.model.User;
+import BookPick.mvp.domain.auth.Roles;
+import BookPick.mvp.domain.user.entity.User;
 
 import java.time.LocalDateTime;
-public record UserUpdateRes(
+
+public record UserRes(
         Long userId,
         String email,
         String nickName,
         String profileImage,
-        UserRole role, 
+        Roles role,
         LocalDateTime createdAt,
         LocalDateTime updatedAt,
         LocalDateTime deletedAt,
         Boolean deleted
 ) {
-    public static UserUpdateRes from(User user) {
-        return new UserUpdateRes(
+    public static UserRes from(User user) {
+        return new UserRes(
                 user.getId(),
                 user.getEmail(),
-                user.getNickName(),
-                user.getProfileImage(),
+                user.getNickname(),
+                user.getProfileImageUrl(),
                 user.getRole(),
                 user.getCreatedAt(),
                 user.getUpdatedAt(),

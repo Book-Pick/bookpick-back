@@ -1,8 +1,8 @@
 package BookPick.mvp.domain.user.util;
 
+import BookPick.mvp.domain.auth.Roles;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Component;
-import springboot.kakao_boot_camp.domain.user.enums.UserRole;
 
 import java.util.Collection;
 
@@ -11,7 +11,7 @@ public class AdminManager {
 
     public boolean isAdmin(Collection<GrantedAuthority> authorities){
         for (GrantedAuthority authority : authorities){
-            if(authority.getAuthority().equals(UserRole.ROLE_ADMIN.name())){
+            if(authority.getAuthority().equals(Roles.ROLE_ADMIN.name())){
                 return true;
             }
         }

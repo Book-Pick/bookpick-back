@@ -1,6 +1,7 @@
-package BookPick.mvp.domain.user.dto.base.soft;
+package BookPick.mvp.domain.user.dto.base.delete;
 
-import springboot.kakao_boot_camp.domain.user.model.User;
+
+import BookPick.mvp.domain.user.entity.User;
 
 import java.time.LocalDateTime;
 
