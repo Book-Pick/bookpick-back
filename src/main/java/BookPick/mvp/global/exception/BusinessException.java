@@ -1,7 +1,6 @@
 package BookPick.mvp.global.exception;
 
-import BookPick.mvp.global.api.ErrorCode.ErrorCode;
-import BookPick.mvp.global.api.ErrorCode.ErrorCodeInterface;
+import BookPick.mvp.global.enums.ErrorCodeInterface;
 import lombok.Getter;
 
 @Getter

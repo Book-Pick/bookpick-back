@@ -1,13 +1,14 @@
 // CurationGetRes.java
 package BookPick.mvp.domain.curation.dto.base.get.one;
 
-import BookPick.mvp.domain.curation.model.Curation;
+import BookPick.mvp.domain.curation.entity.Curation;
 import java.time.LocalDateTime;
 import java.util.List;
 
 public record CurationGetRes(
         Long id,
         Long userId,
+        String title,
         ThumbnailInfo thumbnail,
         BookInfo book,
         String review,
@@ -19,6 +20,7 @@ public record CurationGetRes(
         return new CurationGetRes(
                 curation.getId(),
                 curation.getUser().getId(),
+                curation.getTitle(),
                 new ThumbnailInfo(curation.getThumbnailUrl(), curation.getThumbnailColor()),
                 new BookInfo(curation.getBookTitle(), curation.getBookAuthor(), curation.getBookIsbn()),
                 curation.getReview(),

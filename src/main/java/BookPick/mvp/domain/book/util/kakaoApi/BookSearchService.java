@@ -62,8 +62,9 @@ public class BookSearchService {
             List<String> authors = (List<String>) doc.get("authors");
             String author = authors != null && !authors.isEmpty() ? authors.get(0) : "저자 미상";
             String image = (String) doc.get("thumbnail");
+            String isbn =  (String) doc.get("isbn");
 
-            books.add(new BookSearchRes(title, author, image));
+            books.add(new BookSearchRes(title, author, image, isbn));
         }
 
         // meta 데이터 추출 → PageInfo 변환

@@ -7,7 +7,7 @@ import BookPick.mvp.domain.curation.dto.base.get.one.CurationGetRes;
 import BookPick.mvp.domain.curation.dto.base.update.CurationUpdateReq;
 import BookPick.mvp.domain.curation.dto.base.update.CurationUpdateRes;
 import BookPick.mvp.domain.curation.dto.base.delete.CurationDeleteRes;
-import BookPick.mvp.domain.curation.model.Curation;
+import BookPick.mvp.domain.curation.entity.Curation;
 import BookPick.mvp.domain.curation.exception.CurationAccessDeniedException;
 import BookPick.mvp.domain.curation.exception.CurationNotFoundException;
 import BookPick.mvp.domain.curation.repository.CurationRepository;
@@ -44,6 +44,7 @@ public class CurationService {
 
         Curation curation = Curation.builder()
                 .user(user)
+                .title(req.title())
                 .thumbnailUrl(req.thumbnail().imageUrl())
                 .thumbnailColor(req.thumbnail().imageColor())
                 .bookTitle(req.book().title())

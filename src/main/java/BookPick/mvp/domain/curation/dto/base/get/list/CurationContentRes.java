@@ -2,12 +2,10 @@ package BookPick.mvp.domain.curation.dto.base.get.list;
 
 import BookPick.mvp.domain.author.entity.Author;
 import BookPick.mvp.domain.curation.dto.prefer.ReadingPreferenceInfo;
-import BookPick.mvp.domain.curation.model.Curation;
+import BookPick.mvp.domain.curation.entity.Curation;
 import BookPick.mvp.domain.curation.util.gemini.dto.CurationMatchResult;
 import BookPick.mvp.domain.user.entity.User;
 
-import java.util.List;
-import java.util.Random;
 import java.util.Set;
 
 public record CurationContentRes(
@@ -29,7 +27,7 @@ public record CurationContentRes(
     public static CurationContentRes from(Curation curation) {
         return new CurationContentRes(
                 curation.getId(),
-                curation.getBookTitle(),
+                curation.getTitle(),
                 curation.getUser().getId(),
                 curation.getUser().getNickname(),
                 new ThumbnailRes(curation.getThumbnailUrl(), curation.getThumbnailColor()),
@@ -48,7 +46,7 @@ public record CurationContentRes(
         Curation curation = matchResult.getCuration();
         return new CurationContentRes(
                 curation.getId(),
-                curation.getBookTitle(),
+                curation.getTitle(),
                 curation.getUser().getId(),
                 matchResult.getUser().getNickname(),
                 new ThumbnailRes(curation.getThumbnailUrl(), curation.getThumbnailColor()),

@@ -1,6 +1,6 @@
 package BookPick.mvp.domain.curation.util.gemini.dto;
 
-import BookPick.mvp.domain.curation.model.Curation;
+import BookPick.mvp.domain.curation.entity.Curation;
 import BookPick.mvp.domain.user.entity.User;
 import lombok.Builder;
 import lombok.Getter;

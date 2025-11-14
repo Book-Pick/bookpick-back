@@ -11,7 +11,7 @@ import BookPick.mvp.domain.comment.entity.Comment;
 import BookPick.mvp.domain.comment.exception.CommentNotFoundException;
 import BookPick.mvp.domain.comment.repository.CommentRepository;
 import BookPick.mvp.domain.curation.exception.CurationNotFoundException;
-import BookPick.mvp.domain.curation.model.Curation;
+import BookPick.mvp.domain.curation.entity.Curation;
 import BookPick.mvp.domain.curation.repository.CurationRepository;
 import BookPick.mvp.domain.user.entity.User;
 import BookPick.mvp.domain.user.exception.UserNotFoundException;

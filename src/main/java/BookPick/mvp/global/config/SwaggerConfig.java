@@ -19,7 +19,8 @@ public class SwaggerConfig {
                 .addTagsItem(new Tag().name("Reading Preference").description("유저 독서 취향 관련 API"))
                 .addTagsItem(new Tag().name("Curation").description("큐레이션 관련 API"))
                 .addTagsItem(new Tag().name("Book Search").description("책 검색 관련 API"))
-                .addTagsItem(new Tag().name("Auth").description("유저 인증 관련 API"));
+                .addTagsItem(new Tag().name("Auth").description("인증 관련 API"))
+                .addTagsItem(new Tag().name("User").description("유저 관련 API"));
     }
 
     private Info apiInfo() {

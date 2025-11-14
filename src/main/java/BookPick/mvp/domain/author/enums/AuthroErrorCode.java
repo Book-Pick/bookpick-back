@@ -1,6 +1,6 @@
 package BookPick.mvp.domain.author.enums;
 
-import BookPick.mvp.global.api.ErrorCode.ErrorCodeInterface;
+import BookPick.mvp.global.enums.ErrorCodeInterface;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.springframework.http.HttpStatus;
