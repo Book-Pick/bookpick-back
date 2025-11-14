@@ -11,6 +11,7 @@ import BookPick.mvp.domain.user.service.base.UserService;
 import BookPick.mvp.domain.user.util.AdminManager;
 import BookPick.mvp.global.api.ApiResponse;
 import BookPick.mvp.global.api.SuccessCode.SuccessCode;
+import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -28,6 +29,7 @@ public class UserController {
 
     // 유저 생성
     @PostMapping
+    @Operation(summary = "유저 추가", description = "새로운 유저를 추가합니다", tags = {"User"})
     public ResponseEntity<ApiResponse<UserRes>> createUser(@AuthenticationPrincipal CustomUserDetails currentUser,
                                                            @RequestBody @Valid UserReq req) {
         if (adminManager.isAdmin(currentUser.getAuthorities())) {
@@ -42,6 +44,7 @@ public class UserController {
 
     // 유저 조회
     @GetMapping
+    @Operation(summary = "유저 프로필 조회", description = "로그인한 사용자의 프로필을 조회합니다.", tags = {"User"})
     public ResponseEntity<ApiResponse<UserRes>> getUseProfile(@AuthenticationPrincipal CustomUserDetails currentUser) {
         UserRes res = userService.userProfileGet(currentUser.getId());
 
@@ -50,8 +53,10 @@ public class UserController {
     }
 
 
+
     // 유저 수정
     @PatchMapping
+    @Operation(summary = "유저 프로필 수정", description = "로그인한 사용자의 프로필을 수정합니다.", tags = {"User"})
     public ResponseEntity<ApiResponse<UserRes>> updateUserProfile(@AuthenticationPrincipal CustomUserDetails currentUser
     , @RequestBody @Valid UserReq req) {
         UserRes res = userService.userProfileUpdate(currentUser.getId(), req);
@@ -62,6 +67,8 @@ public class UserController {
 
 
     // 유저 소프트 삭제
+    @DeleteMapping("/soft")
+    @Operation(summary = "유저 프로필 소프트 삭제", description = "로그인한 사용자의 프로필을 임시 삭제합니다.", tags = {"User"})
     public ResponseEntity<ApiResponse<UserSoftDeleteRes>> softDeleteUser(@AuthenticationPrincipal CustomUserDetails currentUser) {
         UserSoftDeleteRes res = userService.softDeleteProfile(currentUser.getId());
 
@@ -71,6 +78,8 @@ public class UserController {
 
 
     // 유저 하드 삭제
+    @DeleteMapping("/hard")
+    @Operation(summary = "유저 프로필 하드 삭제", description = "로그인한 사용자의 프로필을 완전히 삭제합니다.", tags = {"User"})
     public ResponseEntity<ApiResponse<UserRes>> hardDeleteUser(@AuthenticationPrincipal CustomUserDetails currentUser) {
         if (adminManager.isAdmin(currentUser.getAuthorities())) {
             userService.hardDeleteUserProfile(currentUser.getId());
