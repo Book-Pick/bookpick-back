@@ -1,9 +1,9 @@
 // CurationUpdateReq.java
 package BookPick.mvp.domain.curation.dto.base.update;
 
-import BookPick.mvp.domain.curation.dto.base.create.Req.BookDto;
-import BookPick.mvp.domain.curation.dto.base.create.Req.RecommendDto;
-import BookPick.mvp.domain.curation.dto.base.create.Req.ThumbnailDto;
+import BookPick.mvp.domain.curation.dto.base.create.ETC.BookDto;
+import BookPick.mvp.domain.curation.dto.base.create.ETC.RecommendDto;
+import BookPick.mvp.domain.curation.dto.base.create.ETC.ThumbnailDto;
 
 public record CurationUpdateReq(
         String title,

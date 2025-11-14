@@ -1,4 +1,4 @@
-package BookPick.mvp.domain.curation.dto.base.create.Req;
+package BookPick.mvp.domain.curation.dto.base.create.ETC;
 
 import java.util.List;
 public record RecommendDto(

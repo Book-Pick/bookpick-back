@@ -1,5 +1,7 @@
 package BookPick.mvp.domain.curation.entity;
 
+import BookPick.mvp.domain.curation.dto.base.CurationReq;
+import BookPick.mvp.domain.curation.dto.base.CurationRes;
 import BookPick.mvp.domain.curation.dto.base.update.CurationUpdateReq;
 import BookPick.mvp.domain.user.entity.User;
 import jakarta.persistence.*;
@@ -14,6 +16,7 @@ import java.util.List;
 @Builder
 @Entity
 @Getter
+@Setter
 @EntityListeners(AuditingEntityListener.class)
 @Table(name = "curation")
 @AllArgsConstructor
@@ -67,7 +70,6 @@ public class Curation {
     private List<String> styles;
 
 
-
     @Builder.Default
     @Column(name = "like_count")
     private Integer likeCount = 0;
@@ -85,6 +87,8 @@ public class Curation {
     @Column(name = "popularity_score")
     private Integer popularityScore = 0;
 
+    @Column(name = "is_draft")
+    private boolean isDraft = false;
 
     @CreatedDate
     @Column(updatable = false)
@@ -114,11 +118,40 @@ public class Curation {
         this.styles = req.recommend().styles();
     }
 
+    public static Curation createDraft(User user, CurationReq req) {
+        Curation curation = Curation.from(user, req);
+        curation.setDraft(true);
+
+        return curation;
+    }
+
+
     public void increaseViewCount() {
         this.viewCount++;
         updatePopularityScore(); // 인기도 재계산
     }
+
     public void updatePopularityScore() {
         this.popularityScore = (likeCount * 3) + (commentCount * 2) + (viewCount * 1);
     }
+
+
+    // 팩토리 메서드
+    public static Curation from(User user, CurationReq req) {
+        return Curation.builder()
+                .user(user)
+                .title(req.title())
+                .thumbnailUrl(req.thumbnail().imageUrl())
+                .thumbnailColor(req.thumbnail().imageColor())
+                .bookTitle(req.book().title())
+                .bookAuthor(req.book().author())
+                .bookIsbn(req.book().isbn())
+                .review(req.review())
+                .moods(req.recommend().moods())
+                .genres(req.recommend().genres())
+                .keywords(req.recommend().keywords())
+                .styles(req.recommend().styles())
+                .build();
+    }
+
 }

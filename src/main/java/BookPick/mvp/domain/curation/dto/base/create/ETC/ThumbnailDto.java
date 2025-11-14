@@ -1,4 +1,4 @@
-package BookPick.mvp.domain.curation.dto.base.create.Req;
+package BookPick.mvp.domain.curation.dto.base.create.ETC;
 
 // 썸네일 정보
 public record ThumbnailDto(
