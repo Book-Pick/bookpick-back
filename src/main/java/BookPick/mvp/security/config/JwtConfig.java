@@ -1,4 +1,4 @@
-package BookPick.mvp.global.config;
+package BookPick.mvp.security.config;
 
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
