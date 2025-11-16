@@ -3,10 +3,11 @@ package BookPick.mvp.global.util;
 import BookPick.mvp.domain.auth.exception.InvalidTokenTypeException;
 import BookPick.mvp.domain.auth.exception.JwtTokenExpiredException;
 import BookPick.mvp.domain.auth.service.CustomUserDetails;
-import io.jsonwebtoken.ExpiredJwtException;
-import io.jsonwebtoken.JwtException;
+import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
 
@@ -15,21 +16,28 @@ import java.util.Date;
 import java.util.stream.Collectors;
 
 
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jwts;
-
-
+@Slf4j
 @Component
 public class JwtUtil {
     // 1. 키발급
-    final SecretKey key =
-            Keys.hmacShaKeyFor(Decoders.BASE64.decode(
-                    "jwtpassword123jwtpassword123jwtpassword123jwtpassword123jwtpassword"
-            ));
 
-    // (추가) 토큰 수명 상수
-    private static final long ACCESS_TTL_MS = 1000L * 60 * 60;          // 1시간
-    private static final long REFRESH_TTL_MS = 1000L * 60 * 60 * 24 * 14; // 14일
+    private final SecretKey accessKey;
+    private final SecretKey refreshKey;
+    private final long accessTtl;
+    private final long refreshTtl;
+
+    // 생성자 주입
+    public JwtUtil(
+            @Value("${jwt.access.secret}") String accessSecret,
+            @Value("${jwt.refresh.secret}") String refreshSecret,
+            @Value("${jwt.access.expiration}") long accessTtl,
+            @Value("${jwt.refresh.expiration}") long refreshTtl
+    ) {
+        this.accessKey = Keys.hmacShaKeyFor(Decoders.BASE64.decode(accessSecret));
+        this.refreshKey = Keys.hmacShaKeyFor(Decoders.BASE64.decode(refreshSecret));
+        this.accessTtl = accessTtl;
+        this.refreshTtl = refreshTtl;
+    }
 
     // 2. JWT 생성
     public String createAccessToken(Authentication auth) {
@@ -46,7 +54,7 @@ public class JwtUtil {
                 .claim("authorities", authorities)
                 .issuedAt(new Date(System.currentTimeMillis()))
                 .expiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60))  // expiration : 만료
-                .signWith(key)
+                .signWith(accessKey)
                 .compact();
         return jwt;
     }
@@ -57,11 +65,12 @@ public class JwtUtil {
 
         // refresh 토큰에는 최소 정보만: subject/email + typ 정도만 권장
         return Jwts.builder()
+                .claim("userId", usr.getId())  // 여기 추가
                 .claim("email", usr.getUsername())
                 .claim("typ", "refresh") // (권장) 토큰 타입 명시
                 .issuedAt(new Date(System.currentTimeMillis()))
-                .expiration(new Date(System.currentTimeMillis() + REFRESH_TTL_MS))
-                .signWith(key)
+                .expiration(new Date(System.currentTimeMillis() + this.refreshTtl))
+                .signWith(refreshKey)
                 .compact();
     }
 
@@ -71,7 +80,7 @@ public class JwtUtil {
 
         try {
             Claims claims = Jwts.parser()
-                    .verifyWith(key)
+                    .verifyWith(accessKey)
                     .build()
                     .parseSignedClaims(token)
                     .getPayload();
@@ -82,6 +91,58 @@ public class JwtUtil {
             throw new JwtTokenExpiredException();
         } catch (JwtException | IllegalArgumentException e) {
             throw new InvalidTokenTypeException();
+        }
+    }
+
+    // Access Token 파싱
+    public Claims extractAccessToken(String token) {
+        return extractToken(token, accessKey);
+    }
+
+    // Refresh Token 파싱
+    public Claims extractRefreshToken(String token) {
+        return extractToken(token, refreshKey);
+    }
+
+    // 공통 파싱 로직
+    public static Claims extractToken(String token, SecretKey key) {
+        try {
+            Claims claims = Jwts.parser()
+                    .verifyWith(key)
+                    .build()
+                    .parseSignedClaims(token)
+                    .getPayload();
+
+            return claims;
+
+        } catch (ExpiredJwtException e) {
+            // 토큰 만료 예외를 커스텀 예외로 던짐
+            throw new JwtTokenExpiredException();
+        } catch (JwtException | IllegalArgumentException e) {
+            // 잘못된 토큰 예외를 커스텀 예외로
+            System.out.println("JWT Parsing Error: " + e.getClass().getSimpleName() + " - " + e.getMessage());
+            e.printStackTrace();
+
+            throw new InvalidTokenTypeException();
+        }
+
+    }
+
+    // 토큰 유효성 검증 (Access / Refresh 구분)
+    public boolean validateToken(String token, boolean isAccessToken) {
+        try {
+            if (isAccessToken) {
+                extractAccessToken(token);
+            } else {
+                extractRefreshToken(token);
+            }
+            return true; // 예외가 안 나면 유효
+        } catch (JwtTokenExpiredException e) {
+            System.out.println("토큰 만료: " + e.getMessage());
+            return false;
+        } catch (InvalidTokenTypeException | JwtException e) {
+            System.out.println("유효하지 않은 토큰: " + e.getMessage());
+            return false;
         }
     }
 }

@@ -1,4 +1,4 @@
-package BookPick.mvp.global.config;
+package BookPick.mvp.security.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

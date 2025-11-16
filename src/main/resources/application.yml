@@ -24,6 +24,7 @@ server:
     include-exception: true
 
 
+
 logging:
   level:
     root: INFO
@@ -33,10 +34,10 @@ logging:
 
 jwt:
   access:
-    secret: aGVsbG93b3JsZGhlbGxvd29ybGRoZWxsb3dvcmxk
+    secret: c2NhcmVkYWdlZmVhdGhlcnNwbGVudHlyZWFkeWVhdHByaW5jaXBhbHJpc2Vwcm9iYWJsZXRoaXNpc2FsZWFzdDI1NmJpdHM
     expiration: 900000  # 15분 = 15 * 60 * 1000
   refresh:
-    secret: cmVmcmVzaHNlY3JldGtleWZvcmp3dHRva2Vu
+    secret: d2hvbGVtYWlucG9yY2hsb29rZWFyZ3JlYXRseXNoaW5lcmVzdHRlbGxuZWVkbGVrZWVwdGhpc2lzYWxlYXN0MjU2Yml0cw
     expiration: 604800000  # 7일 = 7 * 24 * 60 * 60 * 1000
 
 api :

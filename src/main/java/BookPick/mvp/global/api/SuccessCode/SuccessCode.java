@@ -11,6 +11,8 @@ public enum SuccessCode {
     // -- Auth --
     REGISTER_SUCCESS(HttpStatus.OK, "회원가입을 성공하였습니다."),
     LOGIN_SUCCESS(HttpStatus.OK, "로그인에 성공했습니다"),
+    TOKEN_REFERSH_SUCCESS(HttpStatus.OK, "액세스 토큰 재발급에 성공하였습니다."),
+    LOGOUT_SUCCESS(HttpStatus.OK, "로그아웃에 성공했습니다"),
 
     // -- User --
     GET_USERS_SUCCESS(HttpStatus.OK, "사용자 목록 조회를 성공하였습니다."),
