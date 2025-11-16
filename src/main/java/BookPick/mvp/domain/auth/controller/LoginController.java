@@ -3,6 +3,7 @@ package BookPick.mvp.domain.auth.controller;
 import BookPick.mvp.domain.auth.service.LoginService;
 import BookPick.mvp.global.api.ApiResponse;
 import BookPick.mvp.global.api.SuccessCode.SuccessCode;
+import io.swagger.v3.oas.annotations.Operation;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
@@ -26,6 +27,7 @@ public class LoginController {
 
 
     @PostMapping
+    @Operation(summary = "로그인", description = "로그인", tags = {"Auth"})
     public ResponseEntity<ApiResponse<LoginRes>> login(
             @RequestBody @Valid LoginReq req,
             HttpServletRequest servletRequest,

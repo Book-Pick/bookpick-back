@@ -5,6 +5,7 @@ import BookPick.mvp.domain.auth.service.TokenRefreshService;
 import BookPick.mvp.domain.auth.util.Manager.login.jwt.RefreshTokenCookieManager;
 import BookPick.mvp.global.api.ApiResponse;
 import BookPick.mvp.global.api.SuccessCode.SuccessCode;
+import io.swagger.v3.oas.annotations.Operation;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -27,6 +28,7 @@ public class TokenRefreshController {
      * 🔄 Refresh Token을 이용해 Access Token 재발급
      */
     @PostMapping("/refresh")
+    @Operation(summary = "리프레시 토큰 재발급", description = "리프레시 토큰 재발급", tags = {"Auth"})
     public ResponseEntity<ApiResponse<LoginRes>> refreshAccessToken(
             HttpServletRequest request,
             HttpServletResponse response,

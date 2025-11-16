@@ -5,6 +5,7 @@ import BookPick.mvp.domain.auth.dto.SignReq;
 import BookPick.mvp.domain.auth.dto.SignRes;
 import BookPick.mvp.global.api.ApiResponse;
 import BookPick.mvp.global.api.SuccessCode.SuccessCode;
+import io.swagger.v3.oas.annotations.Operation;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -23,6 +24,7 @@ public class SignUpController {
     private final SignUpService authService;
 
     @PostMapping
+    @Operation(summary = "회원가입", description = "회원가입", tags = {"Auth"})
     public ResponseEntity<ApiResponse<SignRes>> signUp(@RequestBody @Valid SignReq req, HttpServletResponse servletRes) {
         SignRes res = authService.signUp(req);    //data 얻기
 
