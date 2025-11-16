@@ -28,7 +28,7 @@ public class TokenRefreshController {
      * 🔄 Refresh Token을 이용해 Access Token 재발급
      */
     @PostMapping("/refresh")
-    @Operation(summary = "리프레시 토큰 재발급", description = "리프레시 토큰 재발급", tags = {"Auth"})
+    @Operation(summary = "액세스 토큰 재발급", description = "액세스 토큰 재발급", tags = {"Auth"})
     public ResponseEntity<ApiResponse<LoginRes>> refreshAccessToken(
             HttpServletRequest request,
             HttpServletResponse response,
