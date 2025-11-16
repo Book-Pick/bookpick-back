@@ -44,11 +44,15 @@ public class LogoutService {
 
                 // 3.1 리프레시 토큰 획득
                 String refreshToken = cookie.getValue();
+
                 if (refreshToken == null || refreshToken.isEmpty()) return;
 
 
+                int a=1;
                 // 3.2 클레임 토큰 획득
                 Claims claims;
+                int b=1;
+
                 try {
                     claims = jwtUtil.extractRefreshToken(refreshToken);
                 } catch (Exception e) {
@@ -61,9 +65,6 @@ public class LogoutService {
                     tokenUserId = claims.get("userId", Number.class).longValue();
                 } catch (Exception e) {
                     throw new AccessDeniedException("Invalid token structure");
-                }
-                if (!tokenUserId.equals(currentUser.getId())) {
-                    throw new AccessDeniedException("Token does not belong to current user");
                 }
 
 

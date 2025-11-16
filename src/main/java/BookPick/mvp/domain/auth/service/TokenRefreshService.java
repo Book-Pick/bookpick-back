@@ -36,7 +36,8 @@ public class TokenRefreshService {
 
         // Claims 추출
         Claims claims = jwtUtil.extractRefreshToken(refreshToken);
-        Long userId = claims.get("userId", Long.class);
+        Double userIdDouble = claims.get("userId", Double.class);
+        Long userId = userIdDouble.longValue();  // Double → Long
 
         if (!customUserDetails.getId().equals(userId)) {
             throw new RuntimeException("토큰 사용자 정보와 일치하지 않습니다.");
@@ -52,6 +53,6 @@ public class TokenRefreshService {
         // 새 토큰 발급
         JwtAuthManager.TokenPair tokenPair = jwtAuthManager.createTokens(auth);
 
-        return LoginRes.from(customUserDetails, tokenPair.accessToken(),  tokenPair.refreshToken());
+        return LoginRes.from(customUserDetails, tokenPair.accessToken(), tokenPair.refreshToken());
     }
 }

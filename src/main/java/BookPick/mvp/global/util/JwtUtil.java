@@ -3,10 +3,10 @@ package BookPick.mvp.global.util;
 import BookPick.mvp.domain.auth.exception.InvalidTokenTypeException;
 import BookPick.mvp.domain.auth.exception.JwtTokenExpiredException;
 import BookPick.mvp.domain.auth.service.CustomUserDetails;
-import io.jsonwebtoken.ExpiredJwtException;
-import io.jsonwebtoken.JwtException;
+import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
@@ -16,10 +16,7 @@ import java.util.Date;
 import java.util.stream.Collectors;
 
 
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jwts;
-
-
+@Slf4j
 @Component
 public class JwtUtil {
     // 1. 키발급
@@ -68,6 +65,7 @@ public class JwtUtil {
 
         // refresh 토큰에는 최소 정보만: subject/email + typ 정도만 권장
         return Jwts.builder()
+                .claim("userId", usr.getId())  // 여기 추가
                 .claim("email", usr.getUsername())
                 .claim("typ", "refresh") // (권장) 토큰 타입 명시
                 .issuedAt(new Date(System.currentTimeMillis()))
@@ -109,11 +107,14 @@ public class JwtUtil {
     // 공통 파싱 로직
     public static Claims extractToken(String token, SecretKey key) {
         try {
-            return Jwts.parser()
+            Claims claims = Jwts.parser()
                     .verifyWith(key)
                     .build()
                     .parseSignedClaims(token)
                     .getPayload();
+
+            return claims;
+
         } catch (ExpiredJwtException e) {
             // 토큰 만료 예외를 커스텀 예외로 던짐
             throw new JwtTokenExpiredException();

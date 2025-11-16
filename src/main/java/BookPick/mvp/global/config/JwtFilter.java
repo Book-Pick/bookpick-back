@@ -58,7 +58,7 @@ public class JwtFilter extends OncePerRequestFilter {
         try {
 
             // 3. 토큰 까서 claims 획득
-            Claims claims = jwtUtil.extractToken(token);    // 토큰 까기 (토큰 진위여부 검증 해당 메서드에서 진행)
+            Claims claims = jwtUtil.extractAccessToken(token);    // 토큰 까기 (토큰 진위여부 검증 해당 메서드에서 진행)
 
 
             // 4. 블랙리스트 체크
