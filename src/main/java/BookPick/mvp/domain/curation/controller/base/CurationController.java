@@ -1,6 +1,7 @@
 // CurationListController.java에 추가
 package BookPick.mvp.domain.curation.controller.base;
 
+import BookPick.mvp.domain.auth.exception.InvalidTokenTypeException;
 import BookPick.mvp.domain.auth.service.CustomUserDetails;
 import BookPick.mvp.domain.curation.dto.base.create.CurationCreateReq;
 import BookPick.mvp.domain.curation.dto.base.create.CurationCreateRes;
@@ -9,6 +10,7 @@ import BookPick.mvp.domain.curation.dto.base.update.CurationUpdateReq;
 import BookPick.mvp.domain.curation.dto.base.update.CurationUpdateRes;
 import BookPick.mvp.domain.curation.dto.base.delete.CurationDeleteRes;
 import BookPick.mvp.domain.curation.service.base.CurationService;
+import BookPick.mvp.domain.user.util.CurrentUserCheck;
 import BookPick.mvp.global.api.ApiResponse;
 import BookPick.mvp.global.api.SuccessCode.SuccessCode;
 import jakarta.servlet.http.HttpServletRequest;
@@ -27,12 +29,16 @@ import io.swagger.v3.oas.annotations.Operation;
 public class CurationController {
 
     private final CurationService curationService;
+    private final CurrentUserCheck currentUserCheck;
 
     @Operation(summary = "큐레이션 생성", description = "새 큐레이션을 생성합니다", tags = {"Curation"})
     @PostMapping
     public ResponseEntity<ApiResponse<CurationCreateRes>> create(
             @Valid @RequestBody CurationCreateReq req,
             @AuthenticationPrincipal CustomUserDetails currentUser) {
+
+        currentUserCheck.isValidCurrentUser(currentUser);
+
         CurationCreateRes res = curationService.create(currentUser.getId(), req);
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(ApiResponse.success(SuccessCode.CURATION_REGISTER_SUCCESS, res));

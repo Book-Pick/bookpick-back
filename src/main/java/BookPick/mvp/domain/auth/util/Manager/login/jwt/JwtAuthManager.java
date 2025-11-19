@@ -11,6 +11,8 @@ import org.springframework.stereotype.Component;
 public class JwtAuthManager {
     private final JwtUtil jwtUtil;
 
+
+    // 1. 토큰 생성
     public TokenPair createTokens(Authentication token){
         String accessToken = jwtUtil.createAccessToken(token);
         String refreshToken = jwtUtil.createRefreshToken(token);

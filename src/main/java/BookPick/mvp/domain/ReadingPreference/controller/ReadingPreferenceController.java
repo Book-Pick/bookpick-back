@@ -5,6 +5,7 @@ import BookPick.mvp.domain.ReadingPreference.dto.ReadingPreferenceReq;
 import BookPick.mvp.domain.ReadingPreference.dto.ReadingPreferenceRes;
 import BookPick.mvp.domain.auth.service.CustomUserDetails;
 import BookPick.mvp.domain.ReadingPreference.service.ReadingPreferenceService;
+import BookPick.mvp.domain.user.util.CurrentUserCheck;
 import BookPick.mvp.global.api.ApiResponse;
 import BookPick.mvp.global.api.SuccessCode.SuccessCode;
 import jakarta.validation.Valid;
@@ -22,6 +23,7 @@ import io.swagger.v3.oas.annotations.Operation;
 public class ReadingPreferenceController {
 
     private final ReadingPreferenceService readingPreferenceService;
+    private final CurrentUserCheck currentUserCheck;
 
     @Operation(summary = "독서 취향 생성", description = "사용자의 독서 취향을 등록합니다", tags = {"Reading Preference"})
     @PostMapping
@@ -38,6 +40,9 @@ public class ReadingPreferenceController {
     @GetMapping
     public ResponseEntity<ApiResponse<ReadingPreferenceRes>> getDetails(
             @AuthenticationPrincipal CustomUserDetails currentUser) {
+
+        currentUserCheck.isValidCurrentUser(currentUser);
+
         ReadingPreferenceRes res = readingPreferenceService.findReadingPreference(currentUser.getId());
 
         return ResponseEntity.status(HttpStatus.OK)
