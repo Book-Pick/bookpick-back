@@ -48,13 +48,13 @@ public class CurationFetcher {
                 List<CurationMatchResult> paginated = CurationMatchResultPagination.paginate(recommended, cursor, pageable);
                 yield paginated.stream().map(CurationMatchResult::getCuration).collect(Collectors.toList());
             }
-
             case SORT_LIKED -> {
                 List<CurationLike> likedCurationList = curationLikeRepository.findAllByUserIdOrderByCreatedAtDesc(userId, pageable);
                 yield likedCurationList.stream()
                         .map(CurationLike::getCuration)
                         .toList();
             }
+            case SORT_MY -> curationRepository.findByUserId(userId, pageable);
         };
     }
 

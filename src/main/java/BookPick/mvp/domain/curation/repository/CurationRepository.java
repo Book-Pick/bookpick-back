@@ -2,6 +2,7 @@ package BookPick.mvp.domain.curation.repository;
 
 import BookPick.mvp.domain.curation.entity.Curation;
 import BookPick.mvp.domain.curation.entity.CurationLike;
+import BookPick.mvp.domain.user.entity.User;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -12,7 +13,7 @@ import java.util.Optional;
 
 public interface CurationRepository extends JpaRepository<Curation, Long> {
 
-    List<Curation> findByUserId(Long userId);
+    List<Curation> findByUserId(Long userId, Pageable pageable);
 
 
     // 사이즈만큼 최신순으로 불러오는 함수
@@ -48,5 +49,7 @@ public interface CurationRepository extends JpaRepository<Curation, Long> {
     );
 
     Optional<CurationLike> findByUserIdAndId(Long userId, Long id);
+
+    Long user(User user);
 }
 
