@@ -7,6 +7,7 @@ import java.util.Set;
 
 public record BookDto(
          String title,
+         // Todo 1. author String 단수로 변경 필요
          Set<String> authors,
          String image,
          String isbn

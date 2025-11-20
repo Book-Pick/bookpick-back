@@ -1,12 +1,14 @@
 package BookPick.mvp.domain.curation.repository;
 
 import BookPick.mvp.domain.curation.entity.Curation;
+import BookPick.mvp.domain.curation.entity.CurationLike;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface CurationRepository extends JpaRepository<Curation, Long> {
 
@@ -44,5 +46,7 @@ public interface CurationRepository extends JpaRepository<Curation, Long> {
         @Param("keywords") List<String> keywords,
         @Param("styles") List<String> styles
     );
+
+    Optional<CurationLike> findByUserIdAndId(Long userId, Long id);
 }
 
