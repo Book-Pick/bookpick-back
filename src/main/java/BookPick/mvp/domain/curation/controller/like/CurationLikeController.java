@@ -5,6 +5,7 @@ import BookPick.mvp.domain.curation.dto.base.create.CurationCreateReq;
 import BookPick.mvp.domain.curation.dto.base.create.CurationCreateRes;
 import BookPick.mvp.domain.curation.enums.CurationSuccessCode;
 import BookPick.mvp.domain.curation.service.like.CurationLikeService;
+import BookPick.mvp.domain.user.util.CurrentUserCheck;
 import BookPick.mvp.global.api.ApiResponse;
 import BookPick.mvp.global.api.SuccessCode.SuccessCode;
 import io.swagger.v3.oas.annotations.Operation;
@@ -21,11 +22,15 @@ import org.springframework.web.bind.annotation.*;
 public class CurationLikeController {
 
     private final CurationLikeService curationLikeService;
+    private final CurrentUserCheck currentUserCheck;
+
 
     @GetMapping("/{curationId}")
     @Operation(summary = "큐레이션 좋아요", description = "큐레이션 좋아요 버튼을 누릅니다.", tags = {"Curation"})
     public ResponseEntity<ApiResponse<Void>> likeOrUnlikeCuration(@AuthenticationPrincipal CustomUserDetails currentUser
             , @PathVariable Long curationId) {
+
+        currentUserCheck.isValidCurrentUser(currentUser);
 
         boolean liked = curationLikeService.CurationLikeOrUnlike(currentUser.getId(), curationId);
 
@@ -37,6 +42,9 @@ public class CurationLikeController {
                     .body(ApiResponse.success(CurationSuccessCode.POST_DISLIKE_SUCCESS, null));
         }
     }
+
+
+
 
 
 }

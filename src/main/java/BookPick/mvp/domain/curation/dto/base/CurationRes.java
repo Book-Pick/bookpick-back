@@ -28,7 +28,7 @@ public record CurationRes(
                 new BookInfo(curation.getBookTitle(), curation.getBookAuthor(), curation.getBookIsbn()),
                 curation.getReview(),
                 new RecommendInfo(curation.getMoods(), curation.getGenres(), curation.getKeywords(), curation.getStyles()),
-                curation.isDraft(),
+                curation.isDrafted(),
                 curation.getCreatedAt(),
                 curation.getUpdatedAt(),
                 curation.getDeletedAt()

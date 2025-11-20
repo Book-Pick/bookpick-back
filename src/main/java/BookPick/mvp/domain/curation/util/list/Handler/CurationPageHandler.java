@@ -22,7 +22,7 @@ public class CurationPageHandler {
     private final CurationFetcher curationFetcher;
 
     // 1. 데이터 조회 (size+1개 : +1을 하는 이유는 다음 것을 항상 확인하기 위해서
-    public List<Curation> getCurationsPage(SortType sortType, Long cursor, int size, ReadingPreferenceInfo readingPreferenceInfo) {
+    public List<Curation> getCurationsPage( Long userId, SortType sortType, Long cursor, int size, ReadingPreferenceInfo readingPreferenceInfo) {
         Pageable pageable = PageRequest.of(0, size + 1);
         // SORT_SIMILARITY일 경우 preferenceInfo를 사용, 나머지는 user 관련 정보 필요 없음
         if (sortType == SortType.SORT_SIMILARITY && readingPreferenceInfo == null) {
@@ -31,7 +31,7 @@ public class CurationPageHandler {
 
 
         // 1) DB에서 실제로 가져오는 로직 (fetch : DB에서 가져오는 행위)
-        return curationFetcher.fetchCurations(sortType, cursor, pageable, readingPreferenceInfo);
+        return curationFetcher.fetchCurations(userId, sortType, cursor, pageable, readingPreferenceInfo);
     }
 
     // 2. 커서 페이징 처리

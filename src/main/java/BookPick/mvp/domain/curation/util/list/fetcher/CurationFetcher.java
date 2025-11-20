@@ -1,9 +1,11 @@
 package BookPick.mvp.domain.curation.util.list.fetcher;
 
 import BookPick.mvp.domain.curation.dto.prefer.ReadingPreferenceInfo;
+import BookPick.mvp.domain.curation.entity.CurationLike;
 import BookPick.mvp.domain.curation.enums.SortType;
 import BookPick.mvp.domain.curation.entity.Curation;
 import BookPick.mvp.domain.curation.repository.CurationRepository;
+import BookPick.mvp.domain.curation.repository.like.CurationLikeRepository;
 import BookPick.mvp.domain.curation.service.list.CurationRecommendationService;
 import BookPick.mvp.domain.curation.util.gemini.dto.CurationMatchResult;
 import BookPick.mvp.domain.curation.util.list.similarity.CurationMatchResultPagination;
@@ -20,11 +22,12 @@ import java.util.stream.Collectors;
 public class CurationFetcher {
 
     private final CurationRepository curationRepository;
+    private final CurationLikeRepository curationLikeRepository;
     private final CurationRecommendationService curationRecommendationService;
 
 
     // 1. sort Type별로 큐레이션 리스트 가져오기
-    public List<Curation> fetchCurations(SortType sortType, Long cursor, Pageable pageable, ReadingPreferenceInfo readingPreferenceInfo) {
+    public List<Curation> fetchCurations(Long userId, SortType sortType, Long cursor, Pageable pageable, ReadingPreferenceInfo readingPreferenceInfo) {
 
 
         // 1) 맨 처음 페이지 로딩
@@ -46,6 +49,12 @@ public class CurationFetcher {
                 yield paginated.stream().map(CurationMatchResult::getCuration).collect(Collectors.toList());
             }
 
+            case SORT_LIKED -> {
+                List<CurationLike> likedCurationList = curationLikeRepository.findAllByUserIdOrderByCreatedAtDesc(userId, pageable);
+                yield likedCurationList.stream()
+                        .map(CurationLike::getCuration)
+                        .toList();
+            }
         };
     }
 

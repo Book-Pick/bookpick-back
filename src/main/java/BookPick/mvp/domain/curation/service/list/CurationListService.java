@@ -63,7 +63,7 @@ public class CurationListService {
         }
 
         // 1) 큐레이션 페이징해서 구분
-        List<Curation> curations = pageHandler.getCurationsPage(sortType, cursor, size, null);
+        List<Curation> curations = pageHandler.getCurationsPage(userId, sortType, cursor, size, null);
         CursorPage<Curation> page = pageHandler.createCursorPage(curations, size);
         List<CurationContentRes> content = pageHandler.convertToContentRes(page.getContent());
 

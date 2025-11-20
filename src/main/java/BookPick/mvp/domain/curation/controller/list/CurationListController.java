@@ -25,7 +25,7 @@ public class CurationListController {
 
     @Operation(summary = "큐레이션 목록  조회", description = "최신순 / 인기순 / 사용자 취향 유사도 순", tags = {"Curation"})
     @GetMapping
-    public ResponseEntity<ApiResponse<CurationListGetRes>> CurationsGet(
+    public ResponseEntity<ApiResponse<CurationListGetRes>> getCurations(
             @RequestParam(defaultValue = "latest") String sort,
             @RequestParam(required = false) Long cursor,
             @RequestParam(defaultValue = "10") int size,
@@ -45,6 +45,8 @@ public class CurationListController {
         return ResponseEntity.ok()
                 .body(ApiResponse.success(SuccessCode.CURATION_LIST_GET_SUCCESS, curationListGetRes));
     }
+
+
 
 
 }

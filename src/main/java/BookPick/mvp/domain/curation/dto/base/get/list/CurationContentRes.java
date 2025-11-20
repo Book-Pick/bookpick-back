@@ -22,6 +22,7 @@ public record CurationContentRes(
         Integer similarity,
         String matched,
         Integer popularityScore,
+        boolean isDrafted,
         String createdAt
 ) {
     public static CurationContentRes from(Curation curation) {
@@ -38,6 +39,7 @@ public record CurationContentRes(
                 null,
                 null,
                 curation.getPopularityScore(),
+                curation.isDrafted(),
                 curation.getCreatedAt().toString()
         );
     }
@@ -57,6 +59,7 @@ public record CurationContentRes(
                 getSimilarity(matchResult, preferenceInfo),
                 matchResult.getMatched(),
                 curation.getPopularityScore(),
+                curation.isDrafted(),
                 curation.getCreatedAt().toString()
         );
     }

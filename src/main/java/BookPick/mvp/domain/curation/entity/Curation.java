@@ -88,7 +88,7 @@ public class Curation {
     private Integer popularityScore = 0;
 
     @Column(name = "is_draft")
-    private boolean isDraft = false;
+    private boolean isDrafted = false;
 
     @CreatedDate
     @Column(updatable = false)
@@ -98,6 +98,8 @@ public class Curation {
     private LocalDateTime updatedAt;
 
     private LocalDateTime deletedAt;
+
+    //Todo 1. 소프트 델리트 구현 필요
 
     public Curation() {
 
@@ -120,7 +122,7 @@ public class Curation {
 
     public static Curation createDraft(User user, CurationReq req) {
         Curation curation = Curation.from(user, req);
-        curation.setDraft(true);
+        curation.setDrafted(true);
 
         return curation;
     }
