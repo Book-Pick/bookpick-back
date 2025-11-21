@@ -135,6 +135,19 @@ public class ReadingPreference {
     }
 }
 
+    public static ReadingPreference clearPreferences(User user) {
+        return  ReadingPreference.builder()
+                .user(user)
+                .mbti(null)
+                .favoriteBooks(null)
+                .favoriteAuthors(null)
+                .moods(null)
+                .readingHabits(null)
+                .genres(null)
+                .readingStyles(null)
+                .keywords(null)
+                .build();
+    }
 
 
 }

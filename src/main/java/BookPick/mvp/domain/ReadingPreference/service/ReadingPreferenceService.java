@@ -76,6 +76,26 @@ public class ReadingPreferenceService {
 
         return ReadingPreferenceRes.from(saved);
     }
+    // -- 빈 독서취향 등록 --
+     @Transactional
+    public ReadingPreferenceRes addClearReadingPreference(Long userId) {
+
+
+        // 1. 유저 검색
+        User user = userRepository.findById(userId)
+                .orElseThrow(UserNotFoundException::new);
+
+        // 2. 독서취향이 이미 존재하면 이미 존재하는 독서취향입니다.
+        if (readingPreferenceRepository.existsByUserId(userId)) {
+            throw new AlreadyRegisteredReadingPreferenceException();
+        }
+
+        // 3. 처음 가입한 유저도 독서취향 설정할 수 있게, 회원가입시 빈 독서취향 등록하는 로직 추가
+        ReadingPreference saved = readingPreferenceRepository.save(ReadingPreference.clearPreferences(user));
+
+        return ReadingPreferenceRes.from(saved);
+    }
+
 
 
     // -- 유저 독서 취향 단건 조회 --
