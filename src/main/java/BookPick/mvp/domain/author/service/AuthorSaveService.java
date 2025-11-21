@@ -25,7 +25,7 @@ public class AuthorSaveService {
         }
     }
 
-    // 2. Author 단건
+    // 2. Author 저장
     public void saveAuthorIfNotExists(Author author) {
         authorRepository.findByName(author.getName())
                 .orElseGet(() -> authorRepository.save(author));

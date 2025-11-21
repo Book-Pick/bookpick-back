@@ -43,7 +43,9 @@ public class Curation {
     @Column(nullable = false)
     private String bookTitle;
     private String bookAuthor;
+    private String bookImage;
     private String bookIsbn;
+
 
     @Column(columnDefinition = "TEXT")
     private String review;

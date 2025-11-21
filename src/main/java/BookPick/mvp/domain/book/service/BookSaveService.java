@@ -33,7 +33,7 @@ public class BookSaveService {
     public void saveBookIfNotExists(Book book) {
         bookRepository.findByTitle(book.getTitle())
                 .orElseGet(() -> {
-                    authorSaveService.saveAuthorIfNotExists(book.getAuthors()); // 작가 먼저 저장
+                    authorSaveService.saveAuthorIfNotExists(book.getAuthor()); // 작가 먼저 저장
                     return bookRepository.save(book);
                 });
     }
@@ -54,9 +54,9 @@ public class BookSaveService {
         return bookRepository.findByTitle(dto.title())
                 .orElseGet(() -> {      // 책이 없으면
                     // authors 저장
-                    Set<Author> authors = authorSaveService.saveAuthorsIfNotExistsByName(dto.authors());
+                    Author author = authorSaveService.saveAuthorIfNotExistsByName(dto.author());
                     // Book 객체 변환 후 저장
-                    Book book = Book.from(dto, authors);
+                    Book book = Book.from(dto, author);
                     return bookRepository.save(book);
                 });
     }

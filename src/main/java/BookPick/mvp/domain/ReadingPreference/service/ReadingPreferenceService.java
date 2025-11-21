@@ -44,7 +44,6 @@ public class ReadingPreferenceService {
                 .orElseThrow(UserNotFoundException::new);
 
         // 2. 독서취향이 이미 존재하면 이미 존재하는 독서취향입니다.
-        // Todo 1. 독서취향 생성은 처음 회원가입시 바로 생성되고 null값 넣는 것으로 변경 필요
         if (readingPreferenceRepository.existsByUserId(userId)) {
             throw new AlreadyRegisteredReadingPreferenceException();
         }
@@ -57,8 +56,6 @@ public class ReadingPreferenceService {
         Set<Author> savedAuthors = authorSaveService.saveAuthorIfNotExistsDto(req.favoriteAuthors());
 
         // 5. 책 찾고
-
-
         ReadingPreference readingPreference = ReadingPreference.builder()
                 .user(user)
                 .mbti(req.mbti())
@@ -76,8 +73,9 @@ public class ReadingPreferenceService {
 
         return ReadingPreferenceRes.from(saved);
     }
+
     // -- 빈 독서취향 등록 --
-     @Transactional
+    @Transactional
     public ReadingPreferenceRes addClearReadingPreference(Long userId) {
 
 
@@ -96,8 +94,6 @@ public class ReadingPreferenceService {
         return ReadingPreferenceRes.from(saved);
     }
 
-
-
     // -- 유저 독서 취향 단건 조회 --
     @Transactional
     public ReadingPreferenceRes findReadingPreference(Long userId) {
@@ -110,7 +106,7 @@ public class ReadingPreferenceService {
         return ReadingPreferenceRes.from(result);
     }
 
-    // -- 본인 유저 독서 수정 --
+    // -- 본인 유저 독서 취향 수정 --
     @Transactional
     public ReadingPreferenceRes modifyReadingPreference(Long userId, ReadingPreferenceReq req) {
         User user = userRepository.findById(userId)
@@ -120,18 +116,14 @@ public class ReadingPreferenceService {
                 .orElseThrow(UserReadingPreferenceNotExisted::new);
 
 
-//        // 1. 책 저장
-//        List<BookDto> bookDtos = req.favoriteBooks();
-//        for (BookDto bookDto : bookDtos){
-//
-//
-//            Book book  = bookRepository.findBy
-//        }
+        Set<Book> savedBooks = bookSaveService.saveBookIfNotExistsDto(req.favoriteBooks());
 
-        // 2. 작가 저장
+        Set<Author> savedAuthors = authorSaveService.saveAuthorIfNotExistsDto(req.favoriteAuthors());
 
-        // Todo 2. 구현 필요, Service 파라미터로 주면 안돼요!
-//        preference.update(req, authorSaveService, bookSaveService);
+        preference.setFavoriteBooks(savedBooks);
+        preference.setFavoriteAuthors(savedAuthors);
+
+        preference.update(req);
 
         return ReadingPreferenceRes.from(preference);
     }
