@@ -13,8 +13,10 @@ public record CurationContentRes(
         String title,
         Long userId,
         String nickName,
+        String profileImageUrl,
+        String introduction,
         ThumbnailRes thumbnail,
-        String summary,
+        String review,
         BookRes book,
         int likeCount,
         int commentCount,
@@ -31,6 +33,8 @@ public record CurationContentRes(
                 curation.getTitle(),
                 curation.getUser().getId(),
                 curation.getUser().getNickname(),
+                curation.getUser().getProfileImageUrl(),
+                curation.getUser().getBio(),
                 new ThumbnailRes(curation.getThumbnailUrl(), curation.getThumbnailColor()),
                 curation.getReview(), new BookRes(curation.getBookTitle(), curation.getBookAuthor()),
                 curation.getLikeCount(),
@@ -51,6 +55,8 @@ public record CurationContentRes(
                 curation.getTitle(),
                 curation.getUser().getId(),
                 matchResult.getUser().getNickname(),
+                matchResult.getUser().getProfileImageUrl(),
+                matchResult.getUser().getBio(),
                 new ThumbnailRes(curation.getThumbnailUrl(), curation.getThumbnailColor()),
                 curation.getReview(), new BookRes(curation.getBookTitle(), curation.getBookAuthor()),
                 curation.getLikeCount(),
@@ -64,19 +70,10 @@ public record CurationContentRes(
         );
     }
 
-    // 1. 유사도 계산법                                 100%
-    // 1) 작가                                        19%
-    // 2) Matched -> 이거 , 로 분리해서 개수 Count        하나당 20%
-
-    // 1. 유저의 독서취향을 가지고
-    // 2.
-
     static Integer getSimilarity(CurationMatchResult matchResult, ReadingPreferenceInfo preferenceInfo) {
         Integer similarity = 50;
 //        Random random = new Random();
         User user = matchResult.getUser();
-
-
 
         // 1. 매칭된 큐레이션의 작가중
         String author = matchResult.getCuration().getBookAuthor();
@@ -84,7 +81,6 @@ public record CurationContentRes(
 
         //2. 유저 독서취향의 작가들 안에 존재하면 +20
         Set<Author> favoriteAuthors = preferenceInfo.favoriteAuthors();
-
         if(favoriteAuthors.contains(author)){
             similarity+=10;
         }
@@ -93,8 +89,8 @@ public record CurationContentRes(
         similarity += matchResult.getTotalMatchCount()*10;
 
 
-        //4. 1의 자리수 랜덤값으로 조정하여 다채롭게 (mvp단계 한정)
-//        similarity+=random.nextInt(10);
+        // 4. 1의 자리수 랜덤값으로 조정하여 다채롭게 (mvp단계 한정)
+        // similarity+=random.nextInt(10);
 
         return similarity;
     }
