@@ -9,6 +9,7 @@ public record UserReq(
         String passWord,
         String nickName,
         String profileImage,
+        String introduction,
         Roles role
 ) {
     public UserReq from(User user){
@@ -18,6 +19,7 @@ public record UserReq(
                 user.getPassword(),
                 user.getNickname(),
                 user.getProfileImageUrl(),
+                user.getBio(),
                 user.getRole()
         );
     }
