@@ -18,9 +18,9 @@ public enum ErrorCode implements ErrorCodeInterface {
     Invalid_Token_Type(HttpStatus.UNAUTHORIZED, "유효하지 않은 토큰 형식입니다. 다시 로그인해주세요."),
 
     // -- JWT --
-    TOKEN_EXPIRED(HttpStatus.OK, "로그인 토큰이 만료되었습니다. 다시 로그인해주세요."),
-    INVALID_TOKEN_TYPE(HttpStatus.OK, "유효하지 않은 토큰 형식입니다. 다시 로그인해주세요."),
-    TOKEN_LOGOUTED(HttpStatus.OK, "이미 로그아웃된 토큰입니다."),
+    TOKEN_EXPIRED(HttpStatus.UNAUTHORIZED, "로그인 토큰이 만료되었습니다. 다시 로그인해주세요."),
+    INVALID_TOKEN_TYPE(HttpStatus.UNAUTHORIZED, "유효하지 않은 토큰 형식입니다. 다시 로그인해주세요."),
+    TOKEN_LOGOUTED(HttpStatus.UNAUTHORIZED, "이미 로그아웃된 토큰입니다."),
 
 
     // -- User --
