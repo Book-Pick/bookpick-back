@@ -25,7 +25,7 @@ public class CurationLikeController {
     private final CurrentUserCheck currentUserCheck;
 
 
-    @GetMapping("/{curationId}")
+    @PostMapping("/{curationId}")
     @Operation(summary = "큐레이션 좋아요", description = "큐레이션 좋아요 버튼을 누릅니다.", tags = {"Curation"})
     public ResponseEntity<ApiResponse<Void>> likeOrUnlikeCuration(@AuthenticationPrincipal CustomUserDetails currentUser
             , @PathVariable Long curationId) {
