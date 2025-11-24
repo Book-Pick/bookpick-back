@@ -1,8 +1,8 @@
 ---
-name: "[Feat] 기능 추가 탬플릿"
+name: "[Bug] 버그 수정"
 about: "\U0001F517 Fe Be Sync"
-title: "[Feat] "
-labels: "\U0001F517 Fe Be Sync, feat"
+title: "[Bug]"
+labels: "Bug, \U0001F517 Fe Be Sync"
 assignees: ''
 
 ---
