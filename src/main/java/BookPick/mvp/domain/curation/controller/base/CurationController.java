@@ -48,8 +48,10 @@ public class CurationController {
     @GetMapping("/{curationId}")
     public ResponseEntity<ApiResponse<CurationGetRes>> getCuration(
             @PathVariable Long curationId,
-            HttpServletRequest req) {
-        CurationGetRes res = curationService.findCuration(curationId, req);
+            HttpServletRequest req,
+            @AuthenticationPrincipal CustomUserDetails currentUser
+    ) {
+        CurationGetRes res = curationService.findCuration(curationId, currentUser, req);
         return ResponseEntity.ok()
                 .body(ApiResponse.success(SuccessCode.CURATION_GET_SUCCESS, res));
     }

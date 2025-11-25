@@ -12,4 +12,6 @@ public interface CurationLikeRepository extends JpaRepository<CurationLike,Long>
     Optional<CurationLike> findByUserIdAndCurationId(Long userID, Long curationId);
 
     List<CurationLike> findAllByUserIdOrderByCreatedAtDesc(Long userId, Pageable pageable);
+
+    Optional<CurationLike> findByUserId(Long userId);
 }

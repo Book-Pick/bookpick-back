@@ -16,6 +16,7 @@ public record CurationGetRes(
         BookInfo book,
         String review,
         RecommendInfo recommend,
+        Boolean isLiked,
         Integer likeCount,
         Integer viewCount,
         Integer CommentCount,
@@ -23,7 +24,7 @@ public record CurationGetRes(
         LocalDateTime createdAt,
         LocalDateTime updatedAt
 ) {
-    public static CurationGetRes from(Curation curation) {
+    public static CurationGetRes from(Curation curation, boolean isLiked) {
         return new CurationGetRes(
                 curation.getId(),
                 curation.getUser().getId(),
@@ -36,6 +37,7 @@ public record CurationGetRes(
                 curation.getReview(),
                 new RecommendInfo(curation.getMoods(), curation.getGenres(),
                         curation.getKeywords(), curation.getStyles()),
+                isLiked,
                 curation.getLikeCount(),
                 curation.getViewCount(),
                 curation.getCommentCount(),
