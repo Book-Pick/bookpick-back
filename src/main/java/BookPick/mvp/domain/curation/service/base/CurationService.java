@@ -85,7 +85,7 @@ public class CurationService {
                 isLikedCuration = true;
             }
         }
-        // 2.
+
         return CurationGetRes.from(curation, isLikedCuration);
     }
 
