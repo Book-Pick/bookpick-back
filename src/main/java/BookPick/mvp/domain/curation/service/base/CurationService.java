@@ -69,7 +69,7 @@ public class CurationService {
         Curation curation = curationRepository.findById(curationId)
                 .orElseThrow(CurationNotFoundException::new);
 
-        curation.increaseViewCount();
+        curation.increaseViewCount();   //  큐레이션 조회수 +1
 
         return CurationGetRes.from(curation);
     }
