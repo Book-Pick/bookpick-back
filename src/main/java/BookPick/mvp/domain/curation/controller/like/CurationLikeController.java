@@ -36,10 +36,10 @@ public class CurationLikeController {
 
         if (liked) {
             return ResponseEntity.status(HttpStatus.OK)
-                    .body(ApiResponse.success(CurationSuccessCode.POST_LIKE_SUCCESS, null));
+                    .body(ApiResponse.success(CurationSuccessCode.CURATION_LIKE_SUCCESS, null));
         } else {
             return ResponseEntity.status(HttpStatus.OK)
-                    .body(ApiResponse.success(CurationSuccessCode.POST_DISLIKE_SUCCESS, null));
+                    .body(ApiResponse.success(CurationSuccessCode.CURATION_DISLIKE_SUCCESS, null));
         }
     }
 
