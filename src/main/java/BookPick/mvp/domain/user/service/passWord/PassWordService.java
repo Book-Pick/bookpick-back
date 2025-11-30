@@ -2,9 +2,9 @@ package BookPick.mvp.domain.user.service.passWord;
 
 import BookPick.mvp.domain.user.dto.passWord.PassWordChangeReq;
 import BookPick.mvp.domain.user.entity.User;
-import BookPick.mvp.domain.user.exception.PasswordMismatchException;
-import BookPick.mvp.domain.user.exception.UserNotFoundException;
-import BookPick.mvp.domain.user.exception.WrongCurrentPasswordException;
+import BookPick.mvp.domain.user.exception.common.PasswordMismatchException;
+import BookPick.mvp.domain.user.exception.common.UserNotFoundException;
+import BookPick.mvp.domain.user.exception.common.WrongCurrentPasswordException;
 import BookPick.mvp.domain.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;

@@ -2,7 +2,7 @@ package BookPick.mvp.domain.auth.service;
 
 
 import BookPick.mvp.domain.auth.Roles;
-import BookPick.mvp.domain.user.exception.UserNotFoundException;
+import BookPick.mvp.domain.user.exception.common.UserNotFoundException;
 import BookPick.mvp.domain.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;

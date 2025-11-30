@@ -17,7 +17,7 @@ import BookPick.mvp.domain.curation.repository.like.CurationLikeRepository;
 import BookPick.mvp.domain.curation.util.list.Handler.CurationPageHandler;
 import BookPick.mvp.domain.curation.util.list.fetcher.CurationFetcher;
 import BookPick.mvp.domain.user.entity.User;
-import BookPick.mvp.domain.user.exception.UserNotFoundException;
+import BookPick.mvp.domain.user.exception.common.UserNotFoundException;
 import BookPick.mvp.domain.user.repository.UserRepository;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;

@@ -6,7 +6,7 @@ import BookPick.mvp.domain.curation.exception.CurationNotFoundException;
 import BookPick.mvp.domain.curation.repository.CurationRepository;
 import BookPick.mvp.domain.curation.repository.like.CurationLikeRepository;
 import BookPick.mvp.domain.user.entity.User;
-import BookPick.mvp.domain.user.exception.UserNotFoundException;
+import BookPick.mvp.domain.user.exception.common.UserNotFoundException;
 import BookPick.mvp.domain.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

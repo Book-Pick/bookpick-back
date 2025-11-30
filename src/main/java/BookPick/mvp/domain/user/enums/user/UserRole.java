@@ -1,4 +1,4 @@
-package BookPick.mvp.domain.user.enums;
+package BookPick.mvp.domain.user.enums.user;
 
 import lombok.Getter;
 
