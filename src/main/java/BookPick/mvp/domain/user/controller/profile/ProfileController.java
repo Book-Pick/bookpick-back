@@ -5,7 +5,7 @@ import BookPick.mvp.domain.auth.service.CustomUserDetails;
 import BookPick.mvp.domain.user.dto.base.UserReq;
 import BookPick.mvp.domain.user.dto.base.UserRes;
 import BookPick.mvp.domain.user.dto.base.delete.UserSoftDeleteRes;
-import BookPick.mvp.domain.user.enums.UserSuccessCode;
+import BookPick.mvp.domain.user.enums.user.UserSuccessCode;
 import BookPick.mvp.domain.user.service.base.UserService;
 import BookPick.mvp.domain.user.util.AdminManager;
 import BookPick.mvp.global.api.ApiResponse;

@@ -1,6 +1,6 @@
 package BookPick.mvp.global.HyperParam;
 
-import BookPick.mvp.domain.curation.enums.SortType;
+import BookPick.mvp.domain.curation.enums.common.SortType;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 

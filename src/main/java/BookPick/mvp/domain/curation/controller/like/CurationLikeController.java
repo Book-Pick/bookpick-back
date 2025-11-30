@@ -1,15 +1,11 @@
 package BookPick.mvp.domain.curation.controller.like;
 
 import BookPick.mvp.domain.auth.service.CustomUserDetails;
-import BookPick.mvp.domain.curation.dto.base.create.CurationCreateReq;
-import BookPick.mvp.domain.curation.dto.base.create.CurationCreateRes;
-import BookPick.mvp.domain.curation.enums.CurationSuccessCode;
+import BookPick.mvp.domain.curation.enums.common.CurationSuccessCode;
 import BookPick.mvp.domain.curation.service.like.CurationLikeService;
 import BookPick.mvp.domain.user.util.CurrentUserCheck;
 import BookPick.mvp.global.api.ApiResponse;
-import BookPick.mvp.global.api.SuccessCode.SuccessCode;
 import io.swagger.v3.oas.annotations.Operation;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -36,10 +32,10 @@ public class CurationLikeController {
 
         if (liked) {
             return ResponseEntity.status(HttpStatus.OK)
-                    .body(ApiResponse.success(CurationSuccessCode.POST_LIKE_SUCCESS, null));
+                    .body(ApiResponse.success(CurationSuccessCode.CURATION_LIKE_SUCCESS, null));
         } else {
             return ResponseEntity.status(HttpStatus.OK)
-                    .body(ApiResponse.success(CurationSuccessCode.POST_DISLIKE_SUCCESS, null));
+                    .body(ApiResponse.success(CurationSuccessCode.CURATION_DISLIKE_SUCCESS, null));
         }
     }
 

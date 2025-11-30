@@ -2,7 +2,7 @@ package BookPick.mvp.domain.curation.util.list.fetcher;
 
 import BookPick.mvp.domain.curation.dto.prefer.ReadingPreferenceInfo;
 import BookPick.mvp.domain.curation.entity.CurationLike;
-import BookPick.mvp.domain.curation.enums.SortType;
+import BookPick.mvp.domain.curation.enums.common.SortType;
 import BookPick.mvp.domain.curation.entity.Curation;
 import BookPick.mvp.domain.curation.repository.CurationRepository;
 import BookPick.mvp.domain.curation.repository.like.CurationLikeRepository;

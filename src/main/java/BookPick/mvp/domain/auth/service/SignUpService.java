@@ -6,7 +6,6 @@ import BookPick.mvp.domain.auth.Roles;
 import BookPick.mvp.domain.auth.dto.SignReq;
 import BookPick.mvp.domain.auth.dto.SignRes;
 import BookPick.mvp.domain.user.entity.User;
-import BookPick.mvp.domain.user.enums.UserRole;
 import BookPick.mvp.domain.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;

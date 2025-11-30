@@ -4,7 +4,7 @@ import BookPick.mvp.domain.auth.exception.NotAuthenticateUser;
 import BookPick.mvp.domain.auth.service.CustomUserDetails;
 import BookPick.mvp.domain.curation.dto.base.CurationReq;
 import BookPick.mvp.domain.curation.dto.base.CurationRes;
-import BookPick.mvp.domain.curation.enums.CurationSuccessCode;
+import BookPick.mvp.domain.curation.enums.common.CurationSuccessCode;
 import BookPick.mvp.domain.curation.service.draft.CurationDraftService;
 import BookPick.mvp.global.api.ApiResponse;
 import io.swagger.v3.oas.annotations.Operation;

@@ -9,19 +9,17 @@ import BookPick.mvp.domain.ReadingPreference.entity.ReadingPreference;
 import BookPick.mvp.domain.ReadingPreference.repository.ReadingPreferenceRepository;
 import BookPick.mvp.domain.author.entity.Author;
 import BookPick.mvp.domain.author.service.AuthorSaveService;
-import BookPick.mvp.domain.book.dto.preference.BookDto;
 import BookPick.mvp.domain.book.entity.Book;
 import BookPick.mvp.domain.book.repository.BookRepository;
 import BookPick.mvp.domain.book.service.BookSaveService;
 import BookPick.mvp.domain.user.entity.User;
-import BookPick.mvp.domain.user.exception.UserNotFoundException;
+import BookPick.mvp.domain.user.exception.common.UserNotFoundException;
 import BookPick.mvp.domain.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
-import java.util.List;
 import java.util.Set;
 
 @Service

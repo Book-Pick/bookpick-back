@@ -1,10 +1,9 @@
-// CurationListController.java에 추가
 package BookPick.mvp.domain.curation.controller.list;
 
 import BookPick.mvp.domain.auth.exception.InvalidTokenTypeException;
 import BookPick.mvp.domain.auth.service.CustomUserDetails;
 import BookPick.mvp.domain.curation.dto.base.get.list.CurationListGetRes;
-import BookPick.mvp.domain.curation.enums.SortType;
+import BookPick.mvp.domain.curation.enums.common.SortType;
 import BookPick.mvp.domain.curation.service.list.CurationListService;
 import BookPick.mvp.global.api.ApiResponse;
 import BookPick.mvp.global.api.SuccessCode.SuccessCode;

@@ -2,10 +2,9 @@ package BookPick.mvp.domain.user.controller.passWord;
 
 import BookPick.mvp.domain.auth.service.CustomUserDetails;
 import BookPick.mvp.domain.user.dto.passWord.PassWordChangeReq;
-import BookPick.mvp.domain.user.enums.UserSuccessCode;
+import BookPick.mvp.domain.user.enums.user.UserSuccessCode;
 import BookPick.mvp.domain.user.service.passWord.PassWordService;
 import BookPick.mvp.global.api.ApiResponse;
-import BookPick.mvp.global.api.SuccessCode.SuccessCode;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;

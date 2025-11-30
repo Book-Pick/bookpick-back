@@ -10,15 +10,17 @@ import BookPick.mvp.domain.curation.dto.base.update.CurationUpdateRes;
 import BookPick.mvp.domain.curation.dto.base.delete.CurationDeleteRes;
 import BookPick.mvp.domain.curation.entity.Curation;
 import BookPick.mvp.domain.curation.entity.CurationLike;
-import BookPick.mvp.domain.curation.exception.CurationAccessDeniedException;
-import BookPick.mvp.domain.curation.exception.CurationNotFoundException;
+import BookPick.mvp.domain.curation.exception.common.CurationAccessDeniedException;
+import BookPick.mvp.domain.curation.exception.common.CurationNotFoundException;
 import BookPick.mvp.domain.curation.repository.CurationRepository;
 import BookPick.mvp.domain.curation.repository.like.CurationLikeRepository;
 import BookPick.mvp.domain.curation.util.list.Handler.CurationPageHandler;
 import BookPick.mvp.domain.curation.util.list.fetcher.CurationFetcher;
+import BookPick.mvp.domain.user.entity.CuratorSubscribe;
 import BookPick.mvp.domain.user.entity.User;
-import BookPick.mvp.domain.user.exception.UserNotFoundException;
+import BookPick.mvp.domain.user.exception.common.UserNotFoundException;
 import BookPick.mvp.domain.user.repository.UserRepository;
+import BookPick.mvp.domain.user.service.subscribe.CurationSubscribeService;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -36,6 +38,7 @@ public class CurationService {
     private final UserRepository userRepository;
     private final CurationFetcher curationFetcher;
     private final CurationPageHandler pageHandler;
+    private final CurationSubscribeService curationSubscribeService;
 
 
     // -- 큐레이션 등록 --
@@ -71,6 +74,7 @@ public class CurationService {
     @Transactional
     public CurationGetRes findCuration(Long curationId, CustomUserDetails user, HttpServletRequest req) {
         boolean isLikedCuration = false;
+        boolean isSubscribedCurator = false;
 
         Curation curation = curationRepository.findById(curationId)
                 .orElseThrow(CurationNotFoundException::new);
@@ -86,7 +90,12 @@ public class CurationService {
             }
         }
 
-        return CurationGetRes.from(curation, isLikedCuration);
+        // 2. 큐레이터 구독 여부 조회
+        if (user != null) {
+            isSubscribedCurator = curationSubscribeService.isSubscribeCurator(user.getId(), curation.getUser().getId());
+        }
+
+        return CurationGetRes.from(curation, isSubscribedCurator, isLikedCuration);
     }
 
 
