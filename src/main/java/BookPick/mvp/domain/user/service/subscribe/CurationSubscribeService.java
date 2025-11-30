@@ -2,17 +2,25 @@ package BookPick.mvp.domain.user.service.subscribe;
 
 import BookPick.mvp.domain.user.dto.subscribe.CuratorSubscribeReq;
 import BookPick.mvp.domain.user.dto.subscribe.CuratorSubscribeRes;
+import BookPick.mvp.domain.user.dto.subscribe.SubscribedCuratorPageRes;
+import BookPick.mvp.domain.user.dto.subscribe.SubscribedCuratorRes;
 import BookPick.mvp.domain.user.entity.CuratorSubscribe;
 import BookPick.mvp.domain.user.exception.curator.CuratorNotFoundException;
 import BookPick.mvp.domain.user.repository.subscribe.CurationSubscribeRepository;
 import BookPick.mvp.domain.user.entity.User;
 import BookPick.mvp.domain.user.exception.common.UserNotFoundException;
 import BookPick.mvp.domain.user.repository.UserRepository;
+import BookPick.mvp.global.dto.PageInfo;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -58,22 +66,18 @@ public class CurationSubscribeService {
         }
     }
 
-//    @Transactional(readOnly = true)
-//    public CurationListGetRes getSubscribedCurations(Long userId, Long cursor, int size) {
-//        Pageable pageable = PageRequest.of(0, size + 1);
-//        List<Curation> curations = curationSubscribeRepository.findSubscribedCurationsByUserId(userId, cursor, pageable);
-//
-//        boolean hasNext = curations.size() > size;
-//        Long nextCursor = null;
-//        if (hasNext) {
-//            nextCursor = curations.get(size).getId();
-//            curations = curations.subList(0, size);
-//        }
-//
-//        List<CurationContentRes> content = curations.stream()
-//                .map(CurationContentRes::from)
-//                .collect(Collectors.toList());
-//
-//        return CurationListGetRes.from(SortType.SORT_LATEST, content, hasNext, nextCursor);
-//    }
+    // 2. 큐레이터 구독 리스트 반환
+    @Transactional(readOnly = true)
+    public SubscribedCuratorPageRes getSubscribedCurators(Long userId, int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        Page<CuratorSubscribe> subscribesPage = curationSubscribeRepository.findByUserIdOrderByIdDesc(userId, pageable);
+
+        List<SubscribedCuratorRes> content = subscribesPage.getContent().stream()
+                .map(subscribe -> SubscribedCuratorRes.from(subscribe.getCurator()))
+                .collect(Collectors.toList());
+
+        PageInfo pageInfo = PageInfo.of(subscribesPage);
+
+        return SubscribedCuratorPageRes.of(content, pageInfo);
+    }
 }
