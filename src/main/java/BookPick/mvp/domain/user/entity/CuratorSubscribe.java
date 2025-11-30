@@ -1,15 +1,11 @@
-package BookPick.mvp.domain.curation.entity;
+package BookPick.mvp.domain.user.entity;
 
-import BookPick.mvp.domain.user.entity.User;
 import jakarta.persistence.*;
 import lombok.*;
-import org.springframework.data.annotation.CreatedDate;
-
-import java.time.LocalDateTime;
 
 @Entity
 @Table(
-        name = "curation_subscribe",
+        name = "curator_subscribe",
         uniqueConstraints = {
                 @UniqueConstraint(
                         name = "uk_user_curator",
@@ -22,7 +18,7 @@ import java.time.LocalDateTime;
 @Builder
 @Getter
 @Setter
-public class CurationSubscribe {
+public class CuratorSubscribe {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

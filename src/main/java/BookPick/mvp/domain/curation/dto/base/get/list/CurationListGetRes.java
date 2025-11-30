@@ -1,7 +1,7 @@
 // CurationListGetRes.java
 package BookPick.mvp.domain.curation.dto.base.get.list;
 
-import BookPick.mvp.domain.curation.enums.SortType;
+import BookPick.mvp.domain.curation.enums.common.SortType;
 import java.util.List;
 
 public record CurationListGetRes(

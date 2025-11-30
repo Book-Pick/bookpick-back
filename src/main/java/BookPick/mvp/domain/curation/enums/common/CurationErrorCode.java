@@ -1,4 +1,4 @@
-package BookPick.mvp.domain.curation.enums;
+package BookPick.mvp.domain.curation.enums.common;
 
 import BookPick.mvp.global.enums.ErrorCodeInterface;
 import lombok.AllArgsConstructor;

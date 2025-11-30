@@ -4,7 +4,7 @@ import BookPick.mvp.domain.curation.dto.base.get.list.CurationContentRes;
 import BookPick.mvp.domain.curation.dto.base.get.list.CurationListGetRes;
 import BookPick.mvp.domain.curation.dto.base.get.list.CursorPage;
 import BookPick.mvp.domain.curation.dto.prefer.ReadingPreferenceInfo;
-import BookPick.mvp.domain.curation.enums.SortType;
+import BookPick.mvp.domain.curation.enums.common.SortType;
 import BookPick.mvp.domain.curation.entity.Curation;
 import BookPick.mvp.domain.curation.util.gemini.dto.CurationMatchResult;
 import BookPick.mvp.domain.curation.util.list.Handler.CurationPageHandler;

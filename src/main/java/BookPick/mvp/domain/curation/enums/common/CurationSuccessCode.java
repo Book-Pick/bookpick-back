@@ -1,4 +1,4 @@
-package BookPick.mvp.domain.curation.enums;
+package BookPick.mvp.domain.curation.enums.common;
 
 import BookPick.mvp.global.enums.SuccessCodeInterface;
 import lombok.AllArgsConstructor;
@@ -15,15 +15,9 @@ public enum CurationSuccessCode implements SuccessCodeInterface {
 
     // 2. 좋아요
     CURATION_LIKE_SUCCESS(HttpStatus.OK, "큐레이션 좋아요를 성공적으로 실행하였습니다."),
-    CURATION_DISLIKE_SUCCESS(HttpStatus.OK, "큐레이션 좋아요 취소를 성공적으로 실행하였습니다."),
+    CURATION_DISLIKE_SUCCESS(HttpStatus.OK, "큐레이션 좋아요 취소를 성공적으로 실행하였습니다.");
 
 
-    // 3. 구독
-    CURATION_SUBSCRIBE_SUCCESS(HttpStatus.CREATED, "큐레이션 구독을 성공적으로 실행하였습니다."),
-    CURATION_SUBSCRIBE_CANCLE_SUCCESS(HttpStatus.OK, "큐레이션 구독 취소를 성공적으로 실행하였습니다."),
-
-
-    GET_CURATION_SUBSCRIBE_LIST_SUCCESS(HttpStatus.OK, "큐레이션 구독을 리스트를 성공적으로 조회하였습니다.");
 
 
 
