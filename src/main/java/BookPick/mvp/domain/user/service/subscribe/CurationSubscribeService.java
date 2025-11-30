@@ -18,6 +18,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.swing.text.html.Option;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -29,7 +30,7 @@ public class CurationSubscribeService {
     private final UserRepository userRepository;
 
 
-    // 1. 큐레이션 구독
+    // 1. 큐레이터 구독
     @Transactional
     public CuratorSubscribeRes subscribe(Long userId, CuratorSubscribeReq req) {
 
@@ -66,7 +67,16 @@ public class CurationSubscribeService {
         }
     }
 
-    // 2. 큐레이터 구독 리스트 반환
+    @Transactional(readOnly = true)
+    public boolean isSubscribeCurator(Long userId, Long CuratorId){
+        Optional<CuratorSubscribe> subInfo =  curationSubscribeRepository.findByUserIdAndCuratorId(userId,CuratorId);
+        if(subInfo.isPresent()){
+            return true;
+        }
+        return false;
+    }
+
+    // 3. 큐레이터 구독 리스트 반환
     @Transactional(readOnly = true)
     public SubscribedCuratorPageRes getSubscribedCurators(Long userId, int page, int size) {
         Pageable pageable = PageRequest.of(page, size);
