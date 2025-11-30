@@ -8,6 +8,15 @@ import org.springframework.data.annotation.CreatedDate;
 import java.time.LocalDateTime;
 
 @Entity
+@Table(
+        name = "curation_subscribe",
+        uniqueConstraints = {
+                @UniqueConstraint(
+                        name = "uk_user_curator",
+                        columnNames = {"user_id", "curator_id"}
+                )
+        }
+)
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
@@ -20,12 +29,13 @@ public class CurationSubscribe {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "curation_id")
-    private Curation curation;
-
-    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "curator_id")
+    private User curator;
 }
+
 
 
