@@ -1,5 +1,4 @@
 
-
 # 1단계: 빌드 스테이지
 FROM --platform=linux/amd64 gradle:8.5-jdk21-alpine AS builder
 
