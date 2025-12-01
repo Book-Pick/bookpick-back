@@ -36,8 +36,6 @@ public class CurationService {
     private final CurationRepository curationRepository;
     private final CurationLikeRepository curationLikeRepository;
     private final UserRepository userRepository;
-    private final CurationFetcher curationFetcher;
-    private final CurationPageHandler pageHandler;
     private final CurationSubscribeService curationSubscribeService;
 
 
@@ -75,24 +73,28 @@ public class CurationService {
     public CurationGetRes findCuration(Long curationId, CustomUserDetails user, HttpServletRequest req) {
         boolean isLikedCuration = false;
         boolean isSubscribedCurator = false;
+        CurationGetRes res;
 
-        Curation curation = curationRepository.findById(curationId)
+        Curation curation = curationRepository.findByIdWithUser(curationId)
                 .orElseThrow(CurationNotFoundException::new);
 
         curation.increaseViewCount();   // 큐레이션 조회수 +1
 
 
-        // 1. 좋아요 정보 찾기
         if (user != null) {
+            // 1. 좋아요 정보 찾기
             Optional<CurationLike> curationLike = curationLikeRepository.findByUserIdAndCurationId(user.getId(), curationId);
             if (curationLike.isPresent()) {
                 isLikedCuration = true;
             }
-        }
 
-        // 2. 큐레이터 구독 여부 조회
-        if (user != null) {
+            // 2. 큐레이터 구독 여부 조회
             isSubscribedCurator = curationSubscribeService.isSubscribeCurator(user.getId(), curation.getUser().getId());
+
+            // 3. 큐레이션 작성자면 책 정보 넣어서 큐레이션 반환
+            if (curation.getUser().getId().equals(user.getId())) {
+                return CurationGetRes.fromOwnerView(curation, isSubscribedCurator, isLikedCuration);
+            }
         }
 
         return CurationGetRes.from(curation, isSubscribedCurator, isLikedCuration);
