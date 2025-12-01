@@ -36,6 +36,28 @@ public record CurationGetRes(
                 subscribed,
                 curation.getTitle(),
                 new ThumbnailInfo(curation.getThumbnailUrl(), curation.getThumbnailColor()),
+                null,
+                curation.getReview(),
+                new RecommendInfo(curation.getMoods(), curation.getGenres(),
+                        curation.getKeywords(), curation.getStyles()),
+                isLiked,
+                curation.getLikeCount(),
+                curation.getViewCount(),
+                curation.getCommentCount(),
+                curation.getCreatedAt(),
+                curation.getUpdatedAt()
+        );
+    }
+    public static CurationGetRes fromOwnerView(Curation curation, boolean subscribed, boolean isLiked) {
+        return new CurationGetRes(
+                curation.getId(),
+                curation.getUser().getId(),
+                curation.getUser().getNickname(),
+                curation.getUser().getProfileImageUrl(),
+                curation.getUser().getBio(),
+                subscribed,
+                curation.getTitle(),
+                new ThumbnailInfo(curation.getThumbnailUrl(), curation.getThumbnailColor()),
                 new BookInfo(curation.getBookTitle(), curation.getBookAuthor(), curation.getBookIsbn()),
                 curation.getReview(),
                 new RecommendInfo(curation.getMoods(), curation.getGenres(),
@@ -48,6 +70,7 @@ public record CurationGetRes(
                 curation.getUpdatedAt()
         );
     }
+
 
     public record ThumbnailInfo(String imageUrl, String imageColor) {
     }

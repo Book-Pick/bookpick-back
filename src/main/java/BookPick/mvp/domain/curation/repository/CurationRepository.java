@@ -32,24 +32,30 @@ public interface CurationRepository extends JpaRepository<Curation, Long> {
 
     // Gemini 추천 결과로 큐레이션 찾기
     @Query("""
-        SELECT DISTINCT c FROM Curation c
-        LEFT JOIN c.moods m
-        LEFT JOIN c.genres g
-        LEFT JOIN c.keywords k
-        LEFT JOIN c.styles s
-        WHERE c.deletedAt IS NULL
-        AND (m IN :moods OR g IN :genres OR k IN :keywords OR s IN :styles)
-        ORDER BY c.popularityScore DESC
-        """)
+            SELECT DISTINCT c FROM Curation c
+            LEFT JOIN c.moods m
+            LEFT JOIN c.genres g
+            LEFT JOIN c.keywords k
+            LEFT JOIN c.styles s
+            WHERE c.deletedAt IS NULL
+            AND (m IN :moods OR g IN :genres OR k IN :keywords OR s IN :styles)
+            ORDER BY c.popularityScore DESC
+            """)
     List<Curation> findByRecommendation(
-        @Param("moods") List<String> moods,
-        @Param("genres") List<String> genres,
-        @Param("keywords") List<String> keywords,
-        @Param("styles") List<String> styles
+            @Param("moods") List<String> moods,
+            @Param("genres") List<String> genres,
+            @Param("keywords") List<String> keywords,
+            @Param("styles") List<String> styles
     );
 
     Optional<CurationLike> findByUserIdAndId(Long userId, Long id);
 
     Long user(User user);
+
+
+    // 7.
+    @Query("SELECT c FROM Curation c JOIN FETCH c.user WHERE c.id = :id")
+    Optional<Curation> findByIdWithUser(@Param("id") Long id);
+
 }
 
