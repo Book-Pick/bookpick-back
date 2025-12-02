@@ -62,10 +62,10 @@ public class CurationDeleteService {
 
 
         // 1. 큐레이션 Id들 가지고 큐레이션 리스트 찾기
-        List<Curation> curations = curationRepository.findByIdIn((req.ids()));
+        List<Curation> curations = curationRepository.findByIdIn((req.curationIds()));
 
         // 2. 큐레이션들이 존재하지 않으면 삭제할 큐레이션을 찾을 수 없습니다.
-        if (curations.size() != req.ids().size()) {
+        if (curations.size() != req.curationIds().size()) {
             throw new CurationNotFoundException();
         }
 

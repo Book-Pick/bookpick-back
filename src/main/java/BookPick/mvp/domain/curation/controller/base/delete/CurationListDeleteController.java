@@ -11,6 +11,7 @@ import BookPick.mvp.domain.curation.dto.base.get.one.CurationGetRes;
 import BookPick.mvp.domain.curation.dto.base.update.CurationUpdateReq;
 import BookPick.mvp.domain.curation.dto.base.update.CurationUpdateRes;
 import BookPick.mvp.domain.curation.dto.base.delete.CurationDeleteRes;
+import BookPick.mvp.domain.curation.enums.common.CurationSuccessCode;
 import BookPick.mvp.domain.curation.service.base.CurationService;
 import BookPick.mvp.domain.curation.service.base.delete.CurationDeleteService;
 import BookPick.mvp.domain.user.util.CurrentUserCheck;
@@ -44,7 +45,7 @@ public class CurationListDeleteController {
 
         CurationDeleteRes res = curationDeleteService.removeCuration(currentUser.getId(), curationId);
         return ResponseEntity.ok()
-                .body(ApiResponse.success(SuccessCode.CURATION_DELETE_SUCCESS, res));
+                .body(ApiResponse.success(CurationSuccessCode.CURATION_DELETE_SUCCESS, res));
     }
 
     @Operation(summary = "큐레이션 리스트 삭제", description = "복수의 큐레이션들을 삭제합니다", tags = {"Curation"})
@@ -57,7 +58,7 @@ public class CurationListDeleteController {
 
         CurationListDeleteRes res = curationDeleteService.removeCurations(currentUser.getId(), req);
         return ResponseEntity.ok()
-                .body(ApiResponse.success(SuccessCode.CURATION_DELETE_SUCCESS, res));
+                .body(ApiResponse.success(CurationSuccessCode.CURATION_LIST_DELETE_SUCCESS, res));
     }
 }
 

@@ -5,6 +5,6 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 public record CurationListDeleteReq(
-        List<Long> ids
+        List<Long> curationIds
 ) {
 }
