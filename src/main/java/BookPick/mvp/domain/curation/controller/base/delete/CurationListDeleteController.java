@@ -5,11 +5,14 @@ import BookPick.mvp.domain.auth.exception.InvalidTokenTypeException;
 import BookPick.mvp.domain.auth.service.CustomUserDetails;
 import BookPick.mvp.domain.curation.dto.base.create.CurationCreateReq;
 import BookPick.mvp.domain.curation.dto.base.create.CurationCreateRes;
+import BookPick.mvp.domain.curation.dto.base.delete.CurationListDeleteReq;
+import BookPick.mvp.domain.curation.dto.base.delete.CurationListDeleteRes;
 import BookPick.mvp.domain.curation.dto.base.get.one.CurationGetRes;
 import BookPick.mvp.domain.curation.dto.base.update.CurationUpdateReq;
 import BookPick.mvp.domain.curation.dto.base.update.CurationUpdateRes;
 import BookPick.mvp.domain.curation.dto.base.delete.CurationDeleteRes;
 import BookPick.mvp.domain.curation.service.base.CurationService;
+import BookPick.mvp.domain.curation.service.base.delete.CurationDeleteService;
 import BookPick.mvp.domain.user.util.CurrentUserCheck;
 import BookPick.mvp.global.api.ApiResponse;
 import BookPick.mvp.global.api.SuccessCode.SuccessCode;
@@ -28,7 +31,7 @@ import io.swagger.v3.oas.annotations.Operation;
 @RequiredArgsConstructor
 public class CurationListDeleteController {
 
-    private final CurationService curationService;
+    private final CurationDeleteService curationDeleteService;
     private final CurrentUserCheck currentUserCheck;
 
     @Operation(summary = "큐레이션 삭제", description = "큐레이션을 삭제합니다", tags = {"Curation"})
@@ -36,18 +39,23 @@ public class CurationListDeleteController {
     public ResponseEntity<ApiResponse<CurationDeleteRes>> deleteCuration(
             @PathVariable Long curationId,
             @AuthenticationPrincipal CustomUserDetails currentUser) {
-        Long userId = (currentUser == null) ? 2L : currentUser.getId();
-        CurationDeleteRes res = curationService.removeCuration(userId, curationId);
+
+        currentUserCheck.isValidCurrentUser(currentUser);
+
+        CurationDeleteRes res = curationDeleteService.removeCuration(currentUser.getId(), curationId);
         return ResponseEntity.ok()
                 .body(ApiResponse.success(SuccessCode.CURATION_DELETE_SUCCESS, res));
     }
 
     @Operation(summary = "큐레이션 리스트 삭제", description = "복수의 큐레이션들을 삭제합니다", tags = {"Curation"})
     @DeleteMapping
-    public ResponseEntity<ApiResponse<CurationDeleteRes>> deleteCurationList(
-            @AuthenticationPrincipal CustomUserDetails currentUser) {
-        Long userId = (currentUser == null) ? 2L : currentUser.getId();
-        CurationDeleteRes res = curationService.removeCurations(userId, curationId);
+    public ResponseEntity<ApiResponse<CurationListDeleteRes>> deleteCurations(
+            @AuthenticationPrincipal CustomUserDetails currentUser,
+            @RequestBody CurationListDeleteReq req
+    ) {
+        currentUserCheck.isValidCurrentUser(currentUser);
+
+        CurationListDeleteRes res = curationDeleteService.removeCurations(currentUser.getId(), req);
         return ResponseEntity.ok()
                 .body(ApiResponse.success(SuccessCode.CURATION_DELETE_SUCCESS, res));
     }
