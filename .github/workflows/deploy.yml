@@ -5,10 +5,10 @@ name: BookPick BE CI/CD (v 1.1)
 on:
   push:
     branches:
-      - main
+      - develop
   pull_request:
     branches:
-      - main
+      - develop
 
 jobs:
 #  test:
