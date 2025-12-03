@@ -4,8 +4,8 @@ FROM --platform=linux/amd64 gradle:8.5-jdk21 AS builder
 WORKDIR /app
 COPY . .
 
-RUN chmod +x ./gradlew
-RUN gradle clean bootJar --no-daemon
+RUN sudo chmod +x ./gradlew
+RUN sudo gradle clean bootJar --no-daemon
 
 # 2단계: 런타임 스테이지
 FROM --platform=linux/amd64 eclipse-temurin:21-jdk-alpine
