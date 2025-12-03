@@ -117,18 +117,6 @@ public class CurationService {
     }
 
 
-    // -- 큐레이션 삭제 --
-    @Transactional
-    public CurationDeleteRes removeCuration(Long userId, Long curationId) {
-        Curation curation = curationRepository.findById(curationId)
-                .orElseThrow(CurationNotFoundException::new);
 
-        if (!curation.getUser().getId().equals(userId)) {
-            throw new CurationAccessDeniedException();
-        }
 
-        curationRepository.delete(curation);
-
-        return CurationDeleteRes.from(curation.getId(), LocalDateTime.now());
-    }
 }

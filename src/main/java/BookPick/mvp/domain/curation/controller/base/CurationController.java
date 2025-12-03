@@ -69,16 +69,7 @@ public class CurationController {
                 .body(ApiResponse.success(SuccessCode.CURATION_UPDATE_SUCCESS, res));
     }
 
-    @Operation(summary = "큐레이션 삭제", description = "큐레이션을 삭제합니다", tags = {"Curation"})
-    @DeleteMapping("/{curationId}")
-    public ResponseEntity<ApiResponse<CurationDeleteRes>> deleteCuration(
-            @PathVariable Long curationId,
-            @AuthenticationPrincipal CustomUserDetails currentUser) {
-        Long userId = (currentUser == null) ? 2L : currentUser.getId();
-        CurationDeleteRes res = curationService.removeCuration(userId, curationId);
-        return ResponseEntity.ok()
-                .body(ApiResponse.success(SuccessCode.CURATION_DELETE_SUCCESS, res));
-    }
+
 }
 
 

@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
@@ -57,5 +58,6 @@ public interface CurationRepository extends JpaRepository<Curation, Long> {
     @Query("SELECT c FROM Curation c JOIN FETCH c.user WHERE c.id = :id")
     Optional<Curation> findByIdWithUser(@Param("id") Long id);
 
+    List<Curation> findByIdIn(Collection<Long> ids);
 }
 

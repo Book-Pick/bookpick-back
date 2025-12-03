@@ -5,6 +5,7 @@ import BookPick.mvp.domain.auth.service.CustomUserDetails;
 import BookPick.mvp.domain.curation.dto.base.get.list.CurationListGetRes;
 import BookPick.mvp.domain.curation.enums.common.SortType;
 import BookPick.mvp.domain.curation.service.list.CurationListService;
+import BookPick.mvp.domain.user.util.CurrentUserCheck;
 import BookPick.mvp.global.api.ApiResponse;
 import BookPick.mvp.global.api.SuccessCode.SuccessCode;
 import io.swagger.v3.oas.annotations.Operation;
@@ -20,6 +21,7 @@ import org.springframework.web.bind.annotation.*;
 public class CurationListController {
 
     private final CurationListService curationListService;
+    private final CurrentUserCheck currentUserCheck;
 
 
     @Operation(summary = "큐레이션 목록  조회", description = "최신순 / 인기순 / 사용자 취향 유사도 순", tags = {"Curation"})
@@ -31,9 +33,8 @@ public class CurationListController {
             @AuthenticationPrincipal @Valid CustomUserDetails currentUser
     ) {
 
-        if(currentUser==null){
-            throw new InvalidTokenTypeException();
-        }
+        currentUserCheck.isValidCurrentUser(currentUser);
+
 
         // 1. SortType 변환
         SortType sortType = SortType.fromValue(sort);
@@ -44,10 +45,6 @@ public class CurationListController {
         return ResponseEntity.ok()
                 .body(ApiResponse.success(SuccessCode.CURATION_LIST_GET_SUCCESS, curationListGetRes));
     }
-
-
-
-
 
 
 }

@@ -36,7 +36,7 @@ public class CurationFetcher {
                 return curationRepository.findAllByOrderByCreatedAtDesc(pageable);  // 취향 유사도 만들기 전까진 최신순
         }
 
-        // 2) 분류 기준에 맞게 데이터 가져오기
+        // 2) 🌟분류 기준 🌟
         return switch (sortType) {
             case SORT_POPULAR -> curationRepository.findCurationsByPopularity(cursor, pageable); // 인기순
             case SORT_LATEST -> curationRepository.findLatestCurations(cursor, pageable);        // 최신순
