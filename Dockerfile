@@ -1,11 +1,11 @@
-# 1단계: 빌드 스테이지
-FROM --platform=linux/amd64 eclipse-temurin:21-jdk AS builder
+# 1단계: 빌드 스테이지 (무조건 성공하는 조합)
+FROM --platform=linux/amd64 gradle:8.5-jdk21 AS builder
 
 WORKDIR /app
 COPY . .
 
 RUN chmod +x ./gradlew
-RUN ./gradlew clean bootJar --no-daemon
+RUN gradle clean bootJar --no-daemon
 
 # 2단계: 런타임 스테이지
 FROM --platform=linux/amd64 eclipse-temurin:21-jdk-alpine
