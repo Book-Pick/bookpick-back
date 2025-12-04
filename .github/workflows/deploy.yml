@@ -1,14 +1,12 @@
-name: BookPick BE  dev CI/CD (v 1.1)
-
+name: BookPick BE  dev CI/CD (v 1.2)
 
 
 on:
-  push:
-    branches:
-      - develop
   pull_request:
     branches:
-      - develop
+      - develop      # develop을 대상으로 하는 PR만 감지
+    types: [closed]   # PR이 닫힐 때만 실행
+
 
   jobs:
 #  test:
@@ -51,6 +49,7 @@ on:
             --push .
   deploy:
     needs: build-and-push
+    if: github.event.pull_request.merged == true   # merge된 경우에만 실행
     runs-on: ubuntu-latest
     steps:
       - name: Set up SSH    # 1. SSH 설정
