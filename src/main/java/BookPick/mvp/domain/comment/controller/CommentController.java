@@ -35,8 +35,10 @@ public class CommentController {
 
     // -- 2. 댓글 조회 --
     @GetMapping("/{curationId}/comments")
-    public ResponseEntity<ApiResponse<CommentListRes>> getCommentList(@PathVariable Long curationId, @RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "20") int size) {
-        CommentListRes res = commentService.getCommentList(curationId, page, size);
+    public ResponseEntity<ApiResponse<CommentListRes>> getCommentList(@PathVariable Long curationId,
+                                                                      @RequestParam(defaultValue = "1") int page,
+                                                                      @RequestParam(defaultValue = "20") int size) {
+        CommentListRes res = commentService.getCommentList(curationId, page-1, size);
 
         if (res.comments().isEmpty()) {
             return ResponseEntity.ok(ApiResponse.success(SuccessCode.COMMENT_LIST_EMPTY, res));
@@ -44,8 +46,9 @@ public class CommentController {
 
         return ResponseEntity.ok(ApiResponse.success(SuccessCode.COMMENT_LIST_READ_SUCCESS, res));
     }
+
     @GetMapping("/{curationId}/comments/{commentId}")
-    public ResponseEntity<ApiResponse<CommentDetailRes>> getCommentDetail(@PathVariable Long curationId ,@PathVariable Long commentId) {
+    public ResponseEntity<ApiResponse<CommentDetailRes>> getCommentDetail(@PathVariable Long curationId, @PathVariable Long commentId) {
         CommentDetailRes res = commentService.getCommentDetail(commentId);
         return ResponseEntity.ok(ApiResponse.success(SuccessCode.COMMENT_READ_SUCCESS, res));
     }
