@@ -62,6 +62,7 @@ public class UserService {
         if (req.email() != null) user.setEmail(req.email());
         if (req.nickName() != null) user.setNickname(req.nickName());
         if (req.profileImage() != null) user.setProfileImageUrl(req.profileImage());
+        if (req.introduction() != null) user.setBio(req.introduction());
 
         return UserRes.from(user);
 
