@@ -5,32 +5,32 @@ on:
   pull_request:
     branches:
       - develop      # develop을 대상으로 하는 PR만 감지
-    types: [closed]   # PR이 닫힐 때만 실행
+    types: [ closed ]   # PR이 닫힐 때만 실행
 
 
-  jobs:
-#  test:
-#    runs-on: ubuntu-latest
-#    steps:
-#
-#      - name : 1. checkout repo
-#        uses: actions/checkout@v2 # 깃허브 액션이 코드가져옴
-#
-##      - name: 2. run test
-##        run: ./gradlew test
-#
-#      - name: 3. set up JDK 21
-#        uses: actions/setup-java@v2
-#        with:
-#          java-version: 21
-#          distribution: 'temurin'
-#
-#      - name: 4. grant execute permission for gradlew
-#        run: chmod +x gradlew
+jobs:
+  #  test:
+  #    runs-on: ubuntu-latest
+  #    steps:
+  #
+  #      - name : 1. checkout repo
+  #        uses: actions/checkout@v2 # 깃허브 액션이 코드가져옴
+  #
+  ##      - name: 2. run test
+  ##        run: ./gradlew test
+  #
+  #      - name: 3. set up JDK 21
+  #        uses: actions/setup-java@v2
+  #        with:
+  #          java-version: 21
+  #          distribution: 'temurin'
+  #
+  #      - name: 4. grant execute permission for gradlew
+  #        run: chmod +x gradlew
 
 
   build-and-push:
-#    needs: test
+    #    needs: test
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2 # 깃허브 액션이 코드가져옴
