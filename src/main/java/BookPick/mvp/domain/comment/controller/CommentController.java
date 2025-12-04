@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 public class CommentController {
     private final CommentService commentService;
+    private final PagenationService pagenationService;
 
     // -- 1. 댓글 생성 --
     @PostMapping("/{curationId}/comments")
@@ -38,7 +39,15 @@ public class CommentController {
     public ResponseEntity<ApiResponse<CommentListRes>> getCommentList(@PathVariable Long curationId,
                                                                       @RequestParam(defaultValue = "1") int page,
                                                                       @RequestParam(defaultValue = "20") int size) {
-        CommentListRes res = commentService.getCommentList(curationId, page-1, size);
+
+
+        // 1. 페이지를 1부터 보여주기 위해 -1
+        page = page - 1;
+
+        // 2. -1한 페이지가 0보다 작으면 0으로
+        page = pagenationService.changeMinusPageToZeroPage(page);
+
+        CommentListRes res = commentService.getCommentList(curationId, page, size);
 
         if (res.comments().isEmpty()) {
             return ResponseEntity.ok(ApiResponse.success(SuccessCode.COMMENT_LIST_EMPTY, res));
