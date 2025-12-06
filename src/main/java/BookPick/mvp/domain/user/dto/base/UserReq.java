@@ -12,15 +12,5 @@ public record UserReq(
         String introduction,
         Roles role
 ) {
-    public UserReq from(User user){
-        return new UserReq(
-                user.getId(),
-                user.getEmail(),
-                user.getPassword(),
-                user.getNickname(),
-                user.getProfileImageUrl(),
-                user.getBio(),
-                user.getRole()
-        );
-    }
+
 }
