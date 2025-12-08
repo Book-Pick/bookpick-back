@@ -123,9 +123,9 @@ public class ReadingPreferenceService {
         preference.setFavoriteBooks(savedBooks);
         preference.setFavoriteAuthors(savedAuthors);
 
-        if(readingPreferenceValidCheckService.checkReadingPreferenceReqIsValid(req)){
-            preference.update(req);
-        }
+        readingPreferenceValidCheckService.validate(req);   //  ReadingPreferenceReq 검증
+        preference.update(req);
+
 
 
         return ReadingPreferenceRes.from(preference);
