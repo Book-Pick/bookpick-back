@@ -1,4 +1,4 @@
-package BookPick.mvp.domain.ReadingPreference.enums;
+package BookPick.mvp.domain.ReadingPreference.enums.resCode;
 
 import BookPick.mvp.global.enums.ErrorCodeInterface;
 import lombok.AllArgsConstructor;
