@@ -7,9 +7,10 @@ import org.springframework.http.HttpStatus;
 
 @Getter
 @AllArgsConstructor
-public enum PrferenceErrorCode implements ErrorCodeInterface {
+public enum PreferenceErrorCode implements ErrorCodeInterface {
 
-        PREFERENCE_NOT_FOUND(HttpStatus.NOT_FOUND, "사용자의 독서취향이 설정되지 않았습니다.");
+    PREFERENCE_NOT_FOUND(HttpStatus.NOT_FOUND, "사용자의 독서취향이 설정되지 않았습니다."),
+    WRONG_READING_PREFERENCE_REQUEST(HttpStatus.BAD_REQUEST, "잘못된 독서취향 요청값입니다.");
 
 
 

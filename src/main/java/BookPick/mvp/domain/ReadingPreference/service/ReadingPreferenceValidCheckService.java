@@ -1,18 +1,19 @@
 package BookPick.mvp.domain.ReadingPreference.service;
 
+import BookPick.mvp.domain.ReadingPreference.Exception.WrongReadingPreferenceRequestException;
 import BookPick.mvp.domain.ReadingPreference.dto.ReadingPreferenceReq;
 import BookPick.mvp.domain.ReadingPreference.enums.filed.*;
 import org.springframework.stereotype.Service;
 
 @Service
-public class ReadingPreferenceValidCheck {
+public class ReadingPreferenceValidCheckService {
 
-    public boolean checkReadingPreferenceReqIsValid(ReadingPreferenceReq req) {
+    public void validate(ReadingPreferenceReq req) {
 
         // 🔥 MBTI 검증 (null 허용)
         if (req.mbti() != null && !req.mbti().isEmpty()) {
             if (!MBTI.isValid(req.mbti())) {
-                return false;
+                throw new WrongReadingPreferenceRequestException();
             }
         }
 
@@ -20,7 +21,7 @@ public class ReadingPreferenceValidCheck {
         if (req.moods() != null) {
             for (String mood : req.moods()) {
                 if (!Mood.isValid(mood)) {
-                    return false;
+                    throw new WrongReadingPreferenceRequestException();
                 }
             }
         }
@@ -29,7 +30,7 @@ public class ReadingPreferenceValidCheck {
         if (req.readingHabits() != null) {
             for (String habit : req.readingHabits()) {
                 if (!ReadingHabit.isValid(habit)) {
-                    return false;
+                    throw new WrongReadingPreferenceRequestException();
                 }
             }
         }
@@ -38,7 +39,7 @@ public class ReadingPreferenceValidCheck {
         if (req.genres() != null) {
             for (String genre : req.genres()) {
                 if (!Genre.isValid(genre)) {
-                    return false;
+                    throw new WrongReadingPreferenceRequestException();
                 }
             }
         }
@@ -47,7 +48,7 @@ public class ReadingPreferenceValidCheck {
         if (req.keywords() != null) {
             for (String keyword : req.keywords()) {
                 if (!Keyword.isValid(keyword)) {
-                    return false;
+                    throw new WrongReadingPreferenceRequestException();
                 }
             }
         }
@@ -56,11 +57,9 @@ public class ReadingPreferenceValidCheck {
         if (req.readingStyles() != null) {
             for (String style : req.readingStyles()) {
                 if (!ReadingStyle.isValid(style)) {
-                    return false;
+                    throw new WrongReadingPreferenceRequestException();
                 }
             }
         }
-
-        return true;
     }
 }
