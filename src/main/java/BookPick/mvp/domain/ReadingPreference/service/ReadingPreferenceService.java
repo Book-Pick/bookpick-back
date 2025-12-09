@@ -30,6 +30,8 @@ public class ReadingPreferenceService {
     private final BookSaveService bookSaveService;
     private final AuthorSaveService authorSaveService;
     private final BookRepository bookRepository;
+    private final ReadingPreferenceValidCheckService readingPreferenceValidCheckService;
+
 
 
     // -- 유저 독서 취향 등록 --
@@ -121,7 +123,10 @@ public class ReadingPreferenceService {
         preference.setFavoriteBooks(savedBooks);
         preference.setFavoriteAuthors(savedAuthors);
 
+        readingPreferenceValidCheckService.validateReadingPreferenceReq(req);   //  ReadingPreferenceReq 검증
         preference.update(req);
+
+
 
         return ReadingPreferenceRes.from(preference);
     }
