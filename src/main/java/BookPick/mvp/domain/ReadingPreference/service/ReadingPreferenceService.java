@@ -123,7 +123,7 @@ public class ReadingPreferenceService {
         preference.setFavoriteBooks(savedBooks);
         preference.setFavoriteAuthors(savedAuthors);
 
-        readingPreferenceValidCheckService.validate(req);   //  ReadingPreferenceReq 검증
+        readingPreferenceValidCheckService.validateReadingPreferenceReq(req);   //  ReadingPreferenceReq 검증
         preference.update(req);
 
 
