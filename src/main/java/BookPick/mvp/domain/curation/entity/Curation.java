@@ -1,7 +1,6 @@
 package BookPick.mvp.domain.curation.entity;
 
 import BookPick.mvp.domain.curation.dto.base.CurationReq;
-import BookPick.mvp.domain.curation.dto.base.CurationRes;
 import BookPick.mvp.domain.curation.dto.base.update.CurationUpdateReq;
 import BookPick.mvp.domain.user.entity.User;
 import jakarta.persistence.*;
@@ -44,6 +43,7 @@ public class Curation {
     private String bookTitle;
     private String bookAuthor;
     private String bookIsbn;
+    private String bookImageUrl;
 
 
     @Column(columnDefinition = "TEXT")
@@ -107,13 +107,14 @@ public class Curation {
     }
 
 
-    public void update(CurationUpdateReq req) {
+    public void curationUpdate(CurationUpdateReq req) {
         this.title = req.title();
         this.thumbnailUrl = req.thumbnail().imageUrl();
         this.thumbnailColor = req.thumbnail().imageColor();
         this.bookTitle = req.book().title();
         this.bookAuthor = req.book().author();
         this.bookIsbn = req.book().isbn();
+        this.bookImageUrl = req.book().imageUrl();
         this.review = req.review();
         this.moods = req.recommend().moods();
         this.genres = req.recommend().genres();
