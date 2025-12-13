@@ -26,7 +26,7 @@ public class CurationLikeController {
     public ResponseEntity<ApiResponse<Void>> likeOrUnlikeCuration(@AuthenticationPrincipal CustomUserDetails currentUser
             , @PathVariable Long curationId) {
 
-        currentUserCheck.isValidCurrentUser(currentUser);
+        currentUserCheck.validateLoginUser(currentUser);
 
         boolean liked = curationLikeService.CurationLikeOrUnlike(currentUser.getId(), curationId);
 

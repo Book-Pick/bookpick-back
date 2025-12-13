@@ -35,7 +35,7 @@ public class CurationController {
             @Valid @RequestBody CurationCreateReq req,
             @AuthenticationPrincipal CustomUserDetails currentUser) {
 
-        currentUserCheck.isValidCurrentUser(currentUser);
+        currentUserCheck.validateLoginUser(currentUser);
 
         CurationCreateRes res = curationService.curationCreate(currentUser.getId(), req);
         return ResponseEntity.status(HttpStatus.CREATED)
@@ -62,7 +62,10 @@ public class CurationController {
             @PathVariable Long curationId,
             @Valid @RequestBody CurationUpdateReq req,
             @AuthenticationPrincipal CustomUserDetails currentUser) {
-        CurationUpdateRes res = curationService.modifyCuration(currentUser.getId(), curationId, req);
+
+        currentUserCheck.validateLoginUser(currentUser);
+        
+        CurationUpdateRes res = curationService.curationUpdate(currentUser.getId(), curationId, req);
         return ResponseEntity.ok()
                 .body(ApiResponse.success(SuccessCode.CURATION_UPDATE_SUCCESS, res));
     }

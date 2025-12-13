@@ -35,7 +35,7 @@ public class CuratorSubscribeController {
             @RequestBody @Valid CuratorSubscribeReq req,
             @AuthenticationPrincipal CustomUserDetails currentUser){
 
-        currentUserCheck.isValidCurrentUser(currentUser);
+        currentUserCheck.validateLoginUser(currentUser);
 
         CuratorSubscribeRes curatorSubscribeRes = curationSubscribeService.subscribe(currentUser.getId(), req);
 
@@ -56,7 +56,7 @@ public class CuratorSubscribeController {
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size) {
 
-        currentUserCheck.isValidCurrentUser(currentUser);
+        currentUserCheck.validateLoginUser(currentUser);
         SubscribedCuratorPageRes subscribedCuratorPageRes = curationSubscribeService.getSubscribedCurators(currentUser.getId(), page, size);
         return ResponseEntity.ok()
                 .body(ApiResponse.success(CuratorSuccessCode.GET_CURATOR_SUBSCRIBE_LIST_SUCCESS, subscribedCuratorPageRes));
