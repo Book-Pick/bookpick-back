@@ -17,6 +17,7 @@ public record CommentListRes(
     // 📝 댓글 요약 DTO
     public record CommentSummary(
             Long commentId,
+            Long userID,
             Long parentId,
             String nickname,
             String profileImageUrl,
@@ -26,6 +27,7 @@ public record CommentListRes(
     ) {
         public static CommentSummary of(
                 Long commentId,
+                Long userID,
                 Long parentId,
                 String nickname,
                 String profileImageUrl,
@@ -33,7 +35,7 @@ public record CommentListRes(
                 LocalDateTime createdAt,
                 LocalDateTime updatedAt
         ) {
-            return new CommentSummary(commentId, parentId, nickname, profileImageUrl, content, createdAt, updatedAt);
+            return new CommentSummary(commentId, userId, parentId, nickname, profileImageUrl, content, createdAt, updatedAt);
         }
     }
 }
