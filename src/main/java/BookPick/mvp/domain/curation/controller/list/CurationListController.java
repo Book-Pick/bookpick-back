@@ -1,6 +1,5 @@
 package BookPick.mvp.domain.curation.controller.list;
 
-import BookPick.mvp.domain.auth.exception.InvalidTokenTypeException;
 import BookPick.mvp.domain.auth.service.CustomUserDetails;
 import BookPick.mvp.domain.curation.dto.base.get.list.CurationListGetRes;
 import BookPick.mvp.domain.curation.enums.common.SortType;
@@ -33,7 +32,7 @@ public class CurationListController {
             @AuthenticationPrincipal @Valid CustomUserDetails currentUser
     ) {
 
-        currentUserCheck.isValidCurrentUser(currentUser);
+        currentUserCheck.validateLoginUser(currentUser);
 
 
         // 1. SortType 변환

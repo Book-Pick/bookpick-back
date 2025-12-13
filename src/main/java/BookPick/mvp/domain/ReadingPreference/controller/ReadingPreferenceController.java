@@ -41,7 +41,7 @@ public class ReadingPreferenceController {
     public ResponseEntity<ApiResponse<ReadingPreferenceRes>> getDetails(
             @AuthenticationPrincipal CustomUserDetails currentUser) {
 
-        currentUserCheck.isValidCurrentUser(currentUser);
+        currentUserCheck.validateLoginUser(currentUser);
 
         ReadingPreferenceRes res = readingPreferenceService.findReadingPreference(currentUser.getId());
 
