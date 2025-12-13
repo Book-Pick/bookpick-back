@@ -46,9 +46,7 @@ public class CommentController {
 
         // 2. -1한 페이지가 0보다 작으면 0으로
         page = pagenationService.changeMinusPageToZeroPage(page);
-
         CommentListRes res = commentService.getCommentList(curationId, page, size);
-
         if (res.comments().isEmpty()) {
             return ResponseEntity.ok(ApiResponse.success(SuccessCode.COMMENT_LIST_EMPTY, res));
         }

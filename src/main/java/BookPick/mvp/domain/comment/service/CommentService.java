@@ -76,6 +76,7 @@ public class CommentService {
         List<CommentListRes.CommentSummary> commentList = commentPage.getContent().stream()
                 .map(comment -> CommentListRes.CommentSummary.of(
                         comment.getId(),
+                        comment.getUser().getId(),
                         comment.getParent() != null ? comment.getParent().getId() : null,
                         comment.getUser().getNickname(),
                         comment.getUser().getProfileImageUrl(),
