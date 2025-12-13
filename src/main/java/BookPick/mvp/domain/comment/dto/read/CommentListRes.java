@@ -27,7 +27,7 @@ public record CommentListRes(
     ) {
         public static CommentSummary of(
                 Long commentId,
-                Long userID,
+                Long userId,
                 Long parentId,
                 String nickname,
                 String profileImageUrl,
