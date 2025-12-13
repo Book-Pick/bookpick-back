@@ -4,7 +4,6 @@ package BookPick.mvp.domain.curation.dto.base.get.one;
 import BookPick.mvp.domain.curation.entity.Curation;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 public record CurationGetRes(
         Long id,
@@ -58,7 +57,7 @@ public record CurationGetRes(
                 subscribed,
                 curation.getTitle(),
                 new ThumbnailInfo(curation.getThumbnailUrl(), curation.getThumbnailColor()),
-                new BookInfo(curation.getBookTitle(), curation.getBookAuthor(), curation.getBookIsbn()),
+                BookInfo.of(curation),
                 curation.getReview(),
                 new RecommendInfo(curation.getMoods(), curation.getGenres(),
                         curation.getKeywords(), curation.getStyles()),
@@ -72,13 +71,4 @@ public record CurationGetRes(
     }
 
 
-    public record ThumbnailInfo(String imageUrl, String imageColor) {
-    }
-
-    public record BookInfo(String title, String author, String isbn) {
-    }
-
-    public record RecommendInfo(List<String> moods, List<String> genres,
-                                List<String> keywords, List<String> styles) {
-    }
 }
