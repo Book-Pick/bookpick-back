@@ -79,7 +79,7 @@ public class CommentController {
             @PathVariable Long curationId,
             @PathVariable Long commentId
     ) {
-        CommentDeleteRes res = commentService.deleteComment(commentId);
+        CommentDeleteRes res = commentService.deleteComment(curationId, commentId);
         return ResponseEntity.ok(ApiResponse.success(SuccessCode.COMMENT_DELETE_SUCCESS, res));
     }
 

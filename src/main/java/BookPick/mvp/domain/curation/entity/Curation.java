@@ -8,6 +8,7 @@ import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -107,6 +108,7 @@ public class Curation {
     }
 
 
+    // 수정
     public void curationUpdate(CurationUpdateReq req) {
         this.title = req.title();
         this.thumbnailUrl = req.thumbnail().imageUrl();
@@ -122,6 +124,7 @@ public class Curation {
         this.styles = req.recommend().styles();
     }
 
+    // 임시저장
     public static Curation createDraft(User user, CurationReq req) {
         Curation curation = Curation.from(user, req);
         curation.setDrafted(true);
@@ -129,16 +132,32 @@ public class Curation {
         return curation;
     }
 
-
+    // 조회수
     public void increaseViewCount() {
         this.viewCount++;
         updatePopularityScore(); // 인기도 재계산
     }
 
+    // 인기도
     public void updatePopularityScore() {
-        this.popularityScore = (likeCount * 3) + (commentCount * 2) + (viewCount * 1);
+        this.popularityScore = (likeCount * 3) + (commentCount * 2) + (viewCount);
     }
 
+
+    // 댓글 개수
+    public void increaseCommentCount() {
+        this.commentCount++;
+        this.updatePopularityScore();
+    }
+
+    public void decreaseCommentCount() {
+        if (this.commentCount > 0) {
+            this.commentCount--;
+        }
+        this.updatePopularityScore();
+    }
+
+    // ---------------------------
 
     // 팩토리 메서드
     public static Curation from(User user, CurationReq req) {

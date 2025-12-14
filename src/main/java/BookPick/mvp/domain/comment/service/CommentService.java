@@ -36,7 +36,7 @@ public class CommentService {
     private final CommentRepository commentRepository;
 
 
-    // -- C --
+    // -- Create --
     public CommentCreateRes createComment(Long userId, Long curationId, CommentCreateReq req) {
 
         User user = userRepository.findById(userId)
@@ -62,12 +62,13 @@ public class CommentService {
                 .build();
 
         Comment saved = commentRepository.save(comment);
+        curation.increaseCommentCount();
 
         return CommentCreateRes.from(saved);
     }
 
 
-    // -- R --
+    // -- Read --
     @Transactional(readOnly = true)
     public CommentListRes getCommentList(Long curationId, int page, int size) {
         Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "createdAt"));
@@ -100,7 +101,7 @@ public class CommentService {
     }
 
 
-    // -- U --
+    // -- Update --
     @Transactional
     public CommentUpdateRes updateComment(Long commentId, CommentUpdateReq req) {
         Comment comment = commentRepository.findById(commentId)
@@ -115,13 +116,17 @@ public class CommentService {
     }
 
 
-    // -- D --
+    // -- Delete --
     @Transactional
-    public CommentDeleteRes deleteComment(Long commentId) {
+    public CommentDeleteRes deleteComment(Long curationId, Long commentId) {
+        Curation curation = curationRepository.findById(curationId)
+                .orElseThrow(CurationNotFoundException::new);
+
         Comment comment = commentRepository.findById(commentId)
                 .orElseThrow(CommentNotFoundException::new);
 
         commentRepository.delete(comment);
+        curation.decreaseCommentCount();
 
         return CommentDeleteRes.of(commentId, LocalDateTime.now());
     }

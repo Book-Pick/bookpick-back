@@ -38,22 +38,28 @@ public class CurationFetcher {
 
         // 2) 🌟분류 기준 🌟
         return switch (sortType) {
-            case SORT_POPULAR -> curationRepository.findCurationsByPopularity(cursor, pageable); // 인기순
-            case SORT_LATEST -> curationRepository.findLatestCurations(cursor, pageable);        // 최신순
+            // 인기순
+            case SORT_POPULAR -> curationRepository.findCurationsByPopularity(cursor, pageable);
 
-            // 1. 큐레이션 리스트 뽑기
-            // 2. 입력값 :
+            // 최신순
+            case SORT_LATEST -> curationRepository.findLatestCurations(cursor, pageable);
+
+            // 취향 유사도순
             case SORT_SIMILARITY -> {
                 List<CurationMatchResult> recommended = curationRecommendationService.recommend(readingPreferenceInfo);
                 List<CurationMatchResult> paginated = CurationMatchResultPagination.paginate(recommended, cursor, pageable);
                 yield paginated.stream().map(CurationMatchResult::getCuration).collect(Collectors.toList());
             }
+
+            // 좋아요 순
             case SORT_LIKED -> {
                 List<CurationLike> likedCurationList = curationLikeRepository.findAllByUserIdOrderByCreatedAtDesc(userId, pageable);
                 yield likedCurationList.stream()
                         .map(CurationLike::getCuration)
                         .toList();
             }
+
+            // 내가 작성한 순
             case SORT_MY -> curationRepository.findByUserId(userId, pageable);
         };
     }
