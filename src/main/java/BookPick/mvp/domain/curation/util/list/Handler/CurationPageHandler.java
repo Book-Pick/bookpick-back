@@ -24,6 +24,7 @@ public class CurationPageHandler {
     // 1. 데이터 조회 (size+1개 : +1을 하는 이유는 다음 것을 항상 확인하기 위해서
     public List<Curation> getCurationsPage(Long userId, SortType sortType, Long cursor, int size, ReadingPreferenceInfo readingPreferenceInfo) {
         Pageable pageable = PageRequest.of(0, size + 1);
+
         // SORT_SIMILARITY일 경우 preferenceInfo를 사용, 나머지는 user 관련 정보 필요 없음
         if (sortType == SortType.SORT_SIMILARITY && readingPreferenceInfo == null) {
             throw new UserReadingPreferenceNotExisted();

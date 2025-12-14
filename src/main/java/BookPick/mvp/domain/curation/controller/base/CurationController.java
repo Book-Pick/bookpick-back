@@ -1,14 +1,12 @@
 // CurationListController.java에 추가
 package BookPick.mvp.domain.curation.controller.base;
 
-import BookPick.mvp.domain.auth.exception.InvalidTokenTypeException;
 import BookPick.mvp.domain.auth.service.CustomUserDetails;
 import BookPick.mvp.domain.curation.dto.base.create.CurationCreateReq;
 import BookPick.mvp.domain.curation.dto.base.create.CurationCreateRes;
 import BookPick.mvp.domain.curation.dto.base.get.one.CurationGetRes;
 import BookPick.mvp.domain.curation.dto.base.update.CurationUpdateReq;
 import BookPick.mvp.domain.curation.dto.base.update.CurationUpdateRes;
-import BookPick.mvp.domain.curation.dto.base.delete.CurationDeleteRes;
 import BookPick.mvp.domain.curation.service.base.CurationService;
 import BookPick.mvp.domain.user.util.CurrentUserCheck;
 import BookPick.mvp.global.api.ApiResponse;
@@ -37,9 +35,9 @@ public class CurationController {
             @Valid @RequestBody CurationCreateReq req,
             @AuthenticationPrincipal CustomUserDetails currentUser) {
 
-        currentUserCheck.isValidCurrentUser(currentUser);
+        currentUserCheck.validateLoginUser(currentUser);
 
-        CurationCreateRes res = curationService.create(currentUser.getId(), req);
+        CurationCreateRes res = curationService.curationCreate(currentUser.getId(), req);
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(ApiResponse.success(SuccessCode.CURATION_REGISTER_SUCCESS, res));
     }
@@ -64,7 +62,10 @@ public class CurationController {
             @PathVariable Long curationId,
             @Valid @RequestBody CurationUpdateReq req,
             @AuthenticationPrincipal CustomUserDetails currentUser) {
-        CurationUpdateRes res = curationService.modifyCuration(currentUser.getId(), curationId, req);
+
+        currentUserCheck.validateLoginUser(currentUser);
+        
+        CurationUpdateRes res = curationService.curationUpdate(currentUser.getId(), curationId, req);
         return ResponseEntity.ok()
                 .body(ApiResponse.success(SuccessCode.CURATION_UPDATE_SUCCESS, res));
     }

@@ -7,16 +7,12 @@ import BookPick.mvp.domain.curation.dto.base.create.CurationCreateRes;
 import BookPick.mvp.domain.curation.dto.base.get.one.CurationGetRes;
 import BookPick.mvp.domain.curation.dto.base.update.CurationUpdateReq;
 import BookPick.mvp.domain.curation.dto.base.update.CurationUpdateRes;
-import BookPick.mvp.domain.curation.dto.base.delete.CurationDeleteRes;
 import BookPick.mvp.domain.curation.entity.Curation;
 import BookPick.mvp.domain.curation.entity.CurationLike;
 import BookPick.mvp.domain.curation.exception.common.CurationAccessDeniedException;
 import BookPick.mvp.domain.curation.exception.common.CurationNotFoundException;
 import BookPick.mvp.domain.curation.repository.CurationRepository;
 import BookPick.mvp.domain.curation.repository.like.CurationLikeRepository;
-import BookPick.mvp.domain.curation.util.list.Handler.CurationPageHandler;
-import BookPick.mvp.domain.curation.util.list.fetcher.CurationFetcher;
-import BookPick.mvp.domain.user.entity.CuratorSubscribe;
 import BookPick.mvp.domain.user.entity.User;
 import BookPick.mvp.domain.user.exception.common.UserNotFoundException;
 import BookPick.mvp.domain.user.repository.UserRepository;
@@ -26,7 +22,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
 import java.util.Optional;
 
 @Service
@@ -41,7 +36,7 @@ public class CurationService {
 
     // -- 큐레이션 등록 --
     @Transactional
-    public CurationCreateRes create(Long userId, CurationCreateReq req) {
+    public CurationCreateRes curationCreate(Long userId, CurationCreateReq req) {
 
         User user = userRepository.findById(userId)
                 .orElseThrow(UserNotFoundException::new);
@@ -55,6 +50,7 @@ public class CurationService {
                 .bookTitle(req.book().title())
                 .bookAuthor(req.book().author())
                 .bookIsbn(req.book().isbn())
+                .bookImageUrl(req.book().imageUrl())
                 .review(req.review())
                 .moods(req.recommend().moods())
                 .genres(req.recommend().genres())
@@ -103,7 +99,9 @@ public class CurationService {
 
     // -- 큐레이션 수정 --
     @Transactional
-    public CurationUpdateRes modifyCuration(Long userId, Long curationId, CurationUpdateReq req) {
+    public CurationUpdateRes curationUpdate(Long userId, Long curationId, CurationUpdateReq req) {
+
+
         Curation curation = curationRepository.findById(curationId)
                 .orElseThrow(CurationNotFoundException::new);
 
@@ -111,7 +109,7 @@ public class CurationService {
             throw new CurationAccessDeniedException();
         }
 
-        curation.update(req);
+        curation.curationUpdate(req);
 
         return CurationUpdateRes.from(curation);
     }
