@@ -14,6 +14,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.Set;
 
 @Component
 @RequiredArgsConstructor
@@ -44,10 +45,17 @@ public class CurationPageHandler {
         return new CursorPage<>(content, hasNext, nextCursor);
     }
 
-    // 3. DTO 변환
-    public List<CurationContentRes> convertToContentRes(List<Curation> curations) {
+    // 3. DTO 변환 (isLiked 포함)
+    public List<CurationContentRes> convertToContentRes(
+            List<Curation> curations,
+            Set<Long> likedIds
+    ) {
         return curations.stream()
-                .map(CurationContentRes::from)
+                .map(c -> CurationContentRes.from(
+                        c,
+                        likedIds.contains(c.getId())
+                ))
                 .toList();
     }
+
 }

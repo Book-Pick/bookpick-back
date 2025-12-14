@@ -6,68 +6,96 @@ import BookPick.mvp.domain.curation.entity.Curation;
 import BookPick.mvp.domain.curation.util.gemini.dto.CurationMatchResult;
 import BookPick.mvp.domain.user.entity.User;
 
+import java.time.LocalDateTime;
 import java.util.Set;
 
 public record CurationContentRes(
+
+        // 1. 헤더
         Long curationId,
         String title,
+
+        // 2. 작성자 정보
         Long userId,
         String nickName,
         String profileImageUrl,
         String introduction,
+
+
+        // 3. 작성 내용
         ThumbnailRes thumbnail,
         String review,
         BookResInCuration book,
+
+        // 4. 부수 정보
         int likeCount,
         int commentCount,
         int viewCount,
-        Integer similarity,
+        int similarity,
         String matched,
-        Integer popularityScore,
+        int popularityScore,
         boolean isDrafted,
-        String createdAt
+        boolean isLiked,
+
+        // 5. 시간
+        LocalDateTime createdAt,
+        LocalDateTime updatedAt
+
 ) {
-    public static CurationContentRes from(Curation curation) {
+    public static CurationContentRes from(Curation curation, boolean isLiked) {
         return new CurationContentRes(
                 curation.getId(),
                 curation.getTitle(),
+
                 curation.getUser().getId(),
                 curation.getUser().getNickname(),
                 curation.getUser().getProfileImageUrl(),
                 curation.getUser().getBio(),
+
                 new ThumbnailRes(curation.getThumbnailUrl(), curation.getThumbnailColor()),
                 curation.getReview(),
                 BookResInCuration.from(curation.getTitle(), curation.getBookAuthor(), curation.getBookIsbn()),
+
                 curation.getLikeCount(),
                 curation.getCommentCount(),
                 curation.getViewCount(),
-                null,
+                0,
                 null,
                 curation.getPopularityScore(),
                 curation.isDrafted(),
-                curation.getCreatedAt().toString()
+                isLiked,
+
+                curation.getCreatedAt(),
+                curation.getUpdatedAt()
         );
     }
 
-    public static CurationContentRes from(CurationMatchResult matchResult, ReadingPreferenceInfo preferenceInfo) {
+    public static CurationContentRes from(CurationMatchResult matchResult, ReadingPreferenceInfo preferenceInfo,  boolean isLiked) {
         Curation curation = matchResult.getCuration();
         return new CurationContentRes(
                 curation.getId(),
                 curation.getTitle(),
+
                 curation.getUser().getId(),
                 matchResult.getUser().getNickname(),
                 matchResult.getUser().getProfileImageUrl(),
                 matchResult.getUser().getBio(),
+
+                // Todo 1. 팩토리 메서드 구현 필요
                 new ThumbnailRes(curation.getThumbnailUrl(), curation.getThumbnailColor()),
                 curation.getReview(), new BookResInCuration(curation.getBookTitle(), curation.getBookAuthor(), curation.getBookIsbn()),
                 curation.getLikeCount(),
+
                 curation.getCommentCount(),
                 curation.getViewCount(),
                 getSimilarity(matchResult, preferenceInfo),
                 matchResult.getMatched(),
                 curation.getPopularityScore(),
                 curation.isDrafted(),
-                curation.getCreatedAt().toString()
+                isLiked,
+
+                curation.getCreatedAt(),
+                curation.getUpdatedAt()
         );
     }
 

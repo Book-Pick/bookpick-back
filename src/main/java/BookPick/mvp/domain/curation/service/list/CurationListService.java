@@ -6,6 +6,7 @@ import BookPick.mvp.domain.curation.dto.base.get.list.CursorPage;
 import BookPick.mvp.domain.curation.dto.prefer.ReadingPreferenceInfo;
 import BookPick.mvp.domain.curation.enums.common.SortType;
 import BookPick.mvp.domain.curation.entity.Curation;
+import BookPick.mvp.domain.curation.repository.like.CurationLikeRepository;
 import BookPick.mvp.domain.curation.util.gemini.dto.CurationMatchResult;
 import BookPick.mvp.domain.curation.util.list.Handler.CurationPageHandler;
 import BookPick.mvp.domain.curation.util.list.similarity.CurationMatchResultPagination;
@@ -16,6 +17,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -25,6 +27,8 @@ public class CurationListService {
     private final CurationPageHandler pageHandler;
     private final ReadingPreferenceRepository readingPreferenceRepository;
     private final CurationRecommendationService curationRecommendationService;
+    private final CurationLikeRepository curationLikeRepository;
+
 
     // 1. 큐레이션 리스트 조회
     public CurationListGetRes getCurations(SortType sortType, Long cursor, int size, Long userId) {
@@ -51,24 +55,65 @@ public class CurationListService {
             //    더 없으면 그냥 보여줌
             List<CurationMatchResult> contentResults = hasNext ? paginated.subList(0, size) : paginated;
 
-            //6. 다음 커서 반환
+            // 6. 다음 커서 반환
             Long nextCursor = hasNext ? paginated.get(size).getCuration().getId() : null;
 
+            // 7-1. 좋아요 여부 계산을 위한 큐레이션 ID 목록 추출
+            List<Long> curationIds = contentResults.stream()
+                    .map(r -> r.getCuration().getId())
+                    .toList();
 
-            //7. 큐레이션 단건 응답 포멧 반환
+            // 7-2. 사용자가 좋아요 누른 큐레이션 ID 조회
+            Set<Long> likedIds = curationLikeRepository
+                    .findLikedCurationIds(userId, curationIds)
+                    .stream()
+                    .collect(Collectors.toSet());
+
+
+            // 8. 큐레이션 리스트 Dto에 들어갈 단건 dto 생성
             List<CurationContentRes> content = contentResults.stream()
-                    .map(result -> CurationContentRes.from(result, preferenceInfo))
+                    .map(result -> CurationContentRes.from(
+                            result,
+                            preferenceInfo,
+                            likedIds.contains(result.getCuration().getId())
+                    ))
                     .collect(Collectors.toList());
 
-            //8. 큐레이션 리스트로 감싸기
+            //9. 큐레이션 리스트로 감싸기
             return CurationListGetRes.from(sortType, content, hasNext, nextCursor);
         }
 
         // 2) 내 취향 유사도순 X
         List<Curation> curations = pageHandler.getCurationsPage(userId, sortType, cursor, size, null);
         CursorPage<Curation> page = pageHandler.createCursorPage(curations, size);
-        List<CurationContentRes> content = pageHandler.convertToContentRes(page.getContent());
-        return CurationListGetRes.from(sortType, content, page.isHasNext(), page.getNextCursor());
+
+
+        // 2-1. 좋아요 여부 계산을 위한 큐레이션 ID 목록 추출
+        List<Long> curationIds = page.getContent().stream()
+                .map(Curation::getId)
+                .toList();
+
+        // 2-2. 사용자가 좋아요 누른 큐레이션 ID 조회
+        Set<Long> likedIds = curationLikeRepository
+                .findLikedCurationIds(userId, curationIds)
+                .stream()
+                .collect(Collectors.toSet());
+
+
+        List<CurationContentRes> content = page.getContent().stream()
+                .map(c -> CurationContentRes.from(
+                        c,
+                        likedIds.contains(c.getId())
+                ))
+                .collect(Collectors.toList());
+        CurationListGetRes.from(sortType, content, page.isHasNext(), page.getNextCursor());
+
+        return CurationListGetRes.from(
+                sortType,
+                content,
+                page.isHasNext(),
+                page.getNextCursor()
+        );
     }
 
     // Issue 1) DTO 만들어서 독서취향 정보 레이어간 소통 vs 사용자 독서취향 실시간 수정 반영 고려

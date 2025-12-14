@@ -92,6 +92,7 @@ public class Curation {
     @Column(name = "is_draft")
     private boolean isDrafted = false;
 
+
     @CreatedDate
     @Column(updatable = false)
     private LocalDateTime createdAt;
