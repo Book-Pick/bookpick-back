@@ -53,7 +53,7 @@ jobs:
             --push .
   deploy:
     needs: build-and-push
-    if: github.event.pull_request.merged == true   # merge된 경우에만 실행
+    # if: github.event.pull_request.merged == true   # merge된 경우에만 실행
     runs-on: ubuntu-latest
     steps:
       - name: Set up SSH    # 1. SSH 설정
