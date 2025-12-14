@@ -68,7 +68,6 @@ public class CurationListService {
         List<Curation> curations = pageHandler.getCurationsPage(userId, sortType, cursor, size, null);
         CursorPage<Curation> page = pageHandler.createCursorPage(curations, size);
         List<CurationContentRes> content = pageHandler.convertToContentRes(page.getContent());
-
         return CurationListGetRes.from(sortType, content, page.isHasNext(), page.getNextCursor());
     }
 

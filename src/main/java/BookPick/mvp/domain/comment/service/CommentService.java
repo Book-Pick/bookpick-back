@@ -37,6 +37,7 @@ public class CommentService {
 
 
     // -- Create --
+    @Transactional
     public CommentCreateRes createComment(Long userId, Long curationId, CommentCreateReq req) {
 
         User user = userRepository.findById(userId)
