@@ -26,8 +26,7 @@ public class CurationReadController {
     private final CurrentUserCheck currentUserCheck;
 
 
-    // Todo 1. CurationGetRes BookInfo Null 처리 필요
-    @Operation(summary = "큐레이션 일반 단건 조회", description = "큐레이션 ID로 단건 조회", tags = {"Curation"})
+    @Operation(summary = "큐레이션 일반 조회용 단건 조회", description = "큐레이션 ID로 단건 조회", tags = {"Curation"})
     @GetMapping("/{curationId}")
     public ResponseEntity<ApiResponse<CurationGetRes>> getCuration(
             @PathVariable Long curationId,
@@ -37,7 +36,25 @@ public class CurationReadController {
         currentUserCheck.validateLoginUser(currentUser);    // 미 로그인 사용자 접근 방어 로직
 
 
-        CurationGetRes res = curationReadService.findCuration(curationId, currentUser, req);
+        CurationGetRes res = curationReadService.findCuration(curationId, currentUser, req,false);
+
+
+        return ResponseEntity.ok()
+                .body(ApiResponse.success(SuccessCode.CURATION_GET_SUCCESS, res));
+    }
+
+
+    @Operation(summary = "큐레이션 수정용 단건 조회", description = "큐레이션 ID로 단건 조회", tags = {"Curation"})
+    @GetMapping("/{curationId}/edit")
+    public ResponseEntity<ApiResponse<CurationGetRes>> getCurationForEdit(
+            @PathVariable Long curationId,
+            HttpServletRequest req,
+            @AuthenticationPrincipal CustomUserDetails currentUser
+    ) {
+        currentUserCheck.validateLoginUser(currentUser);    // 미 로그인 사용자 접근 방어 로직
+
+
+        CurationGetRes res = curationReadService.findCuration(curationId, currentUser, req, true);
 
 
         return ResponseEntity.ok()

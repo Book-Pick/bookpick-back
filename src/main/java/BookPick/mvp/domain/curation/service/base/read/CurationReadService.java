@@ -39,7 +39,7 @@ public class CurationReadService {
 
     // -- 큐레이션 단건 조회 --
     @Transactional
-    public CurationGetRes findCuration(Long curationId, CustomUserDetails user, HttpServletRequest req) {
+    public CurationGetRes findCuration(Long curationId, CustomUserDetails user, HttpServletRequest req, boolean isEdit) {
         boolean isLikedCuration = false;
         boolean isSubscribedCurator = false;
         CurationGetRes res;
@@ -60,10 +60,15 @@ public class CurationReadService {
             // 2. 큐레이터 구독 여부 조회
             isSubscribedCurator = curationSubscribeService.isSubscribeCurator(user.getId(), curation.getUser().getId());
 
-//            // 3. 큐레이션 작성자면 책 정보 넣어서 큐레이션 반환
-//            if (curation.getUser().getId().equals(user.getId())) {
-//                return CurationGetRes.fromOwnerView(curation, isSubscribedCurator, isLikedCuration);
-//            }
+            // 3. 큐레이션 작성자면 책 정보 넣어서 큐레이션 반환
+            if ( isEdit) {
+                if(curation.getUser().getId().equals(user.getId())){
+                    return CurationGetRes.fromOwnerView(curation, isSubscribedCurator, isLikedCuration);
+                }
+                else{
+                    throw new CurationAccessDeniedException();
+                }
+            }
         }
 
         return CurationGetRes.from(curation, isSubscribedCurator, isLikedCuration);
