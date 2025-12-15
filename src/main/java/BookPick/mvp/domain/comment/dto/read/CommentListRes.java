@@ -17,7 +17,7 @@ public record CommentListRes(
     // 📝 댓글 요약 DTO
     public record CommentSummary(
             Long commentId,
-            Long userID,
+            Long userId,
             Long parentId,
             String nickname,
             String profileImageUrl,
