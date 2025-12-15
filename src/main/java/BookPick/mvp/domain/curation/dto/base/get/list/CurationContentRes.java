@@ -3,6 +3,7 @@ package BookPick.mvp.domain.curation.dto.base.get.list;
 import BookPick.mvp.domain.author.entity.Author;
 import BookPick.mvp.domain.curation.dto.prefer.ReadingPreferenceInfo;
 import BookPick.mvp.domain.curation.entity.Curation;
+import BookPick.mvp.domain.curation.enums.common.State;
 import BookPick.mvp.domain.curation.util.gemini.dto.CurationMatchResult;
 import BookPick.mvp.domain.user.entity.User;
 
@@ -34,7 +35,7 @@ public record CurationContentRes(
         int similarity,
         String matched,
         int popularityScore,
-        boolean isDrafted,
+        State state,
         boolean isLiked,
 
         // 5. 시간
@@ -62,7 +63,7 @@ public record CurationContentRes(
                 0,
                 null,
                 curation.getPopularityScore(),
-                curation.isDrafted(),
+                curation.getState(),
                 isLiked,
 
                 curation.getCreatedAt(),
@@ -91,7 +92,7 @@ public record CurationContentRes(
                 getSimilarity(matchResult, preferenceInfo),
                 matchResult.getMatched(),
                 curation.getPopularityScore(),
-                curation.isDrafted(),
+                curation.getState(),
                 isLiked,
 
                 curation.getCreatedAt(),

@@ -1,5 +1,5 @@
 // CurationListService.java
-package BookPick.mvp.domain.curation.service.base;
+package BookPick.mvp.domain.curation.service.base.read;
 
 import BookPick.mvp.domain.auth.service.CustomUserDetails;
 import BookPick.mvp.domain.curation.dto.base.CurationReq;
@@ -26,7 +26,7 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
-public class CurationService {
+public class CurationReadService {
 
     private final CurationRepository curationRepository;
     private final CurationLikeRepository curationLikeRepository;
@@ -34,19 +34,7 @@ public class CurationService {
     private final CurationSubscribeService curationSubscribeService;
 
 
-    // -- 큐레이션 등록 --
-    @Transactional
-    public CurationCreateRes curationCreate(Long userId, CurationReq req) {
 
-        User user = userRepository.findById(userId)
-                .orElseThrow(UserNotFoundException::new);
-
-        Curation curation = Curation.from(req, user);
-
-        Curation saved = curationRepository.save(curation);
-
-        return CurationCreateRes.from(saved);
-    }
 
 
     // -- 큐레이션 단건 조회 --
@@ -72,32 +60,16 @@ public class CurationService {
             // 2. 큐레이터 구독 여부 조회
             isSubscribedCurator = curationSubscribeService.isSubscribeCurator(user.getId(), curation.getUser().getId());
 
-            // 3. 큐레이션 작성자면 책 정보 넣어서 큐레이션 반환
-            if (curation.getUser().getId().equals(user.getId())) {
-                return CurationGetRes.fromOwnerView(curation, isSubscribedCurator, isLikedCuration);
-            }
+//            // 3. 큐레이션 작성자면 책 정보 넣어서 큐레이션 반환
+//            if (curation.getUser().getId().equals(user.getId())) {
+//                return CurationGetRes.fromOwnerView(curation, isSubscribedCurator, isLikedCuration);
+//            }
         }
 
         return CurationGetRes.from(curation, isSubscribedCurator, isLikedCuration);
     }
 
 
-    // -- 큐레이션 수정 --
-    @Transactional
-    public CurationUpdateRes curationUpdate(Long userId, Long curationId, CurationUpdateReq req) {
-
-
-        Curation curation = curationRepository.findById(curationId)
-                .orElseThrow(CurationNotFoundException::new);
-
-        if (!curation.getUser().getId().equals(userId)) {
-            throw new CurationAccessDeniedException();
-        }
-
-        curation.curationUpdate(req);
-
-        return CurationUpdateRes.from(curation);
-    }
 
 
 

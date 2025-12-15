@@ -2,7 +2,7 @@
 package BookPick.mvp.domain.curation.controller.base;
 
 import BookPick.mvp.domain.auth.service.CustomUserDetails;
-import BookPick.mvp.domain.curation.dto.base.create.CurationCreateReq;
+import BookPick.mvp.domain.curation.dto.base.CurationReq;
 import BookPick.mvp.domain.curation.dto.base.create.CurationCreateRes;
 import BookPick.mvp.domain.curation.dto.base.get.one.CurationGetRes;
 import BookPick.mvp.domain.curation.dto.base.update.CurationUpdateReq;
@@ -32,7 +32,7 @@ public class CurationController {
     @Operation(summary = "큐레이션 생성", description = "새 큐레이션을 생성합니다", tags = {"Curation"})
     @PostMapping
     public ResponseEntity<ApiResponse<CurationCreateRes>> create(
-            @Valid @RequestBody CurationCreateReq req,
+            @Valid @RequestBody CurationReq req,
             @AuthenticationPrincipal CustomUserDetails currentUser) {
 
         currentUserCheck.validateLoginUser(currentUser);
@@ -42,17 +42,7 @@ public class CurationController {
                 .body(ApiResponse.success(SuccessCode.CURATION_REGISTER_SUCCESS, res));
     }
 
-    @Operation(summary = "큐레이션 단건 조회", description = "큐레이션 ID로 단건 조회", tags = {"Curation"})
-    @GetMapping("/{curationId}")
-    public ResponseEntity<ApiResponse<CurationGetRes>> getCuration(
-            @PathVariable Long curationId,
-            HttpServletRequest req,
-            @AuthenticationPrincipal CustomUserDetails currentUser
-    ) {
-        CurationGetRes res = curationService.findCuration(curationId, currentUser, req);
-        return ResponseEntity.ok()
-                .body(ApiResponse.success(SuccessCode.CURATION_GET_SUCCESS, res));
-    }
+
 
 
 

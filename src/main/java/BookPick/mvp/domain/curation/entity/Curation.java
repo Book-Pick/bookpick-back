@@ -2,6 +2,7 @@ package BookPick.mvp.domain.curation.entity;
 
 import BookPick.mvp.domain.curation.dto.base.CurationReq;
 import BookPick.mvp.domain.curation.dto.base.update.CurationUpdateReq;
+import BookPick.mvp.domain.curation.enums.common.State;
 import BookPick.mvp.domain.user.entity.User;
 import jakarta.persistence.*;
 import lombok.*;
@@ -26,11 +27,9 @@ public class Curation {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
-
     private String title;
 
 
@@ -45,8 +44,6 @@ public class Curation {
     private String bookAuthor;
     private String bookIsbn;
     private String bookImageUrl;
-
-
     @Column(columnDefinition = "TEXT")
     private String review;
 
@@ -55,52 +52,41 @@ public class Curation {
     @CollectionTable(name = "curation_moods", joinColumns = @JoinColumn(name = "curation_id"))
     @Column(name = "mood")
     private List<String> moods;
-
     @ElementCollection
     @CollectionTable(name = "curation_genres", joinColumns = @JoinColumn(name = "curation_id"))
     @Column(name = "genre")
     private List<String> genres;
-
     @ElementCollection
     @CollectionTable(name = "curation_keywords", joinColumns = @JoinColumn(name = "curation_id"))
     @Column(name = "keyword")
     private List<String> keywords;
-
     @ElementCollection
     @CollectionTable(name = "curation_styles", joinColumns = @JoinColumn(name = "curation_id"))
     @Column(name = "style")
     private List<String> styles;
 
-
     @Builder.Default
     @Column(name = "like_count")
     private Integer likeCount = 0;
-
     @Builder.Default
     @Column(name = "view_count")
     private Integer viewCount = 0;
-
     @Builder.Default
     @Column(name = "comment_count")
     private Integer commentCount = 0;
-
-
     @Builder.Default
     @Column(name = "popularity_score")
     private Integer popularityScore = 0;
-
-    @Column(name = "is_draft")
-    private boolean isDrafted = false;
+    private State state;
 
 
     @CreatedDate
     @Column(updatable = false)
     private LocalDateTime createdAt;
-
     @LastModifiedDate
     private LocalDateTime updatedAt;
-
     private LocalDateTime deletedAt;
+    private LocalDateTime publishedAt;
 
     //Todo 1. 소프트 델리트 구현 필요
 
@@ -125,13 +111,9 @@ public class Curation {
         this.styles = req.recommend().styles();
     }
 
-    // 임시저장
-    public static Curation createDraft(User user, CurationReq req) {
-        Curation curation = Curation.from(user, req);
-        curation.setDrafted(true);
 
-        return curation;
-    }
+
+
 
     // 조회수
     public void increaseViewCount() {
@@ -161,7 +143,7 @@ public class Curation {
     // ---------------------------
 
     // 팩토리 메서드
-    public static Curation from(User user, CurationReq req) {
+    public static Curation from(CurationReq req, User user) {
         return Curation.builder()
                 .user(user)
                 .title(req.title())
@@ -175,6 +157,7 @@ public class Curation {
                 .genres(req.recommend().genres())
                 .keywords(req.recommend().keywords())
                 .styles(req.recommend().styles())
+                .state(req.state())
                 .build();
     }
 

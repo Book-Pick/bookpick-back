@@ -2,6 +2,7 @@
 package BookPick.mvp.domain.curation.dto.base;
 
 import BookPick.mvp.domain.curation.entity.Curation;
+import BookPick.mvp.domain.curation.enums.common.State;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -10,28 +11,32 @@ public record CurationRes(
         Long id,
         Long userId,
         String title,
+
         ThumbnailInfo thumbnail,
         BookInfo book,
         String review,
+
         RecommendInfo recommend,
-        Boolean isDeleted,
+        State state,
+
         LocalDateTime createdAt,
-        LocalDateTime updatedAt,
-        LocalDateTime deletedAt
+        LocalDateTime updatedAt
 ) {
     public static CurationRes from(Curation curation) {
         return new CurationRes(
                 curation.getId(),
                 curation.getUser().getId(),
                 curation.getTitle(),
+
                 new ThumbnailInfo(curation.getThumbnailUrl(), curation.getThumbnailColor()),
                 new BookInfo(curation.getBookTitle(), curation.getBookAuthor(), curation.getBookIsbn()),
                 curation.getReview(),
+
                 new RecommendInfo(curation.getMoods(), curation.getGenres(), curation.getKeywords(), curation.getStyles()),
-                curation.isDrafted(),
+                curation.getState(),
+
                 curation.getCreatedAt(),
-                curation.getUpdatedAt(),
-                curation.getDeletedAt()
+                curation.getUpdatedAt()
         );
     }
 
