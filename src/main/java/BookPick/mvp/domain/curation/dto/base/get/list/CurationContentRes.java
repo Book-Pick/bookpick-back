@@ -35,8 +35,8 @@ public record CurationContentRes(
         int similarity,
         String matched,
         int popularityScore,
-        State state,
         boolean isLiked,
+        Boolean isDrafted,
 
         // 5. 시간
         LocalDateTime createdAt,
@@ -63,8 +63,8 @@ public record CurationContentRes(
                 0,
                 null,
                 curation.getPopularityScore(),
-                curation.getState(),
                 isLiked,
+                curation.getIsDrafted(),
 
                 curation.getCreatedAt(),
                 curation.getUpdatedAt()
@@ -92,8 +92,8 @@ public record CurationContentRes(
                 getSimilarity(matchResult, preferenceInfo),
                 matchResult.getMatched(),
                 curation.getPopularityScore(),
-                curation.getState(),
                 isLiked,
+                curation.getIsDrafted(),
 
                 curation.getCreatedAt(),
                 curation.getUpdatedAt()

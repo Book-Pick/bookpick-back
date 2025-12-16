@@ -17,7 +17,7 @@ public record CurationRes(
         String review,
 
         RecommendInfo recommend,
-        State state,
+        Boolean isDrafted,
 
         LocalDateTime createdAt,
         LocalDateTime updatedAt
@@ -33,7 +33,7 @@ public record CurationRes(
                 curation.getReview(),
 
                 new RecommendInfo(curation.getMoods(), curation.getGenres(), curation.getKeywords(), curation.getStyles()),
-                curation.getState(),
+                curation.getIsDrafted(),
 
                 curation.getCreatedAt(),
                 curation.getUpdatedAt()
