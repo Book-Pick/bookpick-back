@@ -4,14 +4,13 @@ package BookPick.mvp.domain.curation.controller.base;
 import BookPick.mvp.domain.auth.service.CustomUserDetails;
 import BookPick.mvp.domain.curation.dto.base.CurationReq;
 import BookPick.mvp.domain.curation.dto.base.create.CurationCreateRes;
-import BookPick.mvp.domain.curation.dto.base.get.one.CurationGetRes;
 import BookPick.mvp.domain.curation.dto.base.update.CurationUpdateReq;
 import BookPick.mvp.domain.curation.dto.base.update.CurationUpdateRes;
 import BookPick.mvp.domain.curation.service.base.CurationService;
+import BookPick.mvp.domain.curation.service.base.create.CurationCreateService;
 import BookPick.mvp.domain.user.util.CurrentUserCheck;
 import BookPick.mvp.global.api.ApiResponse;
 import BookPick.mvp.global.api.SuccessCode.SuccessCode;
-import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -27,6 +26,8 @@ import io.swagger.v3.oas.annotations.Operation;
 public class CurationController {
 
     private final CurationService curationService;
+    private final CurationCreateService curationCreateService;
+
     private final CurrentUserCheck currentUserCheck;
 
     @Operation(summary = "큐레이션 생성", description = "새 큐레이션을 생성합니다", tags = {"Curation"})
@@ -37,7 +38,7 @@ public class CurationController {
 
         currentUserCheck.validateLoginUser(currentUser);
 
-        CurationCreateRes res = curationService.curationCreate(currentUser.getId(), req);
+        CurationCreateRes res = curationCreateService.createCuration(currentUser.getId(), req);
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(ApiResponse.success(SuccessCode.CURATION_REGISTER_SUCCESS, res));
     }

@@ -12,7 +12,7 @@ public record CurationReq(
         BookDto book,
         String review,
         RecommendDto recommend,
-        State state
+        Boolean isDrafted
 ) {
 }
 

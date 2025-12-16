@@ -77,7 +77,7 @@ public class Curation {
     @Builder.Default
     @Column(name = "popularity_score")
     private Integer popularityScore = 0;
-    private State state;
+    private Boolean isDrafted;
 
 
     @CreatedDate
@@ -109,10 +109,8 @@ public class Curation {
         this.genres = req.recommend().genres();
         this.keywords = req.recommend().keywords();
         this.styles = req.recommend().styles();
+        this.isDrafted = req.isDrafted();
     }
-
-
-
 
 
     // 조회수
@@ -157,8 +155,18 @@ public class Curation {
                 .genres(req.recommend().genres())
                 .keywords(req.recommend().keywords())
                 .styles(req.recommend().styles())
-                .state(req.state())
+                .isDrafted(req.isDrafted())
                 .build();
     }
 
+    // 발행
+    public void publish() {
+        this.isDrafted = false;
+        this.publishedAt = LocalDateTime.now();
+    }
+
+    // 임시저장
+    public void draft() {
+        this.isDrafted = true;
+    }
 }

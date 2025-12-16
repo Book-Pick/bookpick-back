@@ -10,5 +10,6 @@ public record CurationUpdateReq(
         ThumbnailDto thumbnail,
         BookDto book,
         String review,
-        RecommendDto recommend
+        RecommendDto recommend,
+        Boolean isDrafted
 ) {}

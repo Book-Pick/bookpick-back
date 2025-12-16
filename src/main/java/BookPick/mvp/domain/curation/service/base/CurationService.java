@@ -34,19 +34,7 @@ public class CurationService {
     private final CurationSubscribeService curationSubscribeService;
 
 
-    // -- 큐레이션 등록 --
-    @Transactional
-    public CurationCreateRes curationCreate(Long userId, CurationReq req) {
 
-        User user = userRepository.findById(userId)
-                .orElseThrow(UserNotFoundException::new);
-
-        Curation curation = Curation.from(req, user);
-
-        Curation saved = curationRepository.save(curation);
-
-        return CurationCreateRes.from(saved);
-    }
 
 
     // -- 큐레이션 단건 조회 --
