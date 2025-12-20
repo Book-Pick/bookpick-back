@@ -150,6 +150,7 @@ public class Curation {
                 .bookTitle(req.book().title())
                 .bookAuthor(req.book().author())
                 .bookIsbn(req.book().isbn())
+                .bookImageUrl(req.book().imageUrl())
                 .review(req.review())
                 .moods(req.recommend().moods())
                 .genres(req.recommend().genres())
