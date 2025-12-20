@@ -123,6 +123,11 @@ public class ReadingPreferenceService {
         preference.setFavoriteBooks(savedBooks);
         preference.setFavoriteAuthors(savedAuthors);
 
+        if(!preference.isCompleted()) {
+            preference.setCompleted(true);
+        }
+
+
         readingPreferenceValidCheckService.validateReadingPreferenceReq(req);   //  ReadingPreferenceReq 검증
         preference.update(req);
 
