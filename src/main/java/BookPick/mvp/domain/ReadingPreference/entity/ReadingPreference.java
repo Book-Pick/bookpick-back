@@ -74,6 +74,8 @@ public class ReadingPreference {
     @Column(name = "reading_style")
     private List<String> readingStyles;
 
+    private boolean isCompleted = false;
+
     private LocalDateTime createdAt;
 
     private LocalDateTime updatedAt;
@@ -121,8 +123,9 @@ public class ReadingPreference {
                 .moods(new ArrayList<>())
                 .readingHabits(new ArrayList<>())
                 .genres(new ArrayList<>())
-                .readingStyles(new ArrayList<>())
                 .keywords(new ArrayList<>())
+                .readingStyles(new ArrayList<>())
+                .isCompleted(false)
                 .build();
     }
 

@@ -46,27 +46,27 @@ public class CurationListController {
     }
 
 
-//    @Operation(summary = "큐레이션 임시저장 목록  조회", description = "임시저장", tags = {"Curation"})
-//    @GetMapping
-//    public ResponseEntity<ApiResponse<CurationListGetRes>> getCurations(
-//            @RequestParam(defaultValue = "latest") String sort,
-//            @RequestParam(required = false) Long cursor,
-//            @RequestParam(defaultValue = "10") int size,
-//            @AuthenticationPrincipal @Valid CustomUserDetails currentUser
-//    ) {
-//
-//        currentUserCheck.validateLoginUser(currentUser);
-//
-//
-//        // 1. SortType 변환
-//        SortType sortType = SortType.fromValue(sort);
-//
-//        // 2. 큐레이션 리스트 반환
-//        CurationListGetRes curationListGetRes = curationListService.getCurations(sortType, cursor, size, currentUser.getId());
-//
-//        return ResponseEntity.ok()
-//                .body(ApiResponse.success(SuccessCode.CURATION_LIST_GET_SUCCESS, curationListGetRes));
-//    }
+    /*@Operation(summary = "큐레이션 임시저장 목록  조회", description = "임시저장", tags = {"Curation"})
+    @GetMapping
+    public ResponseEntity<ApiResponse<CurationListGetRes>> getCurations(
+            @RequestParam(defaultValue = "latest") String sort,
+            @RequestParam(required = false) Long cursor,
+            @RequestParam(defaultValue = "10") int size,
+            @AuthenticationPrincipal @Valid CustomUserDetails currentUser
+    ) {
+
+        currentUserCheck.validateLoginUser(currentUser);
+
+
+        // 1. SortType 변환
+        SortType sortType = SortType.fromValue(sort);
+
+        // 2. 큐레이션 리스트 반환
+        CurationListGetRes curationListGetRes = curationListService.getCurations(sortType, cursor, size, currentUser.getId());
+
+        return ResponseEntity.ok()
+                .body(ApiResponse.success(SuccessCode.CURATION_LIST_GET_SUCCESS, curationListGetRes));
+    }*/
 
 
 }

@@ -2,6 +2,8 @@
 package BookPick.mvp.domain.curation.dto.base.get.list;
 
 import BookPick.mvp.domain.curation.enums.common.SortType;
+
+import java.util.ArrayList;
 import java.util.List;
 
 public record CurationListGetRes(
@@ -21,6 +23,17 @@ public record CurationListGetRes(
                 content.size(),
                 hasNext,
                 nextCursor
+        );
+    }
+
+    public static CurationListGetRes ofEmpty(SortType sortType) {
+        return new CurationListGetRes(
+                sortType.getValue(),
+                sortType.getDescription(),
+                new  ArrayList<>(),
+                0,
+                false,
+                null
         );
     }
 }

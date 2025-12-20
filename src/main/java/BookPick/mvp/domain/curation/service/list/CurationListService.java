@@ -1,5 +1,6 @@
 package BookPick.mvp.domain.curation.service.list;
 
+import BookPick.mvp.domain.ReadingPreference.entity.ReadingPreference;
 import BookPick.mvp.domain.curation.dto.base.get.list.CurationContentRes;
 import BookPick.mvp.domain.curation.dto.base.get.list.CurationListGetRes;
 import BookPick.mvp.domain.curation.dto.base.get.list.CursorPage;
@@ -17,6 +18,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -33,14 +35,17 @@ public class CurationListService {
     // 1. 큐레이션 리스트 조회
     public CurationListGetRes getCurations(SortType sortType, Long cursor, int size, Long userId) {
 
-
         // 1. 내 취향 유사도 순 O
         if (sortType == SortType.SORT_SIMILARITY) {
 
             // 1. 유저 독서 취향 반환
-            ReadingPreferenceInfo preferenceInfo = readingPreferenceRepository.findByUserId(userId)
-                    .map(ReadingPreferenceInfo::from)
-                    .orElseThrow(UserReadingPreferenceNotExisted::new);
+            ReadingPreference readingPreference = readingPreferenceRepository.findByUserId(userId).orElse(null);
+
+
+            if(readingPreference == null){
+                return CurationListGetRes.ofEmpty(sortType);
+            }
+            ReadingPreferenceInfo preferenceInfo = ReadingPreferenceInfo.from(readingPreference);
 
             // 2. 매칭된 큐레이션 리스트트 조회
             List<CurationMatchResult> recommended = curationRecommendationService.recommend(preferenceInfo);
@@ -115,6 +120,9 @@ public class CurationListService {
                 page.getNextCursor()
         );
     }
+
+
+
 
     // Issue 1) DTO 만들어서 독서취향 정보 레이어간 소통 vs 사용자 독서취향 실시간 수정 반영 고려
     // 1. 사용자는 독서취향을 한번 설정하면 자주 바꾸지 않는다.
