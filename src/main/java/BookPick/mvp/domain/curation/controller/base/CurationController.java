@@ -30,7 +30,7 @@ public class CurationController {
 
     private final CurrentUserCheck currentUserCheck;
 
-    @Operation(summary = "큐레이션 생성", description = "새 큐레이션을 생성합니다", tags = {"Curation"})
+    @Operation(summary = "큐레이션 생성(일반 및 임시저장)", description = "새 큐레이션을 생성합니다 drafted가 true면 임시저장", tags = {"Curation"})
     @PostMapping
     public ResponseEntity<ApiResponse<CurationCreateRes>> create(
             @Valid @RequestBody CurationReq req,
