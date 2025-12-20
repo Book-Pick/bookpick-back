@@ -109,7 +109,7 @@ public class Curation {
         this.genres = req.recommend().genres();
         this.keywords = req.recommend().keywords();
         this.styles = req.recommend().styles();
-        this.isDrafted = req.isDrafted();
+        this.isDrafted = req.isDrafted();           // 임시저장 및 발행 처리
     }
 
 

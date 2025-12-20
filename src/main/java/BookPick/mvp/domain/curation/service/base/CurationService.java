@@ -82,7 +82,7 @@ public class CurationService {
             throw new CurationAccessDeniedException();
         }
 
-        curation.curationUpdate(req);
+        curation.curationUpdate(req);   // 임시저장 및 발행 처리도 가능
 
         return CurationUpdateRes.from(curation);
     }
