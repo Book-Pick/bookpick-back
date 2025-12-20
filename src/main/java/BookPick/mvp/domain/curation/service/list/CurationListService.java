@@ -40,11 +40,7 @@ public class CurationListService {
 
             // 1. 유저 독서 취향 반환
             ReadingPreference readingPreference = readingPreferenceRepository.findByUserId(userId).orElse(null);
-
-
-            if(readingPreference == null){
-                return CurationListGetRes.ofEmpty(sortType);
-            }
+            if(!readingPreference.isCompleted()){return CurationListGetRes.ofEmpty(sortType);}
             ReadingPreferenceInfo preferenceInfo = ReadingPreferenceInfo.from(readingPreference);
 
             // 2. 매칭된 큐레이션 리스트트 조회

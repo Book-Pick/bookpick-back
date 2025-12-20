@@ -1,5 +1,7 @@
 package BookPick.mvp.domain.curation.controller.list;
 
+import BookPick.mvp.domain.ReadingPreference.enums.resCode.PreferenceErrorCode;
+import BookPick.mvp.domain.ReadingPreference.enums.resCode.PreferenceSuccessCode;
 import BookPick.mvp.domain.auth.service.CustomUserDetails;
 import BookPick.mvp.domain.curation.dto.base.get.list.CurationListGetRes;
 import BookPick.mvp.domain.curation.enums.common.SortType;
@@ -40,6 +42,11 @@ public class CurationListController {
 
         // 2. 큐레이션 리스트 반환
         CurationListGetRes curationListGetRes = curationListService.getCurations(sortType, cursor, size, currentUser.getId());
+
+        if(curationListGetRes.size() == 0 ){
+            return ResponseEntity.ok()
+                .body(ApiResponse.success(PreferenceSuccessCode.PREFERENCE_NOT_FOUND, curationListGetRes));
+        }
 
         return ResponseEntity.ok()
                 .body(ApiResponse.success(SuccessCode.CURATION_LIST_GET_SUCCESS, curationListGetRes));
