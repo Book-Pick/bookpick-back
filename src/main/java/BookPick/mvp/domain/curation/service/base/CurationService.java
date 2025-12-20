@@ -73,8 +73,6 @@ public class CurationService {
     // -- 큐레이션 수정 --
     @Transactional
     public CurationUpdateRes curationUpdate(Long userId, Long curationId, CurationUpdateReq req) {
-
-
         Curation curation = curationRepository.findById(curationId)
                 .orElseThrow(CurationNotFoundException::new);
 
@@ -86,8 +84,4 @@ public class CurationService {
 
         return CurationUpdateRes.from(curation);
     }
-
-
-
-
 }
