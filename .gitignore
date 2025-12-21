@@ -119,6 +119,5 @@ aws/
 
 
 #applicatoin.yml
-./src/main/resources/origin/origin.yml
+./src/main/resources/origin
 ./src/main/resources/.env
-./
