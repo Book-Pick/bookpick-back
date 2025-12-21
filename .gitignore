@@ -117,3 +117,7 @@ aws/
 # macOS system files
 .DS_Store
 
+
+#applicatoin.yml
+./src/main/resources/origin/origin.yml
+./src/main/resources/.env

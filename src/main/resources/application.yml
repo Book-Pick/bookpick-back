@@ -2,19 +2,6 @@ spring:
   application:
     name: BookPick
 
-  datasource:
-    url: jdbc:mysql://hii.mysql.database.azure.com:3306/book_pick
-    username: nan7789
-    password: gustjq3735!
-    driver-class-name: com.mysql.cj.jdbc.Driver
-
-  jpa:
-    hibernate:
-      ddl-auto: none
-    properties:
-      hibernate:
-        show_sql: false
-
 server:
   port: 8081
   error:
@@ -23,29 +10,6 @@ server:
     include-stacktrace: always
     include-exception: true
 
-
-
 logging:
   level:
     root: INFO
-    org.springframework.web: DEBUG
-    org.springframework.security: DEBUG
-    BookPick: DEBUG
-
-jwt:
-  access:
-    secret: c2NhcmVkYWdlZmVhdGhlcnNwbGVudHlyZWFkeWVhdHByaW5jaXBhbHJpc2Vwcm9iYWJsZXRoaXNpc2FsZWFzdDI1NmJpdHM
-    expiration: 900000  # 15분 = 15 * 60 * 1000
-  refresh:
-    secret: d2hvbGVtYWlucG9yY2hsb29rZWFyZ3JlYXRseXNoaW5lcmVzdHRlbGxuZWVkbGVrZWVwdGhpc2lzYWxlYXN0MjU2Yml0cw
-    expiration: 604800000  # 7일 = 7 * 24 * 60 * 60 * 1000
-
-api :
-  kakao :
-    key : 103086ac1d365cf71f026f6caac34fb3
-  gemini:
-    api:
-      key: AIzaSyAKdrlSfIagTGQhdtdaRmTyTVuI2QQLEsw
-      url : https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent
-
-
