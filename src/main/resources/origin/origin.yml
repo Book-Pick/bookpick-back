@@ -45,7 +45,7 @@ api :
     key : 103086ac1d365cf71f026f6caac34fb3
   gemini:
     api:
-      key: AIzaSyAKdrlSfIagTGQhdtdaRmTyTVuI2QQLEsw
+      key: AIzaSyB_WGw2GtuKeXP9uzup9SQlcN7Bvt8v0eM
       url : https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent
 
 
