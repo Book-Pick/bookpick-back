@@ -2,12 +2,16 @@ name: BookPick BE  dev CI/CD (v 1.2)
 
 
 on:
-  pull_request:
+#  pull_request:
+#    branches:
+#      - develop      # develop을 대상으로 하는 PR만 감지
+#    types: [ closed ]   # PR이 닫힐 때만 실행
+
+
+  # PR Merge 수락 시에도 작동됨
+  push:
     branches:
       - develop      # develop을 대상으로 하는 PR만 감지
-    types: [ closed ]   # PR이 닫힐 때만 실행
-
-
 
 
 jobs:
