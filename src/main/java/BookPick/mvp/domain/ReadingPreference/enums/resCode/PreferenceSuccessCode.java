@@ -11,7 +11,7 @@ import org.springframework.http.HttpStatus;
 public enum PreferenceSuccessCode implements SuccessCodeInterface {
 
 
-        PREFERENCE_NOT_FOUND(HttpStatus.OK, "사용자의 독서취향이 설정되지 않았습니다.");
+    PREFERENCE_NOT_FOUND(HttpStatus.OK, "사용자의 독서취향이 설정되지 않았습니다.");
 
     private final HttpStatus status;
     private final String message;
