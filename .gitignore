@@ -119,6 +119,6 @@ aws/
 .DS_Store
 
 
-#applicatoin.yml
+#applicatoin.ym
 ./src/main/resources/origin
 ./src/main/resources/.env
