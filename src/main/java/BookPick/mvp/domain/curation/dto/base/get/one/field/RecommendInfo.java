@@ -1,4 +1,4 @@
-package BookPick.mvp.domain.curation.dto.base.get.one;
+package BookPick.mvp.domain.curation.dto.base.get.one.field;
 
 import java.util.List;
 

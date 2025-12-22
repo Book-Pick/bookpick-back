@@ -1,8 +1,7 @@
 package BookPick.mvp.domain.curation.controller.base.read;
 
 import BookPick.mvp.domain.auth.service.CustomUserDetails;
-import BookPick.mvp.domain.curation.dto.base.get.one.CurationGetRes;
-import BookPick.mvp.domain.curation.service.base.CurationService;
+import BookPick.mvp.domain.curation.dto.base.get.one.field.CurationGetRes;
 import BookPick.mvp.domain.curation.service.base.read.CurationReadService;
 import BookPick.mvp.domain.user.util.CurrentUserCheck;
 import BookPick.mvp.global.api.ApiResponse;
