@@ -26,7 +26,7 @@ jwt:
     expiration: ${JWT_REFRESH_EXPIRATION}
 
 api:
-  kakao:W
+  kakao:
     key: ${KAKAO_API_KEY}
   gemini:
     api:

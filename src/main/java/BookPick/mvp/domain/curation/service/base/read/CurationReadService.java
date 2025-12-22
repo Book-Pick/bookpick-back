@@ -2,7 +2,7 @@
 package BookPick.mvp.domain.curation.service.base.read;
 
 import BookPick.mvp.domain.auth.service.CustomUserDetails;
-import BookPick.mvp.domain.curation.dto.base.get.one.field.CurationGetRes;
+import BookPick.mvp.domain.curation.dto.base.get.one.CurationGetRes;
 import BookPick.mvp.domain.curation.entity.Curation;
 import BookPick.mvp.domain.curation.entity.CurationLike;
 import BookPick.mvp.domain.curation.exception.common.CurationAccessDeniedException;
@@ -55,7 +55,7 @@ public class CurationReadService {
             isSubscribedCurator = curationSubscribeService.isSubscribeCurator(user.getId(), curation.getUser().getId());
 
             // 3. 큐레이션 작성자면 책 정보 넣어서 큐레이션 반환
-            if ( isEdit) {
+            if (isEdit) {
                 if(curation.getUser().getId().equals(user.getId())){
                     return CurationGetRes.fromOwnerView(curation, isSubscribedCurator, isLikedCuration);
                 }

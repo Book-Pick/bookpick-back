@@ -1,6 +1,9 @@
 // CurationGetRes.java
-package BookPick.mvp.domain.curation.dto.base.get.one.field;
+package BookPick.mvp.domain.curation.dto.base.get.one;
 
+import BookPick.mvp.domain.curation.dto.base.get.one.field.BookInfo;
+import BookPick.mvp.domain.curation.dto.base.get.one.field.RecommendInfo;
+import BookPick.mvp.domain.curation.dto.base.get.one.field.ThumbnailInfo;
 import BookPick.mvp.domain.curation.entity.Curation;
 
 import java.time.LocalDateTime;
@@ -18,6 +21,7 @@ public record CurationGetRes(
         String review,
         RecommendInfo recommend,
         Boolean isLiked,
+        Boolean isDrafted,
         Integer likeCount,
         Integer viewCount,
         Integer CommentCount,
@@ -40,6 +44,7 @@ public record CurationGetRes(
                 new RecommendInfo(curation.getMoods(), curation.getGenres(),
                         curation.getKeywords(), curation.getStyles()),
                 isLiked,
+                curation.getIsDrafted(),
                 curation.getLikeCount(),
                 curation.getViewCount(),
                 curation.getCommentCount(),
@@ -62,6 +67,7 @@ public record CurationGetRes(
                 new RecommendInfo(curation.getMoods(), curation.getGenres(),
                         curation.getKeywords(), curation.getStyles()),
                 isLiked,
+                curation.getIsDrafted(),
                 curation.getLikeCount(),
                 curation.getViewCount(),
                 curation.getCommentCount(),

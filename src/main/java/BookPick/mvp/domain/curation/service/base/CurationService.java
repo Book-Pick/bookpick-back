@@ -2,7 +2,7 @@
 package BookPick.mvp.domain.curation.service.base;
 
 import BookPick.mvp.domain.auth.service.CustomUserDetails;
-import BookPick.mvp.domain.curation.dto.base.get.one.field.CurationGetRes;
+import BookPick.mvp.domain.curation.dto.base.get.one.CurationGetRes;
 import BookPick.mvp.domain.curation.dto.base.update.CurationUpdateReq;
 import BookPick.mvp.domain.curation.dto.base.update.CurationUpdateRes;
 import BookPick.mvp.domain.curation.entity.Curation;
