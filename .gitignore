@@ -120,5 +120,5 @@ aws/
 
 
 #applicatoin.ym
-./src/main/resources/origin
-./src/main/resources/.env
+src/main/resources/origin
+src/main/resources/.env
