@@ -25,12 +25,15 @@ public class CurationListController {
     private final CurrentUserCheck currentUserCheck;
 
 
+    // Todo 1. isDrafted = false 인, 큐레이션 리스트 반환
+
     @Operation(summary = "큐레이션 목록  조회", description = "최신순 / 인기순 / 사용자 취향 유사도 순", tags = {"Curation"})
     @GetMapping
     public ResponseEntity<ApiResponse<CurationListGetRes>> getCurations(
             @RequestParam(defaultValue = "latest") String sort,
             @RequestParam(required = false) Long cursor,
             @RequestParam(defaultValue = "10") int size,
+            @RequestParam(defaultValue = "false") boolean drafted,
             @AuthenticationPrincipal @Valid CustomUserDetails currentUser
     ) {
 
@@ -41,7 +44,7 @@ public class CurationListController {
         SortType sortType = SortType.fromValue(sort);
 
         // 2. 큐레이션 리스트 반환
-        CurationListGetRes curationListGetRes = curationListService.getCurations(sortType, cursor, size, currentUser.getId());
+        CurationListGetRes curationListGetRes = curationListService.getCurations(sortType, cursor, size, drafted, currentUser.getId());
 
         if(curationListGetRes.size() == 0 ){
             return ResponseEntity.ok()
@@ -53,27 +56,7 @@ public class CurationListController {
     }
 
 
-    /*@Operation(summary = "큐레이션 임시저장 목록  조회", description = "임시저장", tags = {"Curation"})
-    @GetMapping
-    public ResponseEntity<ApiResponse<CurationListGetRes>> getCurations(
-            @RequestParam(defaultValue = "latest") String sort,
-            @RequestParam(required = false) Long cursor,
-            @RequestParam(defaultValue = "10") int size,
-            @AuthenticationPrincipal @Valid CustomUserDetails currentUser
-    ) {
 
-        currentUserCheck.validateLoginUser(currentUser);
-
-
-        // 1. SortType 변환
-        SortType sortType = SortType.fromValue(sort);
-
-        // 2. 큐레이션 리스트 반환
-        CurationListGetRes curationListGetRes = curationListService.getCurations(sortType, cursor, size, currentUser.getId());
-
-        return ResponseEntity.ok()
-                .body(ApiResponse.success(SuccessCode.CURATION_LIST_GET_SUCCESS, curationListGetRes));
-    }*/
 
 
 }

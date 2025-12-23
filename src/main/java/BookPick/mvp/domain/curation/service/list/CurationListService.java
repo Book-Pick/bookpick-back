@@ -33,7 +33,7 @@ public class CurationListService {
 
 
     // 1. 큐레이션 리스트 조회
-    public CurationListGetRes getCurations(SortType sortType, Long cursor, int size, Long userId) {
+    public CurationListGetRes getCurations(SortType sortType, Long cursor, int size, boolean drafted, Long userId) {
 
         // 1. 내 취향 유사도 순 O
         if (sortType == SortType.SORT_SIMILARITY) {
@@ -107,7 +107,8 @@ public class CurationListService {
                         likedIds.contains(c.getId())
                 ))
                 .collect(Collectors.toList());
-        CurationListGetRes.from(sortType, content, page.isHasNext(), page.getNextCursor());
+
+
 
         return CurationListGetRes.from(
                 sortType,

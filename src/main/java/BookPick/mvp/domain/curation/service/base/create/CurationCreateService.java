@@ -24,20 +24,46 @@ public class CurationCreateService {
     private final CurationSubscribeService curationSubscribeService;
 
 
+    // 분기
+    public CurationCreateRes saveCuration(Long userId, CurationReq req) {
+
+
+        // 발행
+         if(!req.isDrafted()){
+             return publishCuration(userId, req);
+        }
+         else{
+             return draftCuration(userId,req);
+         }
+
+    }
     // -- 큐레이션 등록 --
     @Transactional
-    public CurationCreateRes createCuration(Long userId, CurationReq req) {
+    public CurationCreateRes publishCuration(Long userId, CurationReq req) {
 
 
         User user = userRepository.findById(userId)
                 .orElseThrow(UserNotFoundException::new);
 
-        Curation curation = Curation.from(req, user);
-        if (req.isDrafted()) {
-            curation.draft();
-        }else{
-            curation.publish();
-        }
+        Curation curation = Curation.from(req, user );
+        curation.publish();
+        Curation saved = curationRepository.save(curation);
+
+        return CurationCreateRes.from(saved);
+
+    }
+
+
+     // -- 큐레이션 임시저장 --
+    @Transactional
+    public CurationCreateRes draftCuration(Long userId, CurationReq req) {
+
+
+        User user = userRepository.findById(userId)
+                .orElseThrow(UserNotFoundException::new);
+
+        Curation curation = Curation.from(req, user );
+        curation.draft();
         Curation saved = curationRepository.save(curation);
 
         return CurationCreateRes.from(saved);

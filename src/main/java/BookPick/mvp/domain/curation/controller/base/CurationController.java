@@ -32,13 +32,13 @@ public class CurationController {
 
     @Operation(summary = "큐레이션 생성(일반 및 임시저장)", description = "새 큐레이션을 생성합니다 drafted가 true면 임시저장", tags = {"Curation"})
     @PostMapping
-    public ResponseEntity<ApiResponse<CurationCreateRes>> create(
+    public ResponseEntity<ApiResponse<CurationCreateRes>> createCuration(
             @Valid @RequestBody CurationReq req,
             @AuthenticationPrincipal CustomUserDetails currentUser) {
 
         currentUserCheck.validateLoginUser(currentUser);
 
-        CurationCreateRes res = curationCreateService.createCuration(currentUser.getId(), req);
+        CurationCreateRes res = curationCreateService.publishCuration(currentUser.getId(), req);
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(ApiResponse.success(SuccessCode.CURATION_REGISTER_SUCCESS, res));
     }
@@ -47,7 +47,7 @@ public class CurationController {
 
 
 
-    @Operation(summary = "큐레이션 수정", description = "큐레이션 정보를 수정", tags = {"Curation"})
+    @Operation(summary = "큐레이션 수정 (재발행 및 재 임시저장", description = "큐레이션 정보를 수정", tags = {"Curation"})
     @PatchMapping("/{curationId}")
     public ResponseEntity<ApiResponse<CurationUpdateRes>> updateCuration(
             @PathVariable Long curationId,
