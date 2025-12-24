@@ -30,16 +30,16 @@ public class CurationCreateService {
 
         // 발행
          if(!req.isDrafted()){
-             return publishCuration(userId, req);
+             return publishNewCuration(userId, req);
         }
          else{
-             return draftCuration(userId,req);
+             return draftNewCuration(userId,req);
          }
 
     }
     // -- 큐레이션 등록 --
     @Transactional
-    public CurationCreateRes publishCuration(Long userId, CurationReq req) {
+    public CurationCreateRes publishNewCuration(Long userId, CurationReq req) {
 
 
         User user = userRepository.findById(userId)
@@ -56,7 +56,7 @@ public class CurationCreateService {
 
      // -- 큐레이션 임시저장 --
     @Transactional
-    public CurationCreateRes draftCuration(Long userId, CurationReq req) {
+    public CurationCreateRes draftNewCuration(Long userId, CurationReq req) {
 
 
         User user = userRepository.findById(userId)
