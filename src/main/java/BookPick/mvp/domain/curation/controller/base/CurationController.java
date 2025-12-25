@@ -4,9 +4,10 @@ package BookPick.mvp.domain.curation.controller.base;
 import BookPick.mvp.domain.auth.service.CustomUserDetails;
 import BookPick.mvp.domain.curation.dto.base.CurationReq;
 import BookPick.mvp.domain.curation.dto.base.create.CurationCreateRes;
+import BookPick.mvp.domain.curation.dto.base.create.CurationCreateResult;
 import BookPick.mvp.domain.curation.dto.base.update.CurationUpdateReq;
 import BookPick.mvp.domain.curation.dto.base.update.CurationUpdateRes;
-import BookPick.mvp.domain.curation.dto.base.update.UpdateResult;
+import BookPick.mvp.domain.curation.dto.base.update.CurationUpdateResult;
 import BookPick.mvp.domain.curation.service.base.create.CurationCreateService;
 import BookPick.mvp.domain.curation.service.base.update.CurationUpdateService;
 import BookPick.mvp.domain.user.util.CurrentUserCheck;
@@ -39,9 +40,9 @@ public class CurationController {
 
         currentUserCheck.validateLoginUser(currentUser);
 
-        CurationCreateRes res = curationCreateService.saveCuration(currentUser.getId(), req);
+        CurationCreateResult result = curationCreateService.saveCuration(currentUser.getId(), req);
         return ResponseEntity.status(HttpStatus.CREATED)
-                .body(ApiResponse.success(SuccessCode.CURATION_PUBLISH_SUCCESS, res));
+                .body(ApiResponse.success(result.successCode(), result.curationCreateRes()));
     }
 
 
@@ -57,10 +58,10 @@ public class CurationController {
 
         currentUserCheck.validateLoginUser(currentUser);
 
-        UpdateResult updateResult = curationUpdateService.updateCuration(currentUser.getId(), curationId, req);
+        CurationUpdateResult curationUpdateResult = curationUpdateService.updateCuration(currentUser.getId(), curationId, req);
 
          return ResponseEntity.ok()
-                .body(ApiResponse.success(updateResult.successCode(), updateResult.curationUpdateRes()));
+                .body(ApiResponse.success(curationUpdateResult.successCode(), curationUpdateResult.curationUpdateRes()));
     }
 
 

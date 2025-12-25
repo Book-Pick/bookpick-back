@@ -1,13 +1,10 @@
 // CurationListService.java
 package BookPick.mvp.domain.curation.service.base.update;
 
-import BookPick.mvp.domain.auth.service.CustomUserDetails;
-import BookPick.mvp.domain.curation.dto.base.get.one.CurationGetRes;
 import BookPick.mvp.domain.curation.dto.base.update.CurationUpdateReq;
 import BookPick.mvp.domain.curation.dto.base.update.CurationUpdateRes;
-import BookPick.mvp.domain.curation.dto.base.update.UpdateResult;
+import BookPick.mvp.domain.curation.dto.base.update.CurationUpdateResult;
 import BookPick.mvp.domain.curation.entity.Curation;
-import BookPick.mvp.domain.curation.entity.CurationLike;
 import BookPick.mvp.domain.curation.exception.common.CurationAccessDeniedException;
 import BookPick.mvp.domain.curation.exception.common.CurationAlreadyPublishedException;
 import BookPick.mvp.domain.curation.exception.common.CurationNotFoundException;
@@ -16,12 +13,9 @@ import BookPick.mvp.domain.curation.repository.like.CurationLikeRepository;
 import BookPick.mvp.domain.user.repository.UserRepository;
 import BookPick.mvp.domain.user.service.subscribe.CurationSubscribeService;
 import BookPick.mvp.global.api.SuccessCode.SuccessCode;
-import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -33,17 +27,17 @@ public class CurationUpdateService {
     private final CurationSubscribeService curationSubscribeService;
 
     @Transactional
-    public UpdateResult updateCuration(Long userId, Long curationId, CurationUpdateReq req) {
+    public CurationUpdateResult updateCuration(Long userId, Long curationId, CurationUpdateReq req) {
         Curation curation = curationRepository.findById(curationId)
                 .orElseThrow(CurationNotFoundException::new);
 
         if (curation.getIsDrafted()) {
             if (req.isDrafted()) {
                 // 임시저장 -> 임시저장
-                return UpdateResult.from(reDraftCuration(userId, curation, req), SuccessCode.CURATION_DRAFT_UPDATE_SUCCESS);
+                return CurationUpdateResult.from(reDraftCuration(userId, curation, req), SuccessCode.CURATION_DRAFT_UPDATE_SUCCESS);
             } else {
                 // 임시저장 -> 발행본
-                return UpdateResult.from(publishDraftedCuration(userId, curation, req), SuccessCode.DRAFTED_CURATION_PUBLISH_SUCCESS);
+                return CurationUpdateResult.from(publishDraftedCuration(userId, curation, req), SuccessCode.DRAFTED_CURATION_PUBLISH_SUCCESS);
             }
         }
 
@@ -51,7 +45,7 @@ public class CurationUpdateService {
         // 발행본 -> 발행본
         else {
             if (!req.isDrafted()) {
-                return UpdateResult.from(modifyPublishedCuration(userId, curation, req), SuccessCode.CURATION_UPDATE_SUCCESS);
+                return CurationUpdateResult.from(modifyPublishedCuration(userId, curation, req), SuccessCode.CURATION_UPDATE_SUCCESS);
             } else {
                 throw new CurationAlreadyPublishedException();
             }

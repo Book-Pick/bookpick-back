@@ -3,6 +3,7 @@ package BookPick.mvp.domain.curation.service.base.create;
 
 import BookPick.mvp.domain.curation.dto.base.CurationReq;
 import BookPick.mvp.domain.curation.dto.base.create.CurationCreateRes;
+import BookPick.mvp.domain.curation.dto.base.create.CurationCreateResult;
 import BookPick.mvp.domain.curation.entity.Curation;
 import BookPick.mvp.domain.curation.repository.CurationRepository;
 import BookPick.mvp.domain.curation.repository.like.CurationLikeRepository;
@@ -10,6 +11,7 @@ import BookPick.mvp.domain.user.entity.User;
 import BookPick.mvp.domain.user.exception.common.UserNotFoundException;
 import BookPick.mvp.domain.user.repository.UserRepository;
 import BookPick.mvp.domain.user.service.subscribe.CurationSubscribeService;
+import BookPick.mvp.global.api.SuccessCode.SuccessCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,26 +21,24 @@ import org.springframework.transaction.annotation.Transactional;
 public class CurationCreateService {
 
     private final CurationRepository curationRepository;
-    private final CurationLikeRepository curationLikeRepository;
     private final UserRepository userRepository;
-    private final CurationSubscribeService curationSubscribeService;
 
 
     // 분기
-    public CurationCreateRes saveCuration(Long userId, CurationReq req) {
+    @Transactional
+    public CurationCreateResult saveCuration(Long userId, CurationReq req) {
 
 
         // 발행
          if(!req.isDrafted()){
-             return publishNewCuration(userId, req);
+             return CurationCreateResult.from(publishNewCuration(userId, req),  SuccessCode.CURATION_PUBLISH_SUCCESS);
         }
          else{
-             return draftNewCuration(userId,req);
+             return CurationCreateResult.from(draftNewCuration(userId, req),  SuccessCode.CURATION_DRAFT_SUCCESS);
          }
 
     }
-    // -- 큐레이션 등록 --
-    @Transactional
+    // 큐레이션 발행
     public CurationCreateRes publishNewCuration(Long userId, CurationReq req) {
 
 
@@ -54,8 +54,7 @@ public class CurationCreateService {
     }
 
 
-     // -- 큐레이션 임시저장 --
-    @Transactional
+     // 큐레이션 임시저장
     public CurationCreateRes draftNewCuration(Long userId, CurationReq req) {
 
 
