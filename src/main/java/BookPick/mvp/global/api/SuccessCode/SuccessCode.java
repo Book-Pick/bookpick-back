@@ -35,10 +35,13 @@ public enum SuccessCode {
     READING_PREFERENCE_DELETE_SUCCESS(HttpStatus.CREATED, "독서 취향을 성공적으로 삭제하였습니다."),
 
     // -- Curation --
-    CURATION_REGISTER_SUCCESS(HttpStatus.CREATED, "큐레이션을 성공적으로 등록하였습니다."),
+    CURATION_PUBLISH_SUCCESS(HttpStatus.CREATED, "큐레이션을 성공적으로 발행하였습니다."),
+    DRAFTED_CURATION_PUBLISH_SUCCESS(HttpStatus.OK, "임시저장 된 큐레이션을 성공적으로 발행하였습니다."),
+    CURATION_DRAFT_SUCCESS(HttpStatus.CREATED, "큐레이션을 성공적으로 임시저장하였습니다."),
+    CURATION_DRAFT_UPDATE_SUCCESS(HttpStatus.OK, "큐레이션 임시저장을 성공적으로 수정하였습니다."),
     CURATION_GET_SUCCESS(HttpStatus.OK, "큐레이션을 성공적으로 단건 조회하였습니다."),
     CURATION_LIST_GET_SUCCESS(HttpStatus.OK, "큐레이션을 성공적으로 리스트 조회하였습니다."),
-    CURATION_UPDATE_SUCCESS(HttpStatus.OK, "큐레이션을 성공적으로 수정하였습니다.");
+    CURATION_UPDATE_SUCCESS(HttpStatus.OK, "발행된 큐레이션을 성공적으로 수정하였습니다.");
 
     private final HttpStatus status;
     private final String message;

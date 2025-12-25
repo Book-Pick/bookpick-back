@@ -39,7 +39,8 @@ public enum ErrorCode implements ErrorCodeInterface {
 
     // -- Curation --
     CURATION_NOT_FOUND(HttpStatus.NOT_FOUND, "해당 큐레이션을 찾을 수 없습니다."),
-    CURATION_ACCESS_DENIED(HttpStatus.FORBIDDEN, "큐레이션 접근 권한이 없습니다.");
+    CURATION_ACCESS_DENIED(HttpStatus.FORBIDDEN, "큐레이션 접근 권한이 없습니다."),
+    CurationAlreadyPublishedException(HttpStatus.BAD_REQUEST, "이미 발행된 큐레이션 입니다.");
 
     private final HttpStatus status;
     private final String message;

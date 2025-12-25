@@ -1,4 +1,4 @@
-package BookPick.mvp.domain.curation.controller.base.read;
+package BookPick.mvp.domain.curation.controller.read;
 
 import BookPick.mvp.domain.auth.service.CustomUserDetails;
 import BookPick.mvp.domain.curation.dto.base.get.one.CurationGetRes;

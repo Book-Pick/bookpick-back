@@ -4,10 +4,12 @@ package BookPick.mvp.domain.curation.controller.base;
 import BookPick.mvp.domain.auth.service.CustomUserDetails;
 import BookPick.mvp.domain.curation.dto.base.CurationReq;
 import BookPick.mvp.domain.curation.dto.base.create.CurationCreateRes;
+import BookPick.mvp.domain.curation.dto.base.create.CurationCreateResult;
 import BookPick.mvp.domain.curation.dto.base.update.CurationUpdateReq;
 import BookPick.mvp.domain.curation.dto.base.update.CurationUpdateRes;
-import BookPick.mvp.domain.curation.service.base.CurationService;
+import BookPick.mvp.domain.curation.dto.base.update.CurationUpdateResult;
 import BookPick.mvp.domain.curation.service.base.create.CurationCreateService;
+import BookPick.mvp.domain.curation.service.base.update.CurationUpdateService;
 import BookPick.mvp.domain.user.util.CurrentUserCheck;
 import BookPick.mvp.global.api.ApiResponse;
 import BookPick.mvp.global.api.SuccessCode.SuccessCode;
@@ -25,29 +27,29 @@ import io.swagger.v3.oas.annotations.Operation;
 @RequiredArgsConstructor
 public class CurationController {
 
-    private final CurationService curationService;
     private final CurationCreateService curationCreateService;
+    private final CurationUpdateService curationUpdateService;
 
     private final CurrentUserCheck currentUserCheck;
 
     @Operation(summary = "큐레이션 생성(일반 및 임시저장)", description = "새 큐레이션을 생성합니다 drafted가 true면 임시저장", tags = {"Curation"})
     @PostMapping
-    public ResponseEntity<ApiResponse<CurationCreateRes>> create(
+    public ResponseEntity<ApiResponse<CurationCreateRes>> createCuration(
             @Valid @RequestBody CurationReq req,
             @AuthenticationPrincipal CustomUserDetails currentUser) {
 
         currentUserCheck.validateLoginUser(currentUser);
 
-        CurationCreateRes res = curationCreateService.createCuration(currentUser.getId(), req);
+        CurationCreateResult result = curationCreateService.saveCuration(currentUser.getId(), req);
         return ResponseEntity.status(HttpStatus.CREATED)
-                .body(ApiResponse.success(SuccessCode.CURATION_REGISTER_SUCCESS, res));
+                .body(ApiResponse.success(result.successCode(), result.curationCreateRes()));
     }
 
 
 
 
 
-    @Operation(summary = "큐레이션 수정", description = "큐레이션 정보를 수정", tags = {"Curation"})
+    @Operation(summary = "큐레이션 수정 (재발행 및 재 임시저장", description = "큐레이션 정보를 수정", tags = {"Curation"})
     @PatchMapping("/{curationId}")
     public ResponseEntity<ApiResponse<CurationUpdateRes>> updateCuration(
             @PathVariable Long curationId,
@@ -55,10 +57,11 @@ public class CurationController {
             @AuthenticationPrincipal CustomUserDetails currentUser) {
 
         currentUserCheck.validateLoginUser(currentUser);
-        
-        CurationUpdateRes res = curationService.curationUpdate(currentUser.getId(), curationId, req);
-        return ResponseEntity.ok()
-                .body(ApiResponse.success(SuccessCode.CURATION_UPDATE_SUCCESS, res));
+
+        CurationUpdateResult curationUpdateResult = curationUpdateService.updateCuration(currentUser.getId(), curationId, req);
+
+         return ResponseEntity.ok()
+                .body(ApiResponse.success(curationUpdateResult.successCode(), curationUpdateResult.curationUpdateRes()));
     }
 
 

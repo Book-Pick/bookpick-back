@@ -4,9 +4,10 @@ package BookPick.mvp.domain.curation.dto.base.update;
 import BookPick.mvp.domain.curation.entity.Curation;
 
 public record CurationUpdateRes(
-        Long id
+        Long id,
+        boolean isDrafted
 ) {
     public static CurationUpdateRes from(Curation curation) {
-        return new CurationUpdateRes(curation.getId());
+        return new CurationUpdateRes(curation.getId(), curation.getIsDrafted());
     }
 }
