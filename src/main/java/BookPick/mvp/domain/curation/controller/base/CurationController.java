@@ -6,8 +6,9 @@ import BookPick.mvp.domain.curation.dto.base.CurationReq;
 import BookPick.mvp.domain.curation.dto.base.create.CurationCreateRes;
 import BookPick.mvp.domain.curation.dto.base.update.CurationUpdateReq;
 import BookPick.mvp.domain.curation.dto.base.update.CurationUpdateRes;
-import BookPick.mvp.domain.curation.service.base.CurationService;
+import BookPick.mvp.domain.curation.dto.base.update.UpdateResult;
 import BookPick.mvp.domain.curation.service.base.create.CurationCreateService;
+import BookPick.mvp.domain.curation.service.base.update.CurationUpdateService;
 import BookPick.mvp.domain.user.util.CurrentUserCheck;
 import BookPick.mvp.global.api.ApiResponse;
 import BookPick.mvp.global.api.SuccessCode.SuccessCode;
@@ -25,8 +26,8 @@ import io.swagger.v3.oas.annotations.Operation;
 @RequiredArgsConstructor
 public class CurationController {
 
-    private final CurationService curationService;
     private final CurationCreateService curationCreateService;
+    private final CurationUpdateService curationUpdateService;
 
     private final CurrentUserCheck currentUserCheck;
 
@@ -38,9 +39,9 @@ public class CurationController {
 
         currentUserCheck.validateLoginUser(currentUser);
 
-        CurationCreateRes res = curationCreateService.publishCuration(currentUser.getId(), req);
+        CurationCreateRes res = curationCreateService.saveCuration(currentUser.getId(), req);
         return ResponseEntity.status(HttpStatus.CREATED)
-                .body(ApiResponse.success(SuccessCode.CURATION_REGISTER_SUCCESS, res));
+                .body(ApiResponse.success(SuccessCode.CURATION_PUBLISH_SUCCESS, res));
     }
 
 
@@ -55,10 +56,11 @@ public class CurationController {
             @AuthenticationPrincipal CustomUserDetails currentUser) {
 
         currentUserCheck.validateLoginUser(currentUser);
-        
-        CurationUpdateRes res = curationService.curationUpdate(currentUser.getId(), curationId, req);
-        return ResponseEntity.ok()
-                .body(ApiResponse.success(SuccessCode.CURATION_UPDATE_SUCCESS, res));
+
+        UpdateResult updateResult = curationUpdateService.updateCuration(currentUser.getId(), curationId, req);
+
+         return ResponseEntity.ok()
+                .body(ApiResponse.success(updateResult.successCode(), updateResult.curationUpdateRes()));
     }
 
 

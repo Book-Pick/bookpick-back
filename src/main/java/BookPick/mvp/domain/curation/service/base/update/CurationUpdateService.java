@@ -5,14 +5,17 @@ import BookPick.mvp.domain.auth.service.CustomUserDetails;
 import BookPick.mvp.domain.curation.dto.base.get.one.CurationGetRes;
 import BookPick.mvp.domain.curation.dto.base.update.CurationUpdateReq;
 import BookPick.mvp.domain.curation.dto.base.update.CurationUpdateRes;
+import BookPick.mvp.domain.curation.dto.base.update.UpdateResult;
 import BookPick.mvp.domain.curation.entity.Curation;
 import BookPick.mvp.domain.curation.entity.CurationLike;
 import BookPick.mvp.domain.curation.exception.common.CurationAccessDeniedException;
+import BookPick.mvp.domain.curation.exception.common.CurationAlreadyPublishedException;
 import BookPick.mvp.domain.curation.exception.common.CurationNotFoundException;
 import BookPick.mvp.domain.curation.repository.CurationRepository;
 import BookPick.mvp.domain.curation.repository.like.CurationLikeRepository;
 import BookPick.mvp.domain.user.repository.UserRepository;
 import BookPick.mvp.domain.user.service.subscribe.CurationSubscribeService;
+import BookPick.mvp.global.api.SuccessCode.SuccessCode;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -29,34 +32,68 @@ public class CurationUpdateService {
     private final UserRepository userRepository;
     private final CurationSubscribeService curationSubscribeService;
 
+    @Transactional
+    public UpdateResult updateCuration(Long userId, Long curationId, CurationUpdateReq req) {
+        Curation curation = curationRepository.findById(curationId)
+                .orElseThrow(CurationNotFoundException::new);
 
-    public CurationGetRes updateCuration(Long curationId, CustomUserDetails user, HttpServletRequest req) {
+        if (curation.getIsDrafted()) {
+            if (req.isDrafted()) {
+                // 임시저장 -> 임시저장
+                return UpdateResult.from(reDraftCuration(userId, curation, req), SuccessCode.CURATION_DRAFT_UPDATE_SUCCESS);
+            } else {
+                // 임시저장 -> 발행본
+                return UpdateResult.from(publishDraftedCuration(userId, curation, req), SuccessCode.DRAFTED_CURATION_PUBLISH_SUCCESS);
+            }
+        }
+
+
+        // 발행본 -> 발행본
+        else {
+            if (!req.isDrafted()) {
+                return UpdateResult.from(modifyPublishedCuration(userId, curation, req), SuccessCode.CURATION_UPDATE_SUCCESS);
+            } else {
+                throw new CurationAlreadyPublishedException();
+            }
+        }
 
     }
 
 
 
-    // 임시저장 -> 발행
-    @Transactional
-    public CurationUpdateRes curationUpdate(Long userId, Long curationId, CurationUpdateReq req) {
-        Curation curation = curationRepository.findById(curationId)
-                .orElseThrow(CurationNotFoundException::new);
+    /*---------------------------------------------------------------------------------------------------*/
+
+    // 임시저장 -> 임시저장
+    public CurationUpdateRes reDraftCuration(Long userId, Curation curation, CurationUpdateReq req) {
+
+        if (!curation.getUser().getId().equals(userId)) {
+            throw new CurationAccessDeniedException();
+        }
+
+
+        curation.curationUpdate(req);   // 임시저장 및 발행 처리도 가능
+        curation.draft();
+
+        return CurationUpdateRes.from(curation);
+    }
+
+    // 임시저장 -> 발행본
+    public CurationUpdateRes publishDraftedCuration(Long userId, Curation curation, CurationUpdateReq req) {
+
 
         if (!curation.getUser().getId().equals(userId)) {
             throw new CurationAccessDeniedException();
         }
 
         curation.curationUpdate(req);   // 임시저장 및 발행 처리도 가능
+        curation.publish();
 
         return CurationUpdateRes.from(curation);
     }
 
+    // 발행 -> 발행
+    public CurationUpdateRes modifyPublishedCuration(Long userId, Curation curation, CurationUpdateReq req) {
 
-    // 임시저장 -> 발행
-    @Transactional
-    public CurationUpdateRes curationUpdate(Long userId, Long curationId, CurationUpdateReq req) {
-        Curation curation = curationRepository.findById(curationId)
-                .orElseThrow(CurationNotFoundException::new);
 
         if (!curation.getUser().getId().equals(userId)) {
             throw new CurationAccessDeniedException();

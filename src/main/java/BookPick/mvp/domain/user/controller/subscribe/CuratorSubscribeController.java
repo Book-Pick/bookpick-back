@@ -4,7 +4,6 @@ import BookPick.mvp.domain.auth.service.CustomUserDetails;
 import BookPick.mvp.domain.user.dto.subscribe.CuratorSubscribeReq;
 import BookPick.mvp.domain.user.dto.subscribe.CuratorSubscribeRes;
 import BookPick.mvp.domain.user.dto.subscribe.SubscribedCuratorPageRes;
-import BookPick.mvp.domain.curation.service.base.CurationService;
 import BookPick.mvp.domain.user.enums.curator.CuratorSuccessCode;
 import BookPick.mvp.domain.user.service.subscribe.CurationSubscribeService;
 import BookPick.mvp.domain.user.util.CurrentUserCheck;
@@ -22,7 +21,6 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 public class CuratorSubscribeController {
 
-    private final CurationService curationService;
     private final CurrentUserCheck currentUserCheck;
     private final CurationSubscribeService curationSubscribeService;
 
