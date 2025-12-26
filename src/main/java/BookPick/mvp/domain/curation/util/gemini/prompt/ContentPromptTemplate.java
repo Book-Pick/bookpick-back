@@ -5,7 +5,7 @@ import lombok.Getter;
 
 @Getter
 @Builder
-public class ContentPromptTemplate {
+public class ContentPromptTemplate {    //
 
     private String mbti;
     private String mood;

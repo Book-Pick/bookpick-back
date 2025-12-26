@@ -40,10 +40,10 @@ public class CurationListController {
         currentUserCheck.validateLoginUser(currentUser);
 
 
-        // 1. SortType 변환
+        // 1. 분류 기준 정하고
         SortType sortType = SortType.fromValue(sort);
 
-        // 2. 큐레이션 리스트 반환
+        // 2. 큐레이션 리스트 얻기
         CurationListGetRes curationListGetRes = curationListService.getCurations(sortType, cursor, size, drafted, currentUser.getId());
 
         if(curationListGetRes.size() == 0 ){

@@ -48,7 +48,7 @@ public class GeminiService {
         String recommendedStyle = parsed[3].trim();
 
         // 3. DB에서 큐레이션 찾기
-        List<Curation> curations = curationRepository.findByRecommendation(
+        List<Curation> curations = curationRepository.findPublishedCurationsByRecommendation(
                 List.of(recommendedMood),
                 List.of(recommendedGenre),
                 List.of(recommendedKeyword),

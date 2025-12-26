@@ -35,7 +35,7 @@ public class CurationListService {
     // 1. 큐레이션 리스트 조회
     public CurationListGetRes getCurations(SortType sortType, Long cursor, int size, boolean drafted, Long userId) {
 
-        // 1. 내 취향 유사도 순 O
+        // 1. 내 취향 유사도 순
         if (sortType == SortType.SORT_SIMILARITY) {
 
             // 1. 유저 독서 취향 반환
@@ -84,7 +84,7 @@ public class CurationListService {
             return CurationListGetRes.from(sortType, content, hasNext, nextCursor);
         }
 
-        // 2) 내 취향 유사도순 X
+        // 2) 내 취향 유사도순이 아닌 경우
         List<Curation> curations = pageHandler.getCurationsPage(userId, sortType, cursor, size, null);
         CursorPage<Curation> page = pageHandler.createCursorPage(curations, size);
 

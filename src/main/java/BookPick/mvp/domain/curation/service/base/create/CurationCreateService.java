@@ -37,6 +37,7 @@ public class CurationCreateService {
              return CurationCreateResult.from(draftNewCuration(userId, req),  SuccessCode.CURATION_DRAFT_SUCCESS);
          }
 
+
     }
     // 큐레이션 발행
     public CurationCreateRes publishNewCuration(Long userId, CurationReq req) {
