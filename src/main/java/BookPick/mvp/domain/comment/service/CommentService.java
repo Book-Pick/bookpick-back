@@ -72,7 +72,7 @@ public class CommentService {
     // -- Read --
     @Transactional(readOnly = true)
     public CommentListRes getCommentList(Long curationId, int page, int size) {
-        Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "createdAt"));
+        Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.ASC, "createdAt"));
         Page<Comment> commentPage = commentRepository.findByCurationId(curationId, pageable);
 
         List<CommentListRes.CommentSummary> commentList = commentPage.getContent().stream()
