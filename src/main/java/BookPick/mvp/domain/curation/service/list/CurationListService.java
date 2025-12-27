@@ -85,7 +85,7 @@ public class CurationListService {
         }
 
         // 2) 내 취향 유사도순이 아닌 경우
-        List<Curation> curations = pageHandler.getCurationsPage(userId, sortType, cursor, size, null);
+        List<Curation> curations = pageHandler.getCurationsPage(userId, sortType, cursor, size, null, drafted);
         CursorPage<Curation> page = pageHandler.createCursorPage(curations, size);
 
 

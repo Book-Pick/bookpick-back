@@ -5,6 +5,7 @@ import BookPick.mvp.domain.ReadingPreference.enums.resCode.PreferenceSuccessCode
 import BookPick.mvp.domain.auth.service.CustomUserDetails;
 import BookPick.mvp.domain.curation.dto.base.get.list.CurationListGetRes;
 import BookPick.mvp.domain.curation.enums.common.SortType;
+import BookPick.mvp.domain.curation.exception.common.CurationDraftOwnerException;
 import BookPick.mvp.domain.curation.service.list.CurationListService;
 import BookPick.mvp.domain.user.util.CurrentUserCheck;
 import BookPick.mvp.global.api.ApiResponse;
@@ -33,7 +34,7 @@ public class CurationListController {
             @RequestParam(defaultValue = "latest") String sort,
             @RequestParam(required = false) Long cursor,
             @RequestParam(defaultValue = "10") int size,
-            @RequestParam(defaultValue = "false") boolean drafted,
+            @RequestParam(defaultValue = "false") boolean draft,
             @AuthenticationPrincipal @Valid CustomUserDetails currentUser
     ) {
 
@@ -43,18 +44,21 @@ public class CurationListController {
         // 1. 분류 기준 정하고
         SortType sortType = SortType.fromValue(sort);
 
-        // 2. 큐레이션 리스트 얻기
-        CurationListGetRes curationListGetRes = curationListService.getCurations(sortType, cursor, size, drafted, currentUser.getId());
+        if (draft && !sortType.equals(SortType.SORT_MY)) {
+            throw new CurationDraftOwnerException();
+        }
 
-        if(curationListGetRes.size() == 0 ){
+        // 2. 큐레이션 리스트 얻기
+        CurationListGetRes curationListGetRes = curationListService.getCurations(sortType, cursor, size, draft, currentUser.getId());
+
+        if (curationListGetRes.size() == 0) {
             return ResponseEntity.ok()
-                .body(ApiResponse.success(PreferenceSuccessCode.PREFERENCE_NOT_FOUND, curationListGetRes));
+                    .body(ApiResponse.success(PreferenceSuccessCode.PREFERENCE_NOT_FOUND, curationListGetRes));
         }
 
         return ResponseEntity.ok()
                 .body(ApiResponse.success(SuccessCode.CURATION_LIST_GET_SUCCESS, curationListGetRes));
     }
-
 
 
 

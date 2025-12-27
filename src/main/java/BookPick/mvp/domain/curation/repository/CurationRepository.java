@@ -14,22 +14,35 @@ import java.util.Optional;
 
 public interface CurationRepository extends JpaRepository<Curation, Long> {
 
-    List<Curation> findByUserId(Long userId, Pageable pageable);
+    List<Curation> findByUserIdAndIsDraftedOrderByCreatedAtDesc(Long userId, boolean isDrafted, Pageable pageable);
 
 
     // 사이즈만큼 최신순으로 불러오는 함수
     List<Curation> findAllByOrderByCreatedAtDesc(Pageable pageable);
 
+    // Drafted 여부에 따라 가져옴
+    List<Curation> findAllByIsDraftedOrderByCreatedAtDesc(Boolean isDrafted, Pageable pageable);
 
-    @Query("SELECT c FROM Curation c WHERE c.id <= :cursor ORDER BY c.createdAt DESC, c.id DESC")
-    List<Curation> findLatestCurations(@Param("cursor") Long cursor, Pageable pageable);
 
-    @Query("SELECT c FROM Curation c " +
-            "WHERE (:cursor IS NULL) " +
-            "   OR c.popularityScore <= (SELECT c2.popularityScore FROM Curation c2 WHERE c2.id = :cursor) " +
-            "   OR (c.popularityScore = (SELECT c2.popularityScore FROM Curation c2 WHERE c2.id = :cursor) AND c.id < :cursor) " +
-            "ORDER BY c.popularityScore DESC, c.id DESC")
-    List<Curation> findCurationsByPopularity(@Param("cursor") Long cursor, Pageable pageable);
+    @Query("SELECT c FROM Curation c WHERE c.id <= :cursor and c.isDrafted = :isDrafted order BY c.createdAt DESC, c.id DESC")
+    List<Curation> findLatestCurations(@Param("cursor") Long cursor,
+                                       @Param("isDrafted") boolean isDrafted,
+                                       Pageable pageable);
+
+    // 인기순
+    @Query("""
+                SELECT c FROM Curation c
+                WHERE c.isDrafted = false AND
+                      (:cursorScore IS NULL 
+                       OR c.popularityScore < :cursorScore
+                       OR (c.popularityScore = :cursorScore AND c.id < :cursorId))
+                ORDER BY c.popularityScore DESC, c.id DESC
+            """)
+    List<Curation> findCurationsByPopularity(
+            @Param("cursorScore") Integer cursorScore,
+            @Param("cursorId") Long cursorId,
+            Pageable pageable
+    );
 
     // Gemini 추천 결과로 큐레이션 찾기
     @Query("""
@@ -50,12 +63,7 @@ public interface CurationRepository extends JpaRepository<Curation, Long> {
     );
 
 
-
-
     Optional<CurationLike> findByUserIdAndId(Long userId, Long id);
-
-
-    Long user(User user);
 
 
     // 7.
@@ -63,5 +71,16 @@ public interface CurationRepository extends JpaRepository<Curation, Long> {
     Optional<Curation> findByIdWithUser(@Param("id") Long id);
 
     List<Curation> findByIdIn(Collection<Long> ids);
+
+
+    // Like (실제 발행된 것만)
+    @Query("""
+                select c from Curation c
+                join CurationLike cl on  cl.curation = c
+                where c.isDrafted is false and c.user.id = :userId
+                order by cl.createdAt desc
+            """)
+    List<Curation> findLikedCurationsByUser(@Param("userId") Long userId, Pageable pageable);
+
 }
 
