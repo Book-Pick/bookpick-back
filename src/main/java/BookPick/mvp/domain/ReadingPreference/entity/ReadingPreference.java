@@ -82,12 +82,17 @@ public class ReadingPreference {
 
     private LocalDateTime deletedAt;
 
-    public void update(ReadingPreferenceReq req) {
-        if (req.mbti() != null) this.mbti = req.mbti();
+   /* public void update(ReadingPreferenceReq req) {
+//        if (req.mbti() != null) this.mbti = req.mbti();  // mbti null값 허용
+
+
 
         if (req.moods() != null) {
             this.moods.clear();
             this.moods.addAll(req.moods());
+        }
+        else{
+            this.moods.clear();
         }
 
         if (req.readingHabits() != null) {
@@ -109,8 +114,37 @@ public class ReadingPreference {
             this.readingStyles.clear();
             this.readingStyles.addAll(req.readingStyles());
         }
-    }
+    }*/
 
+    public void update(ReadingPreferenceReq req) {
+
+        this.mbti = req.mbti();
+
+        this.moods.clear();
+        if (req.moods() != null) {
+            this.moods.addAll(req.moods());
+        }
+
+        this.readingHabits.clear();
+        if (req.readingHabits() != null) {
+            this.readingHabits.addAll(req.readingHabits());
+        }
+
+        this.genres.clear();
+        if (req.genres() != null) {
+            this.genres.addAll(req.genres());
+        }
+
+        this.keywords.clear();
+        if (req.keywords() != null) {
+            this.keywords.addAll(req.keywords());
+        }
+
+        this.readingStyles.clear();
+        if (req.readingStyles() != null) {
+            this.readingStyles.addAll(req.readingStyles());
+        }
+    }
 
 
     public static ReadingPreference clearPreferences(User user) {

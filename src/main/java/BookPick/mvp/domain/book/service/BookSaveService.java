@@ -38,11 +38,16 @@ public class BookSaveService {
                 });
     }
 
+
+    // ------------------------위에거 안쓰임
+
     // 3. BookDto 리스트
     public Set<Book> saveBookIfNotExistsDto(Set<BookDto> bookDtos) {
         Set<Book> books= new HashSet<>();
-        for (BookDto dto : bookDtos) {
-            books.add(saveBookIfNotExistsDto(dto));
+        if(bookDtos != null) {           // BookDto가 Null이 아닐 경우 책 저장 진행
+            for (BookDto dto : bookDtos) {
+                books.add(saveBookIfNotExistsDto(dto));
+            }
         }
 
         return books;

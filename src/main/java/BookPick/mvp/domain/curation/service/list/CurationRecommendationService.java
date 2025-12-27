@@ -17,6 +17,7 @@ public class CurationRecommendationService {
 
     public List<CurationMatchResult> recommend(ReadingPreferenceInfo preferenceInfo) {
 
+        //
         return geminiService.recommendCurationsWithMatch(
 
 

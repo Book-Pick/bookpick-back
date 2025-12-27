@@ -50,8 +50,10 @@ public class AuthorSaveService {
     // 5.AuthorDto 리스트
     public Set<Author> saveAuthorIfNotExistsDto(Set<AuthorDto> authorDtos) {
         Set<Author> authors = new HashSet<>();
-        for (AuthorDto dto : authorDtos) {
-            authors.add(saveAuthorIfNotExistsDto(dto));
+        if(authorDtos != null) {
+            for (AuthorDto dto : authorDtos) {
+                authors.add(saveAuthorIfNotExistsDto(dto));
+            }
         }
 
         return authors;
