@@ -126,6 +126,8 @@ public class CommentService {
         Comment comment = commentRepository.findById(commentId)
                 .orElseThrow(CommentNotFoundException::new);
 
+
+
         commentRepository.delete(comment);
         curation.decreaseCommentCount();
 
