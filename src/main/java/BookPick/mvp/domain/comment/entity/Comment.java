@@ -10,6 +10,8 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
@@ -27,6 +29,10 @@ public class Comment {
     @ManyToOne
     @JoinColumn(name = "parent_comment_id")
     private Comment parent;
+
+    // 자식 댓글 관계
+    @OneToMany(mappedBy = "parent", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Comment> children = new ArrayList<>();
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "curation_id")
