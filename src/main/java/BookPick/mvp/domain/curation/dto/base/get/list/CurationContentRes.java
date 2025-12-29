@@ -55,8 +55,8 @@ public record CurationContentRes(
 
                 new ThumbnailRes(curation.getThumbnailUrl(), curation.getThumbnailColor()),
                 curation.getReview(),
-                BookResInCuration.from(curation.getTitle(), curation.getBookAuthor(), curation.getBookIsbn()),
-
+//                BookResInCuration.from(curation.getTitle(), curation.getBookAuthor(), curation.getBookIsbn()),
+                null,
                 curation.getLikeCount(),
                 curation.getCommentCount(),
                 curation.getViewCount(),
