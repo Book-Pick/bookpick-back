@@ -3,7 +3,11 @@ package BookPick.mvp.domain.book.util.kakaoApi;
 import BookPick.mvp.domain.book.dto.search.BookSearchPageRes;
 import BookPick.mvp.domain.book.dto.search.BookSearchReq;
 import BookPick.mvp.domain.book.dto.search.BookSearchRes;
+import BookPick.mvp.domain.curation.entity.Curation;
+import BookPick.mvp.domain.curation.exception.common.CurationNotFoundException;
+import BookPick.mvp.domain.curation.repository.CurationRepository;
 import BookPick.mvp.global.dto.PageInfo;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -19,7 +23,10 @@ import java.util.List;
 import java.util.Map;
 
 @Service
+@RequiredArgsConstructor
 public class BookSearchService {
+    private final CurationRepository curationRepository;
+
 
     @Value("${api.kakao.key}")
     private String kakaoApiKey;
@@ -82,5 +89,46 @@ public class BookSearchService {
 
         // 최종 응답 DTO 반환
         return new BookSearchPageRes(books, pageInfo);
+    }
+
+    public String getBookPurchaseLink(Long curationId) {
+
+         // 큐레이션 조회
+        Curation curation = curationRepository.findById(curationId)
+                .orElseThrow(CurationNotFoundException::new);
+
+        RestTemplate restTemplate = new RestTemplate();
+
+        // 헤더 설정
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("Authorization", "KakaoAK " + kakaoApiKey);
+
+        // 요청 URL 구성
+        UriComponents uri = UriComponentsBuilder.fromHttpUrl(API_URL)
+                .queryParam("query", curation.getBookTitle())
+                .queryParam("page", 1)
+                .queryParam("size", 1)
+                .build();
+
+        HttpEntity<Void> requestEntity = new HttpEntity<>(headers);
+
+        // 카카오 API 호출
+        ResponseEntity<Map> response = restTemplate.exchange(
+                uri.toUriString(),
+                HttpMethod.GET,
+                requestEntity,
+                Map.class
+        );
+
+        // documents 배열 추출
+        List<Map<String, Object>> documents = (List<Map<String, Object>>) response.getBody().get("documents");
+
+        // 첫 번째 결과의 URL 반환
+        if (documents != null && !documents.isEmpty()) {
+            Map<String, Object> firstBook = documents.get(0);
+            return (String) firstBook.get("url");
+        }
+
+        return null;
     }
 }

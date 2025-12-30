@@ -23,10 +23,13 @@ public class BookSearchController {
 
     @Operation(summary = "책 검색", description = "검색어로 책 목록 조회", tags = {"Book Search"})
     @PostMapping("/search")
-    public ResponseEntity<ApiResponse<BookSearchPageRes>> searchBookList(@RequestBody BookSearchReq req){
+    public ResponseEntity<ApiResponse<BookSearchPageRes>> searchBookList(@RequestBody BookSearchReq req) {
         BookSearchPageRes res = bookSearchService.getBookSearchList(req);
 
         return ResponseEntity.status(HttpStatus.OK)
                 .body(ApiResponse.success(SuccessCode.BOOK_LIST_READ_SUCCESS, res));
     }
+
+
+
 }

@@ -27,6 +27,7 @@ public enum SuccessCode {
 
     // -- Book --
     BOOK_LIST_READ_SUCCESS(HttpStatus.OK, "책 목록을 성공적으로 조회하였습니다."),
+    BOOK_LINK_READ_SUCCESS(HttpStatus.OK, "책 구매 링크를 성공적으로 조회하였습니다."),
     READING_PREFERENCE_REGISTER_SUCCESS(HttpStatus.CREATED, "독서 취향을 성공적으로 등록하였습니다."),
 
     // -- Reading Preference --
