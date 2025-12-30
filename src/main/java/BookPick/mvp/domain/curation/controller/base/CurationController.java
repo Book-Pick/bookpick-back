@@ -2,12 +2,16 @@
 package BookPick.mvp.domain.curation.controller.base;
 
 import BookPick.mvp.domain.auth.service.CustomUserDetails;
+import BookPick.mvp.domain.book.util.kakaoApi.BookSearchService;
 import BookPick.mvp.domain.curation.dto.base.CurationReq;
 import BookPick.mvp.domain.curation.dto.base.create.CurationCreateRes;
 import BookPick.mvp.domain.curation.dto.base.create.CurationCreateResult;
 import BookPick.mvp.domain.curation.dto.base.update.CurationUpdateReq;
 import BookPick.mvp.domain.curation.dto.base.update.CurationUpdateRes;
 import BookPick.mvp.domain.curation.dto.base.update.CurationUpdateResult;
+import BookPick.mvp.domain.curation.entity.Curation;
+import BookPick.mvp.domain.curation.exception.common.CurationNotFoundException;
+import BookPick.mvp.domain.curation.repository.CurationRepository;
 import BookPick.mvp.domain.curation.service.base.create.CurationCreateService;
 import BookPick.mvp.domain.curation.service.base.update.CurationUpdateService;
 import BookPick.mvp.domain.user.util.CurrentUserCheck;
@@ -29,6 +33,8 @@ public class CurationController {
 
     private final CurationCreateService curationCreateService;
     private final CurationUpdateService curationUpdateService;
+    private final CurationRepository curationRepository;
+    private final BookSearchService bookSearchService;
 
     private final CurrentUserCheck currentUserCheck;
 
@@ -62,6 +68,29 @@ public class CurationController {
 
          return ResponseEntity.ok()
                 .body(ApiResponse.success(curationUpdateResult.successCode(), curationUpdateResult.curationUpdateRes()));
+    }
+
+    @Operation(
+            summary = "큐레이션의 책 구매 링크 제공",
+            description = "큐레이션 ID로 조회하여 해당 큐레이션의 책 제목으로 카카오 API를 사용해 외부 서점 검색 링크를 제공합니다",
+            tags = {"Curation"}
+    )
+    @GetMapping("/{curationId}/book-link")
+    public ResponseEntity<ApiResponse<String>> getCurationBookPurchaseLink(
+            @PathVariable Long curationId
+    ) {
+        // 큐레이션 조회
+        Curation curation = curationRepository.findById(curationId)
+                .orElseThrow(CurationNotFoundException::new);
+
+        // 책 제목으로 카카오 API 호출하여 첫 번째 결과의 URL 반환
+        String link = bookSearchService.getBookPurchaseLink(curation.getBookTitle());
+
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(ApiResponse.success(
+                        SuccessCode.BOOK_LINK_READ_SUCCESS,
+                        link
+                ));
     }
 
 

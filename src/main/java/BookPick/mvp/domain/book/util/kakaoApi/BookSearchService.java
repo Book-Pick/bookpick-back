@@ -83,4 +83,40 @@ public class BookSearchService {
         // 최종 응답 DTO 반환
         return new BookSearchPageRes(books, pageInfo);
     }
+
+    public String getBookPurchaseLink(String bookTitle) {
+        RestTemplate restTemplate = new RestTemplate();
+
+        // 헤더 설정
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("Authorization", "KakaoAK " + kakaoApiKey);
+
+        // 요청 URL 구성
+        UriComponents uri = UriComponentsBuilder.fromHttpUrl(API_URL)
+                .queryParam("query", bookTitle)
+                .queryParam("page", 1)
+                .queryParam("size", 1)
+                .build();
+
+        HttpEntity<Void> requestEntity = new HttpEntity<>(headers);
+
+        // 카카오 API 호출
+        ResponseEntity<Map> response = restTemplate.exchange(
+                uri.toUriString(),
+                HttpMethod.GET,
+                requestEntity,
+                Map.class
+        );
+
+        // documents 배열 추출
+        List<Map<String, Object>> documents = (List<Map<String, Object>>) response.getBody().get("documents");
+
+        // 첫 번째 결과의 URL 반환
+        if (documents != null && !documents.isEmpty()) {
+            Map<String, Object> firstBook = documents.get(0);
+            return (String) firstBook.get("url");
+        }
+
+        return null;
+    }
 }
