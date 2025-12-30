@@ -33,9 +33,7 @@ public class CurationController {
 
     private final CurationCreateService curationCreateService;
     private final CurationUpdateService curationUpdateService;
-    private final CurationRepository curationRepository;
     private final BookSearchService bookSearchService;
-
     private final CurrentUserCheck currentUserCheck;
 
     @Operation(summary = "큐레이션 생성(일반 및 임시저장)", description = "새 큐레이션을 생성합니다 drafted가 true면 임시저장", tags = {"Curation"})
@@ -77,14 +75,15 @@ public class CurationController {
     )
     @GetMapping("/{curationId}/book-link")
     public ResponseEntity<ApiResponse<String>> getCurationBookPurchaseLink(
-            @PathVariable Long curationId
+            @PathVariable Long curationId,
+            @AuthenticationPrincipal CustomUserDetails currentUser
     ) {
-        // 큐레이션 조회
-        Curation curation = curationRepository.findById(curationId)
-                .orElseThrow(CurationNotFoundException::new);
+
+        currentUserCheck.validateLoginUser(currentUser);
+
 
         // 책 제목으로 카카오 API 호출하여 첫 번째 결과의 URL 반환
-        String link = bookSearchService.getBookPurchaseLink(curation.getBookTitle());
+        String link = bookSearchService.getBookPurchaseLink(curationId);
 
         return ResponseEntity.status(HttpStatus.OK)
                 .body(ApiResponse.success(

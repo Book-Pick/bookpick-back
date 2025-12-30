@@ -3,7 +3,11 @@ package BookPick.mvp.domain.book.util.kakaoApi;
 import BookPick.mvp.domain.book.dto.search.BookSearchPageRes;
 import BookPick.mvp.domain.book.dto.search.BookSearchReq;
 import BookPick.mvp.domain.book.dto.search.BookSearchRes;
+import BookPick.mvp.domain.curation.entity.Curation;
+import BookPick.mvp.domain.curation.exception.common.CurationNotFoundException;
+import BookPick.mvp.domain.curation.repository.CurationRepository;
 import BookPick.mvp.global.dto.PageInfo;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -19,7 +23,10 @@ import java.util.List;
 import java.util.Map;
 
 @Service
+@RequiredArgsConstructor
 public class BookSearchService {
+    private final CurationRepository curationRepository;
+
 
     @Value("${api.kakao.key}")
     private String kakaoApiKey;
@@ -84,7 +91,12 @@ public class BookSearchService {
         return new BookSearchPageRes(books, pageInfo);
     }
 
-    public String getBookPurchaseLink(String bookTitle) {
+    public String getBookPurchaseLink(Long curationId) {
+
+         // 큐레이션 조회
+        Curation curation = curationRepository.findById(curationId)
+                .orElseThrow(CurationNotFoundException::new);
+
         RestTemplate restTemplate = new RestTemplate();
 
         // 헤더 설정
@@ -93,7 +105,7 @@ public class BookSearchService {
 
         // 요청 URL 구성
         UriComponents uri = UriComponentsBuilder.fromHttpUrl(API_URL)
-                .queryParam("query", bookTitle)
+                .queryParam("query", curation.getBookTitle())
                 .queryParam("page", 1)
                 .queryParam("size", 1)
                 .build();

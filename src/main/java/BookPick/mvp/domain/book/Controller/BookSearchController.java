@@ -30,22 +30,6 @@ public class BookSearchController {
                 .body(ApiResponse.success(SuccessCode.BOOK_LIST_READ_SUCCESS, res));
     }
 
-    @Operation(
-            summary = "책 구매 링크 제공",
-            description = "책 제목으로 외부 서점 검색 링크를 제공합니다",
-            tags = {"Book Search"}
-    )
-    @PostMapping("/link")
-    public ResponseEntity<ApiResponse<String>> getBookPurchaseLink(
-            @RequestBody BookSearchReq req
-    ) {
-        String link = bookSearchService.getBookPurchaseLink(req.keyword());
 
-        return ResponseEntity.status(HttpStatus.OK)
-                .body(ApiResponse.success(
-                        SuccessCode.BOOK_LINK_READ_SUCCESS,
-                        link
-                ));
-    }
 
 }
