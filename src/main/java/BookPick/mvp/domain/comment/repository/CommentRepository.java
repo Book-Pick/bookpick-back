@@ -22,7 +22,8 @@ public interface CommentRepository extends JpaRepository<Comment, Long> {
                 ORDER BY cm.createdAt DESC
             """)
     List<Comment> findLatestCommentsByUserId(
-            @Param("userId") Long userId
+            @Param("userId") Long userId,
+            Pageable pageable
     );
 
 }
