@@ -4,6 +4,7 @@ package BookPick.mvp.global.exception;
 import BookPick.mvp.global.api.ApiResponse;
 import BookPick.mvp.global.api.ErrorCode.ErrorCode;
 import BookPick.mvp.global.enums.ErrorCodeInterface;
+import BookPick.mvp.global.enums.SuccessCodeInterface;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;

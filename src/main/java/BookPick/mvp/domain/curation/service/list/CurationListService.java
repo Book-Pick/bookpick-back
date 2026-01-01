@@ -11,14 +11,12 @@ import BookPick.mvp.domain.curation.repository.like.CurationLikeRepository;
 import BookPick.mvp.domain.curation.util.gemini.dto.CurationMatchResult;
 import BookPick.mvp.domain.curation.util.list.Handler.CurationPageHandler;
 import BookPick.mvp.domain.curation.util.list.similarity.CurationMatchResultPagination;
-import BookPick.mvp.domain.ReadingPreference.Exception.UserReadingPreferenceNotExisted;
 import BookPick.mvp.domain.ReadingPreference.repository.ReadingPreferenceRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 

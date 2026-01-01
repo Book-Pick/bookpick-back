@@ -1,6 +1,6 @@
 package BookPick.mvp.domain.ReadingPreference.service;
 
-import BookPick.mvp.domain.ReadingPreference.Exception.WrongReadingPreferenceRequestException;
+import BookPick.mvp.domain.ReadingPreference.Exception.fail.WrongReadingPreferenceRequestException;
 import BookPick.mvp.domain.ReadingPreference.dto.ReadingPreferenceReq;
 import BookPick.mvp.domain.ReadingPreference.enums.filed.*;
 import org.springframework.stereotype.Service;

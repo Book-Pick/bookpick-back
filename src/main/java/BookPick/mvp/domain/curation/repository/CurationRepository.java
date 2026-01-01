@@ -51,11 +51,12 @@ public interface CurationRepository extends JpaRepository<Curation, Long> {
             LEFT JOIN c.genres g
             LEFT JOIN c.keywords k
             LEFT JOIN c.styles s
-            WHERE c.deletedAt IS NULL and c.isDrafted is false
+            WHERE c.deletedAt IS NULL and c.isDrafted is false and c.user.id != :userId
             AND (m IN :moods OR g IN :genres OR k IN :keywords OR s IN :styles)
             ORDER BY c.popularityScore DESC
             """)
     List<Curation> findPublishedCurationsByRecommendation(
+            @Param("userId") Long userId,
             @Param("moods") List<String> moods,
             @Param("genres") List<String> genres,
             @Param("keywords") List<String> keywords,

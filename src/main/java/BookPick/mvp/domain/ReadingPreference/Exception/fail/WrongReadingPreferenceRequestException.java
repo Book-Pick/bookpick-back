@@ -1,4 +1,4 @@
-package BookPick.mvp.domain.ReadingPreference.Exception;
+package BookPick.mvp.domain.ReadingPreference.Exception.fail;
 
 import BookPick.mvp.domain.ReadingPreference.enums.resCode.PreferenceErrorCode;
 import BookPick.mvp.global.exception.BusinessException;
