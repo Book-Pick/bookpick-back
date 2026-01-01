@@ -5,6 +5,7 @@ import BookPick.mvp.domain.curation.util.gemini.dto.CurationMatchResult;
 import BookPick.mvp.domain.curation.util.gemini.prompt.ContentPromptTemplate;
 import BookPick.mvp.domain.curation.util.gemini.service.GeminiService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -15,6 +16,7 @@ public class CurationRecommendationService {
 
     private final GeminiService geminiService;
 
+    @Cacheable(value = "gemini-recommendations", key = "#preferenceInfo.userId()")
     public List<CurationMatchResult> recommend(ReadingPreferenceInfo preferenceInfo) {
 
         //

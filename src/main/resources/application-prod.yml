@@ -11,6 +11,7 @@ spring:
     properties:
       hibernate:
         show_sql: true
+        default_batch_fetch_size: 100  # N+1 방지 (한 번에 100개씩 배치 조회)
 
 logging:
   level:
