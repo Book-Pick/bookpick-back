@@ -41,10 +41,10 @@ public class CurationListService {
             if(!readingPreference.isCompleted()){return CurationListGetRes.ofEmpty(sortType);}
             ReadingPreferenceInfo preferenceInfo = ReadingPreferenceInfo.from(readingPreference);
 
-            // 2. 매칭된 큐레이션 리스트트 조회
+            // 2. 매칭된 큐레이션 리스트 조회 (캐싱됨 - 첫 요청 이후 Gemini 호출 안함)
             List<CurationMatchResult> recommended = curationRecommendationService.recommend(preferenceInfo);
 
-            //3. 매칭된 큐레이션 페이지네이션
+            //3. 매칭된 큐레이션 페이지네이션 (cursor를 offset으로 사용)
             List<CurationMatchResult> paginated = CurationMatchResultPagination.paginate(recommended, cursor, PageRequest.of(0, size + 1));
 
             //4. 유저가 스크롤시, 다음 조회할 값있는지
@@ -54,8 +54,9 @@ public class CurationListService {
             //    더 없으면 그냥 보여줌
             List<CurationMatchResult> contentResults = hasNext ? paginated.subList(0, size) : paginated;
 
-            // 6. 다음 커서 반환
-            Long nextCursor = hasNext ? paginated.get(size).getCuration().getId() : null;
+            // 6. 다음 커서 반환 (offset 기반)
+            int currentOffset = (cursor != null) ? cursor.intValue() : 0;
+            Long nextCursor = hasNext ? (long)(currentOffset + size) : null;
 
             // 7-1. 좋아요 여부 계산을 위한 큐레이션 ID 목록 추출
             List<Long> curationIds = contentResults.stream()
