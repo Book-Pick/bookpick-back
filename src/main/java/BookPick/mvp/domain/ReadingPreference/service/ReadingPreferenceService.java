@@ -1,7 +1,7 @@
 package BookPick.mvp.domain.ReadingPreference.service;
 
-import BookPick.mvp.domain.ReadingPreference.Exception.AlreadyRegisteredReadingPreferenceException;
-import BookPick.mvp.domain.ReadingPreference.Exception.UserReadingPreferenceNotExisted;
+import BookPick.mvp.domain.ReadingPreference.Exception.fail.AlreadyRegisteredReadingPreferenceException;
+import BookPick.mvp.domain.ReadingPreference.Exception.fail.UserReadingPreferenceNotExisted;
 import BookPick.mvp.domain.ReadingPreference.dto.ETC.Delete.ReadingPreferenceDeleteRes;
 import BookPick.mvp.domain.ReadingPreference.dto.ReadingPreferenceReq;
 import BookPick.mvp.domain.ReadingPreference.dto.ReadingPreferenceRes;

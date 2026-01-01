@@ -20,6 +20,9 @@ public class CurationRecommendationService {
         //
         return geminiService.recommendCurationsWithMatch(
 
+                // 유저 ID
+                preferenceInfo.userId(),
+
 
                 // 1. 제미나이 프롬프트 생성
                 ContentPromptTemplate.builder()

@@ -26,6 +26,7 @@ public enum CurationSuccessCode implements SuccessCodeInterface {
     CURATION_LIST_DELETE_SUCCESS(HttpStatus.OK, "다수의 큐레이션을 성공적으로 삭제하였습니다.");
 
 
+    // 조회
 
 
 

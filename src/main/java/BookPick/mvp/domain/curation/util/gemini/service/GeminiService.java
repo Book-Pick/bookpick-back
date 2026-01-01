@@ -34,7 +34,7 @@ public class GeminiService {
     }
 
     @Transactional(readOnly = true)
-    public List<CurationMatchResult> recommendCurationsWithMatch(ContentPromptTemplate contentTemplate) {
+    public List<CurationMatchResult> recommendCurationsWithMatch(Long userId, ContentPromptTemplate contentTemplate) {
 
 
         // 1. Gemini에게 추천 받기
@@ -49,6 +49,7 @@ public class GeminiService {
 
         // 3. DB에서 큐레이션 찾기
         List<Curation> curations = curationRepository.findPublishedCurationsByRecommendation(
+                userId,
                 List.of(recommendedMood),
                 List.of(recommendedGenre),
                 List.of(recommendedKeyword),
