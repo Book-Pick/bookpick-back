@@ -44,7 +44,7 @@ public interface CurationRepository extends JpaRepository<Curation, Long> {
             Pageable pageable
     );
 
-    // Gemini 추천 결과로 큐레이션 찾기
+    // Gemini 추천 결과로 큐레이션 찾기 (Batch Fetch로 N+1 방지)
     @Query("""
             SELECT DISTINCT c FROM Curation c
             LEFT JOIN c.moods m
