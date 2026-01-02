@@ -57,7 +57,7 @@ public class CurationLikeService {
         else {
             curationLikeRepository.delete(opt.get());
 
-            if (curation.getLikeCount() >= 0) {
+            if (curation.getLikeCount() > 0) {
                 curation.setLikeCount(curation.getLikeCount() - 1);
             }
 
