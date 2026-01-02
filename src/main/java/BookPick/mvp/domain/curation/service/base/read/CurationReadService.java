@@ -32,7 +32,7 @@ public class CurationReadService {
 
 
     // -- 큐레이션 단건 조회 --
-    @Transactional
+    @Transactional(readOnly = true)
     public CurationGetRes findCuration(Long curationId, CustomUserDetails user, HttpServletRequest req, boolean isEdit) {
         boolean isLikedCuration = false;
         boolean isSubscribedCurator = false;
