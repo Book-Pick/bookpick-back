@@ -43,7 +43,7 @@ public class CommentService {
         User user = userRepository.findById(userId)
                 .orElseThrow(UserNotFoundException::new);
 
-        Curation curation = curationRepository.findById(curationId)
+        Curation curation = curationRepository.findByIdWithLock(curationId)
                 .orElseThrow(CurationNotFoundException::new);
 
         Comment parent = null;
@@ -63,7 +63,7 @@ public class CommentService {
                 .build();
 
         Comment saved = commentRepository.save(comment);
-        curation.increaseCommentCount();
+        curation.increaseCommentCount();    // curation = post
 
         return CommentCreateRes.from(saved);
     }
@@ -120,7 +120,7 @@ public class CommentService {
     // -- Delete --
     @Transactional
     public CommentDeleteRes deleteComment(Long curationId, Long commentId) {
-        Curation curation = curationRepository.findById(curationId)
+        Curation curation = curationRepository.findByIdWithLock(curationId)
                 .orElseThrow(CurationNotFoundException::new);
 
         Comment comment = commentRepository.findById(commentId)

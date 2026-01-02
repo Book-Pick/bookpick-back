@@ -27,7 +27,7 @@ public class CurationLikeService {
     public boolean CurationLikeOrUnlike(Long userId, Long curationId) {
 
         // 1. 포스트 아이디 얻기
-        Curation curation = curationRepository.findById(curationId)
+        Curation curation = curationRepository.findByIdWithLock(curationId)
                 .orElseThrow(CurationNotFoundException::new);
         // 2. 유저 아이디 얻기
         User user = userRepository.findById(userId)

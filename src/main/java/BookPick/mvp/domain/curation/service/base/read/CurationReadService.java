@@ -38,7 +38,7 @@ public class CurationReadService {
         boolean isSubscribedCurator = false;
         CurationGetRes res;
 
-        Curation curation = curationRepository.findByIdWithUser(curationId)
+        Curation curation = curationRepository.findByIdWithUserAndLock(curationId)
                 .orElseThrow(CurationNotFoundException::new);
 
         curation.increaseViewCount();   // 큐레이션 조회수 +1
