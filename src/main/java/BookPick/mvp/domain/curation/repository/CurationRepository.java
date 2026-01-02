@@ -3,8 +3,10 @@ package BookPick.mvp.domain.curation.repository;
 import BookPick.mvp.domain.curation.entity.Curation;
 import BookPick.mvp.domain.curation.entity.CurationLike;
 import BookPick.mvp.domain.user.entity.User;
+import jakarta.persistence.LockModeType;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Lock;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
@@ -82,6 +84,16 @@ public interface CurationRepository extends JpaRepository<Curation, Long> {
                 order by cl.createdAt desc
             """)
     List<Curation> findLikedCurationsByUser(@Param("userId") Long userId, Pageable pageable);
+
+    // Pessimistic lock for preventing deadlocks when updating comment count
+    @Lock(LockModeType.PESSIMISTIC_WRITE)
+    @Query("SELECT c FROM Curation c WHERE c.id = :id")
+    Optional<Curation> findByIdWithLock(@Param("id") Long id);
+
+    // Pessimistic lock with user join for view count updates
+    @Lock(LockModeType.PESSIMISTIC_WRITE)
+    @Query("SELECT c FROM Curation c JOIN FETCH c.user WHERE c.id = :id")
+    Optional<Curation> findByIdWithUserAndLock(@Param("id") Long id);
 
 }
 
