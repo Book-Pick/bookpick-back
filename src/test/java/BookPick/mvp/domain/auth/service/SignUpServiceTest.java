@@ -8,7 +8,7 @@ import BookPick.mvp.domain.auth.exception.DuplicateEmailException;
 import BookPick.mvp.domain.auth.util.Manager.signup.SignUpManager;
 import BookPick.mvp.domain.user.entity.User;
 import BookPick.mvp.domain.user.repository.UserRepository;
-import org.junit.jupit`er.api.DisplayName;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
