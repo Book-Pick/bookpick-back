@@ -6,7 +6,7 @@
 //import BookPick.mvp.domain.user.dto.base.UserRes;
 //import BookPick.mvp.domain.user.dto.base.delete.UserSoftDeleteRes;
 //import BookPick.mvp.domain.user.enums.user.UserSuccessCode;
-//import BookPick.mvp.domain.user.exception.common.NotHaveAdminRole;
+//import BookPick.mvp.domain.user.exception.common.UserNameNotNullException;
 //import BookPick.mvp.domain.user.service.base.UserService;
 //import BookPick.mvp.domain.user.util.AdminManager;
 //import BookPick.mvp.global.api.ApiResponse;
@@ -32,7 +32,7 @@
 //    public ResponseEntity<ApiResponse<UserRes>> createUser(@AuthenticationPrincipal CustomUserDetails currentUser,
 //                                                           @RequestBody @Valid UserReq req) {
 //        if (adminManager.isAdmin(currentUser.getAuthorities())) {
-//            throw new NotHaveAdminRole();
+//            throw new UserNameNotNullException();
 //        }
 //
 //        UserRes res = userService.CreateUser(req);
