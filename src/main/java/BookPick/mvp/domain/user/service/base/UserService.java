@@ -6,6 +6,7 @@ import BookPick.mvp.domain.user.dto.base.delete.UserSoftDeleteRes;
 import BookPick.mvp.domain.user.entity.User;
 import BookPick.mvp.domain.user.exception.common.AlreadyDeletedException;
 import BookPick.mvp.domain.user.exception.common.UserNotFoundException;
+import BookPick.mvp.domain.user.exception.profile.UserNameNotNullException;
 import BookPick.mvp.domain.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -60,7 +61,10 @@ public class UserService {
 
         // 더티 체킹
         if (req.email() != null) user.setEmail(req.email());
-        if (req.nickName() != null) user.setNickname(req.nickName());
+        if (req.nickName() == null) {
+            throw new UserNameNotNullException();
+        }
+            user.setNickname(req.nickName());
         if (req.profileImage() != null) user.setProfileImageUrl(req.profileImage());
         if (req.introduction() != null) user.setBio(req.introduction());
 
