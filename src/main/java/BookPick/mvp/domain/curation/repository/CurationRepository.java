@@ -80,7 +80,7 @@ public interface CurationRepository extends JpaRepository<Curation, Long> {
     @Query("""
                 select c from Curation c
                 join CurationLike cl on  cl.curation = c
-                where c.isDrafted is false and c.user.id = :userId
+                where c.isDrafted is false and cl.user.id = :userId
                 order by cl.createdAt desc
             """)
     List<Curation> findLikedCurationsByUser(@Param("userId") Long userId, Pageable pageable);
