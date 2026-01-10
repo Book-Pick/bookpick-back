@@ -77,6 +77,8 @@ public class Curation {
     @Builder.Default
     @Column(name = "popularity_score")
     private Integer popularityScore = 0;
+
+    @Column(name = "is_draft")
     private Boolean isDrafted;
 
 

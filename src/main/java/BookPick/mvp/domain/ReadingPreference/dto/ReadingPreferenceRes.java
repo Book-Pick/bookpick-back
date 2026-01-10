@@ -2,7 +2,7 @@ package BookPick.mvp.domain.ReadingPreference.dto;
 
 
 import BookPick.mvp.domain.ReadingPreference.entity.ReadingPreference;
-import BookPick.mvp.domain.author.entity.Author;
+import BookPick.mvp.domain.author.dto.preference.AuthorDto;
 import BookPick.mvp.domain.book.dto.preference.BookRes;
 
 import java.util.List;
@@ -13,7 +13,7 @@ public record ReadingPreferenceRes(
         Long preferenceId,
         String mbti,
         Set<BookRes> favoriteBooks,        // 좋아하는 책
-        Set<Author> favoriteAuthors,
+        Set<AuthorDto> favoriteAuthors,
         List<String> moods,    // 독서 선호 분위기
         List<String> readingHabits,        // 독서 습관
         List<String> genres,      // 선호 장르
@@ -32,11 +32,15 @@ public record ReadingPreferenceRes(
                 ))
                 .collect(Collectors.toSet());
 
+        Set<AuthorDto> favoriteAuthors = rp.getFavoriteAuthors().stream()
+                .map(author -> new AuthorDto(author.getName()))
+                .collect(Collectors.toSet());
+
         return new ReadingPreferenceRes(
                 rp.getId(),
                 rp.getMbti(),
                 favoriteBooks,
-                rp.getFavoriteAuthors(),
+                favoriteAuthors,
                 rp.getMoods(),
                 rp.getReadingHabits(),
                 rp.getGenres(),
