@@ -7,6 +7,7 @@ import BookPick.mvp.domain.curation.dto.base.get.list.CursorPage;
 import BookPick.mvp.domain.curation.dto.prefer.ReadingPreferenceInfo;
 import BookPick.mvp.domain.curation.enums.common.SortType;
 import BookPick.mvp.domain.curation.entity.Curation;
+import BookPick.mvp.domain.curation.repository.CurationRepository;
 import BookPick.mvp.domain.curation.repository.like.CurationLikeRepository;
 import BookPick.mvp.domain.curation.util.gemini.dto.CurationMatchResult;
 import BookPick.mvp.domain.curation.util.list.Handler.CurationPageHandler;
@@ -15,6 +16,7 @@ import BookPick.mvp.domain.ReadingPreference.repository.ReadingPreferenceReposit
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Set;
@@ -28,6 +30,7 @@ public class CurationListService {
     private final ReadingPreferenceRepository readingPreferenceRepository;
     private final CurationRecommendationService curationRecommendationService;
     private final CurationLikeRepository curationLikeRepository;
+    private final CurationRepository curationRepository;
 
 
     // 1. 큐레이션 리스트 조회
@@ -123,4 +126,19 @@ public class CurationListService {
     // Issue 1) DTO 만들어서 독서취향 정보 레이어간 소통 vs 사용자 독서취향 실시간 수정 반영 고려
     // 1. 사용자는 독서취향을 한번 설정하면 자주 바꾸지 않는다.
     // 2. 따라서 DTO 생성 후 넣기로 결정
+
+    // 2. curationId 목록으로 큐레이션 조회
+    @Transactional(readOnly = true)
+    public List<CurationContentRes> getCurationsByIds(List<Long> curationIds, Long userId) {
+        List<Curation> curations = curationRepository.findByIdIn(curationIds);
+
+        Set<Long> likedIds = curationLikeRepository
+                .findLikedCurationIds(userId, curationIds)
+                .stream()
+                .collect(Collectors.toSet());
+
+        return curations.stream()
+                .map(c -> CurationContentRes.from(c, likedIds.contains(c.getId())))
+                .collect(Collectors.toList());
+    }
 }

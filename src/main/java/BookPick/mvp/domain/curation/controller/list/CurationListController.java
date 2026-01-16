@@ -3,6 +3,8 @@ package BookPick.mvp.domain.curation.controller.list;
 import BookPick.mvp.domain.ReadingPreference.enums.resCode.PreferenceErrorCode;
 import BookPick.mvp.domain.ReadingPreference.enums.resCode.PreferenceSuccessCode;
 import BookPick.mvp.domain.auth.service.CustomUserDetails;
+import BookPick.mvp.domain.curation.dto.base.get.list.CurationContentRes;
+import BookPick.mvp.domain.curation.dto.base.get.list.CurationIdsReq;
 import BookPick.mvp.domain.curation.dto.base.get.list.CurationListGetRes;
 import BookPick.mvp.domain.curation.enums.common.SortType;
 import BookPick.mvp.domain.curation.exception.common.CurationDraftOwnerException;
@@ -16,6 +18,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/curations")
@@ -60,9 +64,22 @@ public class CurationListController {
                 .body(ApiResponse.success(SuccessCode.CURATION_LIST_GET_SUCCESS, curationListGetRes));
     }
 
+    @Operation(summary = "큐레이션 ID 목록으로 조회", description = "curationId 배열을 받아 해당 큐레이션 목록 반환", tags = {"Curation"})
+    @PostMapping("/by-ids")
+    public ResponseEntity<ApiResponse<List<CurationContentRes>>> getCurationsByIds(
+            @RequestBody @Valid CurationIdsReq request,
+            @AuthenticationPrincipal CustomUserDetails currentUser
+    ) {
+        currentUserCheck.validateLoginUser(currentUser);
 
+        List<CurationContentRes> curations = curationListService.getCurationsByIds(
+                request.curationIds(),
+                currentUser.getId()
+        );
 
-
+        return ResponseEntity.ok()
+                .body(ApiResponse.success(SuccessCode.CURATION_LIST_GET_SUCCESS, curations));
+    }
 }
 
 
