@@ -35,6 +35,7 @@ public class CurationMatchResult {
         List<String> matchedItems = new ArrayList<>();
 
         // Mood 매칭
+        // curation.getMoods() -> 1+N 문제 발생 , 아래도 동일
         if (curation.getMoods() != null && curation.getMoods().contains(recommendedMood)) {
             matchedMood = recommendedMood;
             matchedItems.add(recommendedMood);

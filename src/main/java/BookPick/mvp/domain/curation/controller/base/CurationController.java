@@ -50,9 +50,6 @@ public class CurationController {
     }
 
 
-
-
-
     @Operation(summary = "큐레이션 수정 (재발행 및 재 임시저장", description = "큐레이션 정보를 수정", tags = {"Curation"})
     @PatchMapping("/{curationId}")
     public ResponseEntity<ApiResponse<CurationUpdateRes>> updateCuration(
@@ -64,7 +61,7 @@ public class CurationController {
 
         CurationUpdateResult curationUpdateResult = curationUpdateService.updateCuration(currentUser.getId(), curationId, req);
 
-         return ResponseEntity.ok()
+        return ResponseEntity.ok()
                 .body(ApiResponse.success(curationUpdateResult.successCode(), curationUpdateResult.curationUpdateRes()));
     }
 

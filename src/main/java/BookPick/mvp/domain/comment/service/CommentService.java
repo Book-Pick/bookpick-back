@@ -8,7 +8,9 @@ import BookPick.mvp.domain.comment.dto.read.CommentListRes;
 import BookPick.mvp.domain.comment.dto.update.CommentUpdateReq;
 import BookPick.mvp.domain.comment.dto.update.CommentUpdateRes;
 import BookPick.mvp.domain.comment.entity.Comment;
+import BookPick.mvp.domain.comment.exception.CommentAccessDeniedException;
 import BookPick.mvp.domain.comment.exception.CommentNotFoundException;
+import BookPick.mvp.domain.comment.exception.NotFoundParentCommentException;
 import BookPick.mvp.domain.comment.repository.CommentRepository;
 import BookPick.mvp.domain.curation.exception.common.CurationNotFoundException;
 import BookPick.mvp.domain.curation.entity.Curation;
@@ -34,6 +36,7 @@ public class CommentService {
     private final UserRepository userRepository;
     private final CurationRepository curationRepository;
     private final CommentRepository commentRepository;
+    private final CommentPolicy commentPolicy;
 
 
     // -- Create --
@@ -48,9 +51,12 @@ public class CommentService {
 
         Comment parent = null;
 
-        if (req.parentId() != null) {
+
+
+        // 자식 댓글이면,
+        if(commentPolicy.isChildrenComment(req)){
             parent = commentRepository.findById(req.parentId())
-                    .orElseThrow(CommentNotFoundException::new);
+                    .orElseThrow(NotFoundParentCommentException::new);
         }
 
         Comment comment = Comment.builder()
@@ -67,6 +73,8 @@ public class CommentService {
 
         return CommentCreateRes.from(saved);
     }
+
+
 
 
     // -- Read --
@@ -104,9 +112,13 @@ public class CommentService {
 
     // -- Update --
     @Transactional
-    public CommentUpdateRes updateComment(Long commentId, CommentUpdateReq req) {
+    public CommentUpdateRes updateComment(Long userId, Long commentId, CommentUpdateReq req) {
         Comment comment = commentRepository.findById(commentId)
                 .orElseThrow(CommentNotFoundException::new);
+
+        if(!comment.getUser().getId().equals(userId) ){
+            throw new CommentAccessDeniedException();
+        }
 
         if (req.content() != null && !req.content().isBlank()) {
             comment.setContent(req.content());
