@@ -13,7 +13,8 @@ public enum Keyword implements PreferenceField {
     FANTASY("판타지"),
     REALITY("현실"),
     FUTURE("미래"),
-    PAST("과거");
+    PAST("과거"),
+    HORROR("공포");
 
     private final String description;
 
