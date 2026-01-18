@@ -47,7 +47,7 @@ public class SecurityConfig {
 
                         // 로그인이 필요없는 것들
                         // 1. auth
-                        .requestMatchers("/api/v1/signup", "/api/v1/login", "/api/v1/logout").permitAll()
+                        .requestMatchers("/api/v1/auth/signup", "/api/v1/auth/login", "/api/v1/auth/logout").permitAll()
                         // 2. author
                         // 3. book
                         // 4. comment

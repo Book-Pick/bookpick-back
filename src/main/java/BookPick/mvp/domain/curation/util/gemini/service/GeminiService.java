@@ -57,7 +57,13 @@ public class GeminiService {
         );
 
         // 4. 일치 정보와 함께 반환 (일치 개수 많은 순, 0점 제외)
-        return curations.stream()
+
+
+        // 5. 메모리 측정
+//        Runtime runtime = Runtime.getRuntime();
+//        long before = runtime.totalMemory() - runtime.freeMemory();
+
+        List<CurationMatchResult> results = curations.stream()
                 .map(curation -> CurationMatchResult.of(
                         curation,
                         curation.getUser(),
@@ -66,8 +72,13 @@ public class GeminiService {
                         recommendedKeyword,
                         recommendedStyle
                 ))
-                .filter(matchResult -> matchResult.getTotalMatchCount() > 0)  // 매칭 점수 0점인 큐레이션 제외
-                .sorted((a, b) -> Integer.compare(b.getTotalMatchCount(), a.getTotalMatchCount())) // Todo 1. 현재 MatchCount가지고 정렬 -> 취향유사도 해당 로직에서 계산해서 정렬 필요
+                .filter(matchResult -> matchResult.getTotalMatchCount() > 0)
+                .sorted((a, b) -> Integer.compare(b.getTotalMatchCount(), a.getTotalMatchCount()))
                 .collect(Collectors.toList());
+
+//        long after = runtime.totalMemory() - runtime.freeMemory();
+//        System.out.println("사용 메모리: " + (after - before) / 1024 + " KB"); // 100 배치당 1079KB 사용
+
+        return results;
     }
 }
