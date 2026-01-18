@@ -10,6 +10,7 @@ import BookPick.mvp.domain.comment.dto.read.CommentListRes;
 import BookPick.mvp.domain.comment.dto.update.CommentUpdateReq;
 import BookPick.mvp.domain.comment.dto.update.CommentUpdateRes;
 import BookPick.mvp.domain.comment.service.CommentService;
+import BookPick.mvp.domain.user.util.CurrentUserCheck;
 import BookPick.mvp.global.api.ApiResponse;
 import BookPick.mvp.global.api.SuccessCode.SuccessCode;
 import io.swagger.v3.oas.annotations.Operation;
@@ -25,12 +26,17 @@ import org.springframework.web.bind.annotation.*;
 public class CommentController {
     private final CommentService commentService;
     private final PagenationService pagenationService;
+    private final CurrentUserCheck currentUserCheck;
 
     // -- 1. 댓글 생성 --
     @Operation(summary = "댓글 생성", description = "특정 큐레이션에 댓글을 생성합니다", tags = {"Comment"})
     @PostMapping("/{curationId}/comments")
     public ResponseEntity<ApiResponse<CommentCreateRes>> create(@PathVariable Long curationId,
-                                                                @RequestBody CommentCreateReq commentCreateReq, @AuthenticationPrincipal CustomUserDetails currentUser) {
+                                                                @RequestBody CommentCreateReq commentCreateReq,
+                                                                @AuthenticationPrincipal CustomUserDetails currentUser) {
+
+//        currentUserCheck.validateLoginUser(currentUser);
+
         CommentCreateRes res = commentService.createComment(currentUser.getId(), curationId, commentCreateReq);
 
         return ResponseEntity.status(HttpStatus.CREATED)
@@ -74,9 +80,12 @@ public class CommentController {
     public ResponseEntity<ApiResponse<CommentUpdateRes>> updateComment(
             @PathVariable Long curationId,
             @PathVariable Long commentId,
-            @RequestBody CommentUpdateReq req
+            @RequestBody CommentUpdateReq req,
+            @AuthenticationPrincipal CustomUserDetails currentUser
     ) {
-        CommentUpdateRes res = commentService.updateComment(commentId, req);
+//        currentUserCheck.validateLoginUser(currentUser);
+
+        CommentUpdateRes res = commentService.updateComment(currentUser.getId(), commentId, req);
         return ResponseEntity.ok(ApiResponse.success(SuccessCode.COMMENT_UPDATE_SUCCESS, res));
     }
 
@@ -88,6 +97,8 @@ public class CommentController {
             @PathVariable Long curationId,
             @PathVariable Long commentId
     ) {
+
+
         CommentDeleteRes res = commentService.deleteComment(curationId, commentId);
         return ResponseEntity.ok(ApiResponse.success(SuccessCode.COMMENT_DELETE_SUCCESS, res));
     }

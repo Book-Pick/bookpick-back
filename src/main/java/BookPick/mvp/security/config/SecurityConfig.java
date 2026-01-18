@@ -1,10 +1,14 @@
 package BookPick.mvp.security.config;
 
+import BookPick.mvp.global.api.ApiResponse;
 import BookPick.mvp.global.config.JwtFilter;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -39,14 +43,37 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable())
                 .sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/**").permitAll()
+
+
+                        // 로그인이 필요없는 것들
+                        // 1. auth
                         .requestMatchers("/api/v1/signup", "/api/v1/login", "/api/v1/logout").permitAll()
-                        .requestMatchers("/api/v1/users/*/preferences").permitAll()
-                        .requestMatchers(HttpMethod.GET,"/api/v1/curations/*/comments").permitAll()
+                        // 2. author
+                        // 3. book
+                        // 4. comment
+                        // 5. curation
+                        // 6. ReadingPreference
+                        // 7. user
                         .requestMatchers("/v3/api-docs/**", "/swagger-ui/**", "/swagger-resources/**").permitAll()
                         .requestMatchers("/error").permitAll()
                         .anyRequest().authenticated()
                 )
+                .exceptionHandling(eh -> eh
+                        .authenticationEntryPoint((req, res, ex) -> {
+                            res.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                            res.setContentType("application/json; charset=UTF-8");
+
+                            ApiResponse<Void> response = ApiResponse.customError(
+                                    HttpStatus.UNAUTHORIZED,
+                                    "로그인이 필요합니다.",
+                                    null
+                            );
+
+                            ObjectMapper objectMapper = new ObjectMapper();
+                            res.getWriter().write(objectMapper.writeValueAsString(response));
+                        })
+                )
+
                 .logout(logout -> logout
                         .logoutUrl("/api/v1/logout")
                         .clearAuthentication(true)
