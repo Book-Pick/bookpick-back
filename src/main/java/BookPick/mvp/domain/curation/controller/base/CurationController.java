@@ -14,7 +14,6 @@ import BookPick.mvp.domain.curation.exception.common.CurationNotFoundException;
 import BookPick.mvp.domain.curation.repository.CurationRepository;
 import BookPick.mvp.domain.curation.service.base.create.CurationCreateService;
 import BookPick.mvp.domain.curation.service.base.update.CurationUpdateService;
-import BookPick.mvp.domain.curation.service.csv.CurationCsvService;
 import BookPick.mvp.domain.user.util.CurrentUserCheck;
 import BookPick.mvp.global.api.ApiResponse;
 import BookPick.mvp.global.api.SuccessCode.SuccessCode;
@@ -38,7 +37,6 @@ public class CurationController {
 
     private final CurationCreateService curationCreateService;
     private final CurationUpdateService curationUpdateService;
-    private final CurationCsvService curationCsvService;
     private final BookSearchService bookSearchService;
     private final CurrentUserCheck currentUserCheck;
 
@@ -95,29 +93,8 @@ public class CurationController {
                 ));
     }
 
-    @Operation(
-            summary = "CSV 파일로 큐레이션 일괄 생성",
-            description = "CSV 파일을 업로드하여 여러 큐레이션을 한 번에 생성합니다. " +
-                    "CSV 형식: title, bookTitle, bookAuthor, bookIsbn, bookImageUrl, review, moods, genres, keywords, styles, thumbnailUrl, thumbnailColor",
-            tags = {"Curation"}
-    )
-    @PostMapping(value = "/upload-csv", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<ApiResponse<List<CurationCreateRes>>> uploadCsv(
-            @RequestParam("file") MultipartFile file,
-            @AuthenticationPrincipal CustomUserDetails currentUser
-    ) {
 
-        currentUserCheck.validateLoginUser(currentUser);
 
-        // CSV 파일 처리 및 큐레이션 생성
-        List<CurationCreateRes> results = curationCsvService.uploadCsvAndCreateCurations(file, currentUser.getId());
-
-        return ResponseEntity.status(HttpStatus.CREATED)
-                .body(ApiResponse.success(
-                        SuccessCode.CURATION_PUBLISH_SUCCESS,
-                        results
-                ));
-    }
 
 
 }
