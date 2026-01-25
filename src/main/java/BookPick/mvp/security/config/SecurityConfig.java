@@ -92,7 +92,9 @@ public class SecurityConfig {
 
         config.setAllowedOrigins(List.of(
                 "http://localhost:5173",
-                "https://bookpick-front.vercel.app"
+                "https://bookpick-front.vercel.app",
+                "https://bookpick-front-dev.vercel.app"
+
         ));
 
         config.setAllowedMethods(List.of("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"));
