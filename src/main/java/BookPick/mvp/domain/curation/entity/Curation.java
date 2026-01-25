@@ -1,5 +1,6 @@
 package BookPick.mvp.domain.curation.entity;
 
+import BookPick.mvp.domain.comment.entity.Comment;
 import BookPick.mvp.domain.curation.dto.base.CurationReq;
 import BookPick.mvp.domain.curation.dto.base.update.CurationUpdateReq;
 import BookPick.mvp.domain.curation.enums.common.State;
@@ -12,6 +13,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Builder
@@ -80,6 +82,9 @@ public class Curation {
 
     @Column(name = "is_draft")
     private Boolean isDrafted;
+
+    @OneToMany(mappedBy = "curation", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Comment> comments = new ArrayList<>();
 
 
     @CreatedDate
