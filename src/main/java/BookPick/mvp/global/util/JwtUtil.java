@@ -53,7 +53,7 @@ public class JwtUtil {
                 .claim("email", usr.getUsername())
                 .claim("authorities", authorities)
                 .issuedAt(new Date(System.currentTimeMillis()))
-                .expiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60))  // expiration : 만료
+                .expiration(new Date(System.currentTimeMillis() + this.accessTtl))
                 .signWith(accessKey)
                 .compact();
         return jwt;
