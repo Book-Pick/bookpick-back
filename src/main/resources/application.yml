@@ -1,0 +1,15 @@
+spring:
+  application:
+    name: BookPick
+
+server:
+  port: 8081
+  error:
+    include-message: always
+    include-binding-errors: always
+    include-stacktrace: always
+    include-exception: true
+
+logging:
+  level:
+    root: INFO
