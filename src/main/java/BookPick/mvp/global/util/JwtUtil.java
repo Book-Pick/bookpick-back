@@ -53,7 +53,7 @@ public class JwtUtil {
                 .claim("email", usr.getUsername())
                 .claim("authorities", authorities)
                 .issuedAt(new Date(System.currentTimeMillis()))
-                .expiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60))  // expiration : 만료
+                .expiration(new Date(System.currentTimeMillis() + this.accessTtl))
                 .signWith(accessKey)
                 .compact();
         return jwt;
@@ -120,9 +120,7 @@ public class JwtUtil {
             throw new JwtTokenExpiredException();
         } catch (JwtException | IllegalArgumentException e) {
             // 잘못된 토큰 예외를 커스텀 예외로
-            System.out.println("JWT Parsing Error: " + e.getClass().getSimpleName() + " - " + e.getMessage());
-            e.printStackTrace();
-
+            log.warn("JWT 파싱 실패: {}", e.getClass().getSimpleName());
             throw new InvalidTokenTypeException();
         }
 
@@ -138,10 +136,10 @@ public class JwtUtil {
             }
             return true; // 예외가 안 나면 유효
         } catch (JwtTokenExpiredException e) {
-            System.out.println("토큰 만료: " + e.getMessage());
+            log.debug("토큰 만료");
             return false;
         } catch (InvalidTokenTypeException | JwtException e) {
-            System.out.println("유효하지 않은 토큰: " + e.getMessage());
+            log.debug("유효하지 않은 토큰");
             return false;
         }
     }

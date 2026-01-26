@@ -7,8 +7,8 @@ server:
   error:
     include-message: always
     include-binding-errors: always
-    include-stacktrace: always
-    include-exception: true
+    include-stacktrace: never
+    include-exception: false
 
 logging:
   level:

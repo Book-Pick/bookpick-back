@@ -1,6 +1,7 @@
 package BookPick.mvp.security.config;
 
 import BookPick.mvp.global.api.ApiResponse;
+import BookPick.mvp.global.config.AuthRateLimitFilter;
 import BookPick.mvp.global.config.JwtFilter;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.HttpServletResponse;
@@ -29,6 +30,7 @@ public class SecurityConfig {
 
 
     private final JwtFilter jwtFilter;
+    private final AuthRateLimitFilter authRateLimitFilter;
 
     @Bean
     PasswordEncoder passwordEncoder() {
@@ -81,6 +83,7 @@ public class SecurityConfig {
                         .logoutSuccessHandler((req, res, auth) -> {
                             res.setStatus(org.springframework.http.HttpStatus.OK.value()); // 200 OK
                         }))
+                .addFilterBefore(authRateLimitFilter, UsernamePasswordAuthenticationFilter.class)
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
     }

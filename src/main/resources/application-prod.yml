@@ -10,13 +10,13 @@ spring:
       ddl-auto: ${SPRING_JPA_DDL_AUTO}
     properties:
       hibernate:
-        show_sql: true
+        show_sql: false
         default_batch_fetch_size: 100  # N+1 방지 (한 번에 100개씩 배치 조회)
 
 logging:
   level:
-    org.springframework.web: DEBUG
-    BookPick: DEBUG
+    org.springframework.web: WARN
+    BookPick: INFO
 
 jwt:
   access:
