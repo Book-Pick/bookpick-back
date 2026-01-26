@@ -21,7 +21,11 @@ import java.util.List;
 @Getter
 @Setter
 @EntityListeners(AuditingEntityListener.class)
-@Table(name = "curation")
+@Table(name = "curation", indexes = {
+        @Index(name = "idx_curation_popularity", columnList = "popularity_score DESC"),
+        @Index(name = "idx_curation_draft_created", columnList = "is_draft, created_at DESC"),
+        @Index(name = "idx_curation_user_id", columnList = "user_id")
+})
 @AllArgsConstructor
 public class Curation {
 

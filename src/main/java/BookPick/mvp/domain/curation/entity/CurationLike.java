@@ -15,9 +15,15 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 @Builder
-@Table(name = "curation_like", uniqueConstraints = {
-        @UniqueConstraint(name = "uk_user_curation", columnNames = {"user_id", "curation_id"})
-})
+@Table(name = "curation_like",
+        uniqueConstraints = {
+                @UniqueConstraint(name = "uk_user_curation", columnNames = {"user_id", "curation_id"})
+        },
+        indexes = {
+                @Index(name = "idx_like_user_id", columnList = "user_id"),
+                @Index(name = "idx_like_curation_id", columnList = "curation_id")
+        }
+)
 @AllArgsConstructor
 @EntityListeners(AuditingEntityListener.class)
 

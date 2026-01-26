@@ -16,7 +16,10 @@ import java.util.List;
 @Entity
 @Getter
 @Setter
-@Table(name = "comment")
+@Table(name = "comment", indexes = {
+        @Index(name = "idx_comment_curation_id", columnList = "curation_id"),
+        @Index(name = "idx_comment_user_id", columnList = "user_id")
+})
 @Builder
 @AllArgsConstructor
 public class Comment {
