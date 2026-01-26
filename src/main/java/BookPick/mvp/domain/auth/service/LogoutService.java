@@ -48,10 +48,8 @@ public class LogoutService {
                 if (refreshToken == null || refreshToken.isEmpty()) return;
 
 
-                int a=1;
                 // 3.2 클레임 토큰 획득
                 Claims claims;
-                int b=1;
 
                 try {
                     claims = jwtUtil.extractRefreshToken(refreshToken);
