@@ -6,8 +6,8 @@ import BookPick.mvp.domain.comment.repository.CommentRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import javax.swing.text.html.Option;
 import java.util.List;
 
 @Service
@@ -15,6 +15,7 @@ import java.util.List;
 public class ReceivedCommentsService {
     private final CommentRepository commentRepository;
 
+    @Transactional(readOnly = true)
     public ReceivedCommentsDTO receivedCommentsRead(Long userId){
         List<Comment> comments = commentRepository.findLatestCommentsByUserId(userId, PageRequest.of(0,3));
 

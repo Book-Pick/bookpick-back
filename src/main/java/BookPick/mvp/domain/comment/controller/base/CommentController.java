@@ -14,6 +14,7 @@ import BookPick.mvp.domain.user.util.CurrentUserCheck;
 import BookPick.mvp.global.api.ApiResponse;
 import BookPick.mvp.global.api.SuccessCode.SuccessCode;
 import io.swagger.v3.oas.annotations.Operation;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -32,7 +33,7 @@ public class CommentController {
     @Operation(summary = "댓글 생성", description = "특정 큐레이션에 댓글을 생성합니다", tags = {"Comment"})
     @PostMapping("/{curationId}/comments")
     public ResponseEntity<ApiResponse<CommentCreateRes>> create(@PathVariable Long curationId,
-                                                                @RequestBody CommentCreateReq commentCreateReq,
+                                                                @Valid @RequestBody CommentCreateReq commentCreateReq,
                                                                 @AuthenticationPrincipal CustomUserDetails currentUser) {
 
 //        currentUserCheck.validateLoginUser(currentUser);
@@ -80,7 +81,7 @@ public class CommentController {
     public ResponseEntity<ApiResponse<CommentUpdateRes>> updateComment(
             @PathVariable Long curationId,
             @PathVariable Long commentId,
-            @RequestBody CommentUpdateReq req,
+            @Valid @RequestBody CommentUpdateReq req,
             @AuthenticationPrincipal CustomUserDetails currentUser
     ) {
 //        currentUserCheck.validateLoginUser(currentUser);
