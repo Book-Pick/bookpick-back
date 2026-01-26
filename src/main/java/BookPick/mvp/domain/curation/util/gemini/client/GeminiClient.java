@@ -6,6 +6,7 @@ import BookPick.mvp.domain.curation.util.gemini.GeminiErrorException;
 import BookPick.mvp.domain.curation.util.gemini.enums.GeminiErrorCode;
 import BookPick.mvp.global.exception.BusinessException;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.http.*;
@@ -15,6 +16,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
 
+@Slf4j
 @Component
 @RequiredArgsConstructor
 public class GeminiClient {
@@ -72,7 +74,10 @@ public class GeminiClient {
                     .path("content").path("parts").get(0)
                     .path("text").asText();
 
+        } catch (BusinessException e) {
+            throw e;
         } catch (Exception e) {
+            log.error("Gemini API 호출 실패: {}", e.getMessage());
             throw new GeminiErrorException();
         }
     }
