@@ -13,7 +13,8 @@ import java.util.List;
 @Repository
 public interface CommentRepository extends JpaRepository<Comment, Long> {
 
-    Page<Comment> findByCurationId(Long curationId, Pageable pageable);
+    @Query("SELECT c FROM Comment c LEFT JOIN FETCH c.parent LEFT JOIN FETCH c.user WHERE c.curation.id = :curationId")
+    Page<Comment> findByCurationId(@Param("curationId") Long curationId, Pageable pageable);
 
 
     @Query("""
