@@ -15,7 +15,9 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 @Builder
-@Table(name = "curation_like")
+@Table(name = "curation_like", uniqueConstraints = {
+        @UniqueConstraint(name = "uk_user_curation", columnNames = {"user_id", "curation_id"})
+})
 @AllArgsConstructor
 @EntityListeners(AuditingEntityListener.class)
 
