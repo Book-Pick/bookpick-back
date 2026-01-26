@@ -131,14 +131,16 @@ public class CommentService {
 
     // -- Delete --
     @Transactional
-    public CommentDeleteRes deleteComment(Long curationId, Long commentId) {
+    public CommentDeleteRes deleteComment(Long userId, Long curationId, Long commentId) {
         Curation curation = curationRepository.findByIdWithLock(curationId)
                 .orElseThrow(CurationNotFoundException::new);
 
         Comment comment = commentRepository.findById(commentId)
                 .orElseThrow(CommentNotFoundException::new);
 
-
+        if (!comment.getUser().getId().equals(userId)) {
+            throw new CommentAccessDeniedException();
+        }
 
         commentRepository.delete(comment);
         curation.decreaseCommentCount();

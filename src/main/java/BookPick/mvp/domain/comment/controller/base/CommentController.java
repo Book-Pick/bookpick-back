@@ -95,11 +95,11 @@ public class CommentController {
     @DeleteMapping("/{curationId}/comments/{commentId}")
     public ResponseEntity<ApiResponse<CommentDeleteRes>> deleteComment(
             @PathVariable Long curationId,
-            @PathVariable Long commentId
+            @PathVariable Long commentId,
+            @AuthenticationPrincipal CustomUserDetails currentUser
     ) {
 
-
-        CommentDeleteRes res = commentService.deleteComment(curationId, commentId);
+        CommentDeleteRes res = commentService.deleteComment(currentUser.getId(), curationId, commentId);
         return ResponseEntity.ok(ApiResponse.success(SuccessCode.COMMENT_DELETE_SUCCESS, res));
     }
 
