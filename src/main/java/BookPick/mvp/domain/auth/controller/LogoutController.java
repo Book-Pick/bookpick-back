@@ -1,5 +1,7 @@
 package BookPick.mvp.domain.auth.controller;
 
+import BookPick.mvp.domain.auth.service.CustomUserDetails;
+import BookPick.mvp.domain.auth.service.LogoutService;
 import BookPick.mvp.global.api.ApiResponse;
 import BookPick.mvp.global.api.SuccessCode.SuccessCode;
 import io.swagger.v3.oas.annotations.Operation;
@@ -11,8 +13,6 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import BookPick.mvp.domain.auth.service.LogoutService;
-import BookPick.mvp.domain.auth.service.CustomUserDetails;
 
 @RestController
 @RequestMapping("/api/v1/auth/logout")
@@ -22,9 +22,14 @@ public class LogoutController {
     private final LogoutService logoutService;
 
     @PostMapping
-    @Operation(summary = "로그아웃", description = "로그아웃", tags = {"Auth"})
-    public ResponseEntity<ApiResponse<Void>> logout(HttpServletRequest request, HttpServletResponse response,
-                                                    @AuthenticationPrincipal CustomUserDetails currentUser) {
+    @Operation(
+            summary = "로그아웃",
+            description = "로그아웃",
+            tags = {"Auth"})
+    public ResponseEntity<ApiResponse<Void>> logout(
+            HttpServletRequest request,
+            HttpServletResponse response,
+            @AuthenticationPrincipal CustomUserDetails currentUser) {
 
         logoutService.logout(currentUser, request, response);
 

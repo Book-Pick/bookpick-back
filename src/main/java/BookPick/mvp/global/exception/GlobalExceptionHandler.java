@@ -1,10 +1,8 @@
 package BookPick.mvp.global.exception;
 
-
 import BookPick.mvp.global.api.ApiResponse;
 import BookPick.mvp.global.api.ErrorCode.ErrorCode;
 import BookPick.mvp.global.enums.ErrorCodeInterface;
-import BookPick.mvp.global.enums.SuccessCodeInterface;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -17,27 +15,26 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ApiResponse<Void>> handleBusinessException(BusinessException e) {
         ErrorCodeInterface errorCode = e.getErrorCode();
 
-        return ResponseEntity
-                .status(errorCode.getStatus())
-                .body(ApiResponse.error(errorCode));
+        return ResponseEntity.status(errorCode.getStatus()).body(ApiResponse.error(errorCode));
     }
-
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<ApiResponse<Void>> handleValidationException(MethodArgumentNotValidException e) {
+    public ResponseEntity<ApiResponse<Void>> handleValidationException(
+            MethodArgumentNotValidException e) {
 
-        String errorMessage = e.getBindingResult()
-                .getFieldErrors()
-                .stream()
-                .findFirst()
-                .map(fieldError -> fieldError.getDefaultMessage())   // DTO의 @Email(message="...") 내용
-                .orElse("잘못된 요청입니다.");
+        String errorMessage =
+                e.getBindingResult().getFieldErrors().stream()
+                        .findFirst()
+                        .map(
+                                fieldError ->
+                                        fieldError
+                                                .getDefaultMessage()) // DTO의 @Email(message="...")
+                        // 내용
+                        .orElse("잘못된 요청입니다.");
 
-        return ResponseEntity
-                .status(ErrorCode.INVALID_REQUEST.getStatus())   // 400
-                .body(ApiResponse.customError(ErrorCode.INVALID_REQUEST.getStatus(), errorMessage, null));
+        return ResponseEntity.status(ErrorCode.INVALID_REQUEST.getStatus()) // 400
+                .body(
+                        ApiResponse.customError(
+                                ErrorCode.INVALID_REQUEST.getStatus(), errorMessage, null));
     }
-
-
-
 }

@@ -1,5 +1,9 @@
 package BookPick.mvp.domain.auth.service;
 
+import static org.assertj.core.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.*;
+
 import BookPick.mvp.domain.ReadingPreference.service.ReadingPreferenceService;
 import BookPick.mvp.domain.auth.Roles;
 import BookPick.mvp.domain.auth.dto.SignReq;
@@ -16,41 +20,32 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import static org.assertj.core.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.*;
-
 @ExtendWith(MockitoExtension.class)
 @DisplayName("회원가입 서비스 테스트")
 class SignUpServiceTest {
 
-    @InjectMocks
-    private SignUpService signUpService;
+    @InjectMocks private SignUpService signUpService;
 
-    @Mock
-    private UserRepository userRepository;
+    @Mock private UserRepository userRepository;
 
-    @Mock
-    private PasswordEncoder passwordEncoder;
+    @Mock private PasswordEncoder passwordEncoder;
 
-    @Mock
-    private SignUpManager signUpManager;
+    @Mock private SignUpManager signUpManager;
 
-    @Mock
-    private ReadingPreferenceService readingPreferenceService;
+    @Mock private ReadingPreferenceService readingPreferenceService;
 
     @Test
     @DisplayName("정상 회원가입 - 일반 유저")
     void signUp_success_normalUser() {
         // given
         SignReq req = new SignReq("test@test.com", "password123");
-        User mockUser = User.builder()
-                .id(1L)
-                .email(req.email())
-                .password("encodedPassword")
-                .role(Roles.ROLE_USER)
-                .build();
+        User mockUser =
+                User.builder()
+                        .id(1L)
+                        .email(req.email())
+                        .password("encodedPassword")
+                        .role(Roles.ROLE_USER)
+                        .build();
 
         when(userRepository.existsByEmail(req.email())).thenReturn(false);
         when(signUpManager.isAdmin(req.email())).thenReturn(false);
@@ -73,12 +68,13 @@ class SignUpServiceTest {
     void signUp_success_adminUser() {
         // given
         SignReq req = new SignReq("admin@bookpick.com", "password123");
-        User mockUser = User.builder()
-                .id(1L)
-                .email(req.email())
-                .password("encodedPassword")
-                .role(Roles.ROLE_ADMIN)
-                .build();
+        User mockUser =
+                User.builder()
+                        .id(1L)
+                        .email(req.email())
+                        .password("encodedPassword")
+                        .role(Roles.ROLE_ADMIN)
+                        .build();
 
         when(userRepository.existsByEmail(req.email())).thenReturn(false);
         when(signUpManager.isAdmin(req.email())).thenReturn(true);
@@ -91,9 +87,7 @@ class SignUpServiceTest {
         // then
         assertThat(result.userId()).isEqualTo(1L);
         verify(signUpManager).isAdmin(req.email());
-        verify(userRepository).save(argThat(user ->
-            user.getRole() == Roles.ROLE_ADMIN
-        ));
+        verify(userRepository).save(argThat(user -> user.getRole() == Roles.ROLE_ADMIN));
     }
 
     @Test
@@ -119,11 +113,7 @@ class SignUpServiceTest {
         SignReq req = new SignReq("test@test.com", "plainPassword");
         String encodedPassword = "encrypted_password_hash";
 
-        User mockUser = User.builder()
-                .id(1L)
-                .email(req.email())
-                .password(encodedPassword)
-                .build();
+        User mockUser = User.builder().id(1L).email(req.email()).password(encodedPassword).build();
 
         when(userRepository.existsByEmail(req.email())).thenReturn(false);
         when(signUpManager.isAdmin(req.email())).thenReturn(false);
@@ -135,9 +125,11 @@ class SignUpServiceTest {
 
         // then
         verify(passwordEncoder).encode("plainPassword");
-        verify(userRepository).save(argThat(user ->
-            user.getPassword().equals(encodedPassword) &&
-            !user.getPassword().equals("plainPassword")
-        ));
+        verify(userRepository)
+                .save(
+                        argThat(
+                                user ->
+                                        user.getPassword().equals(encodedPassword)
+                                                && !user.getPassword().equals("plainPassword")));
     }
 }

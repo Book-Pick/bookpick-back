@@ -22,7 +22,10 @@ public class ReceivedCommentsController {
     private final ReceivedCommentsService receivedCommentsService;
     private final CurrentUserCheck currentUserCheck;
 
-    @Operation(summary = "받은 댓글 조회", description = "현재 사용자가 받은 최신 댓글 목록을 조회합니다", tags = {"Comment"})
+    @Operation(
+            summary = "받은 댓글 조회",
+            description = "현재 사용자가 받은 최신 댓글 목록을 조회합니다",
+            tags = {"Comment"})
     @GetMapping
     public ResponseEntity<ApiResponse<ReceivedCommentsDTO>> getReceivedComments(
             @AuthenticationPrincipal CustomUserDetails currentUser) {

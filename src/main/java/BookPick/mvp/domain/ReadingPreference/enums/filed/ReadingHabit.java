@@ -1,7 +1,6 @@
 package BookPick.mvp.domain.ReadingPreference.enums.filed;
 
-public enum ReadingHabit implements PreferenceField{
-
+public enum ReadingHabit implements PreferenceField {
     READ_AT_ONCE("한 번에 완독하는 편"),
     HIGHLIGHTING("밑줄 긋거나 형광펜으로 표시하는 편"),
     MULTIPLE_BOOKS("여러 권을 동시에 읽는 편"),

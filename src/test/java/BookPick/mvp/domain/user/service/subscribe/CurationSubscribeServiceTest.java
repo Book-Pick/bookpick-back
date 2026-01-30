@@ -1,14 +1,18 @@
 package BookPick.mvp.domain.user.service.subscribe;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.*;
+
 import BookPick.mvp.domain.user.dto.subscribe.CuratorSubscribeReq;
 import BookPick.mvp.domain.user.dto.subscribe.CuratorSubscribeRes;
 import BookPick.mvp.domain.user.dto.subscribe.SubscribedCuratorPageRes;
 import BookPick.mvp.domain.user.entity.CuratorSubscribe;
 import BookPick.mvp.domain.user.entity.User;
-import BookPick.mvp.domain.user.exception.curator.CuratorNotFoundException;
-import BookPick.mvp.domain.user.exception.common.UserNotFoundException;
 import BookPick.mvp.domain.user.repository.UserRepository;
 import BookPick.mvp.domain.user.repository.subscribe.CurationSubscribeRepository;
+import java.util.Collections;
+import java.util.Optional;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -20,27 +24,15 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.*;
-
 @ExtendWith(MockitoExtension.class)
 @DisplayName("큐레이터 구독 서비스 테스트")
 class CurationSubscribeServiceTest {
 
-    @InjectMocks
-    private CurationSubscribeService curationSubscribeService;
+    @InjectMocks private CurationSubscribeService curationSubscribeService;
 
-    @Mock
-    private UserRepository userRepository;
+    @Mock private UserRepository userRepository;
 
-    @Mock
-    private CurationSubscribeRepository curationSubscribeRepository;
+    @Mock private CurationSubscribeRepository curationSubscribeRepository;
 
     @Test
     @DisplayName("큐레이터 구독 성공")
@@ -54,7 +46,8 @@ class CurationSubscribeServiceTest {
 
         when(userRepository.findById(userId)).thenReturn(Optional.of(user));
         when(userRepository.findById(curatorId)).thenReturn(Optional.of(curator));
-        when(curationSubscribeRepository.findByUserIdAndCuratorId(userId, curatorId)).thenReturn(Optional.empty());
+        when(curationSubscribeRepository.findByUserIdAndCuratorId(userId, curatorId))
+                .thenReturn(Optional.empty());
 
         // when
         CuratorSubscribeRes res = curationSubscribeService.subscribe(userId, req);
@@ -74,11 +67,13 @@ class CurationSubscribeServiceTest {
         CuratorSubscribeReq req = new CuratorSubscribeReq(curatorId);
         User user = User.builder().id(userId).build();
         User curator = User.builder().id(curatorId).nickname("curator").build();
-        CuratorSubscribe existingSubscription = CuratorSubscribe.builder().user(user).curator(curator).build();
+        CuratorSubscribe existingSubscription =
+                CuratorSubscribe.builder().user(user).curator(curator).build();
 
         when(userRepository.findById(userId)).thenReturn(Optional.of(user));
         when(userRepository.findById(curatorId)).thenReturn(Optional.of(curator));
-        when(curationSubscribeRepository.findByUserIdAndCuratorId(userId, curatorId)).thenReturn(Optional.of(existingSubscription));
+        when(curationSubscribeRepository.findByUserIdAndCuratorId(userId, curatorId))
+                .thenReturn(Optional.of(existingSubscription));
 
         // when
         CuratorSubscribeRes res = curationSubscribeService.subscribe(userId, req);
@@ -94,7 +89,8 @@ class CurationSubscribeServiceTest {
         // given
         Long userId = 1L;
         Long curatorId = 2L;
-        when(curationSubscribeRepository.findByUserIdAndCuratorId(userId, curatorId)).thenReturn(Optional.of(new CuratorSubscribe()));
+        when(curationSubscribeRepository.findByUserIdAndCuratorId(userId, curatorId))
+                .thenReturn(Optional.of(new CuratorSubscribe()));
 
         // when
         boolean isSubscribed = curationSubscribeService.isSubscribeCurator(userId, curatorId);
@@ -109,7 +105,8 @@ class CurationSubscribeServiceTest {
         // given
         Long userId = 1L;
         Long curatorId = 2L;
-        when(curationSubscribeRepository.findByUserIdAndCuratorId(userId, curatorId)).thenReturn(Optional.empty());
+        when(curationSubscribeRepository.findByUserIdAndCuratorId(userId, curatorId))
+                .thenReturn(Optional.empty());
 
         // when
         boolean isSubscribed = curationSubscribeService.isSubscribeCurator(userId, curatorId);
@@ -126,12 +123,15 @@ class CurationSubscribeServiceTest {
         Pageable pageable = PageRequest.of(0, 10);
         User curatorUser = User.builder().id(2L).nickname("curator1").build();
         CuratorSubscribe subscription = CuratorSubscribe.builder().curator(curatorUser).build();
-        Page<CuratorSubscribe> page = new PageImpl<>(Collections.singletonList(subscription), pageable, 1);
+        Page<CuratorSubscribe> page =
+                new PageImpl<>(Collections.singletonList(subscription), pageable, 1);
 
-        when(curationSubscribeRepository.findByUserIdOrderByIdDesc(userId, pageable)).thenReturn(page);
+        when(curationSubscribeRepository.findByUserIdOrderByIdDesc(userId, pageable))
+                .thenReturn(page);
 
         // when
-        SubscribedCuratorPageRes res = curationSubscribeService.getSubscribedCurators(userId, 0, 10);
+        SubscribedCuratorPageRes res =
+                curationSubscribeService.getSubscribedCurators(userId, 0, 10);
 
         // then
         assertThat(res.curators()).hasSize(1);

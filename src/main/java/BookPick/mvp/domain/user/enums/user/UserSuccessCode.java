@@ -8,7 +8,6 @@ import org.springframework.http.HttpStatus;
 @AllArgsConstructor
 @Getter
 public enum UserSuccessCode implements SuccessCodeInterface {
-
     CREATE_USER_SUCCESS(HttpStatus.CREATED, "사용자 생성을 성공하였습니다."),
     GET_USERS_SUCCESS(HttpStatus.OK, "사용자 목록 조회를 성공하였습니다."),
     GET_MY_PROFILE_SUCCESS(HttpStatus.OK, "사용자 프로필 조회를 성공하였습니다."),

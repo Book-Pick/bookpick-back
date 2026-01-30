@@ -1,18 +1,16 @@
 package BookPick.mvp.domain.curation.util.gemini.service;
 
-
 import BookPick.mvp.domain.curation.entity.Curation;
 import BookPick.mvp.domain.curation.repository.CurationRepository;
 import BookPick.mvp.domain.curation.util.gemini.client.GeminiClient;
 import BookPick.mvp.domain.curation.util.gemini.dto.CurationMatchResult;
-import BookPick.mvp.domain.curation.util.gemini.prompt.SystemInstructionPromptTemplate;
 import BookPick.mvp.domain.curation.util.gemini.prompt.ContentPromptTemplate;
+import BookPick.mvp.domain.curation.util.gemini.prompt.SystemInstructionPromptTemplate;
+import java.util.List;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -34,8 +32,8 @@ public class GeminiService {
     }
 
     @Transactional(readOnly = true)
-    public List<CurationMatchResult> recommendCurationsWithMatch(Long userId, ContentPromptTemplate contentTemplate) {
-
+    public List<CurationMatchResult> recommendCurationsWithMatch(
+            Long userId, ContentPromptTemplate contentTemplate) {
 
         // 1. Gemini에게 추천 받기
         String result = generateRecommendation(contentTemplate);
@@ -48,36 +46,41 @@ public class GeminiService {
         String recommendedStyle = parsed[3].trim();
 
         // 3. DB에서 큐레이션 찾기
-        List<Curation> curations = curationRepository.findPublishedCurationsByRecommendation(
-                userId,
-                List.of(recommendedMood),
-                List.of(recommendedGenre),
-                List.of(recommendedKeyword),
-                List.of(recommendedStyle)
-        );
+        List<Curation> curations =
+                curationRepository.findPublishedCurationsByRecommendation(
+                        userId,
+                        List.of(recommendedMood),
+                        List.of(recommendedGenre),
+                        List.of(recommendedKeyword),
+                        List.of(recommendedStyle));
 
         // 4. 일치 정보와 함께 반환 (일치 개수 많은 순, 0점 제외)
 
-
         // 5. 메모리 측정
-//        Runtime runtime = Runtime.getRuntime();
-//        long before = runtime.totalMemory() - runtime.freeMemory();
+        //        Runtime runtime = Runtime.getRuntime();
+        //        long before = runtime.totalMemory() - runtime.freeMemory();
 
-        List<CurationMatchResult> results = curations.stream()
-                .map(curation -> CurationMatchResult.of(
-                        curation,
-                        curation.getUser(),
-                        recommendedMood,
-                        recommendedGenre,
-                        recommendedKeyword,
-                        recommendedStyle
-                ))
-                .filter(matchResult -> matchResult.getTotalMatchCount() > 0)
-                .sorted((a, b) -> Integer.compare(b.getTotalMatchCount(), a.getTotalMatchCount()))
-                .collect(Collectors.toList());
+        List<CurationMatchResult> results =
+                curations.stream()
+                        .map(
+                                curation ->
+                                        CurationMatchResult.of(
+                                                curation,
+                                                curation.getUser(),
+                                                recommendedMood,
+                                                recommendedGenre,
+                                                recommendedKeyword,
+                                                recommendedStyle))
+                        .filter(matchResult -> matchResult.getTotalMatchCount() > 0)
+                        .sorted(
+                                (a, b) ->
+                                        Integer.compare(
+                                                b.getTotalMatchCount(), a.getTotalMatchCount()))
+                        .collect(Collectors.toList());
 
-//        long after = runtime.totalMemory() - runtime.freeMemory();
-//        System.out.println("사용 메모리: " + (after - before) / 1024 + " KB"); // 100 배치당 1079KB 사용
+        //        long after = runtime.totalMemory() - runtime.freeMemory();
+        //        System.out.println("사용 메모리: " + (after - before) / 1024 + " KB"); // 100 배치당
+        // 1079KB 사용
 
         return results;
     }

@@ -25,18 +25,18 @@ public class BookSearchController {
     private final BookSearchService bookSearchService;
     private final CurrentUserCheck currentUserCheck;
 
-    @Operation(summary = "책 검색", description = "검색어로 책 목록 조회", tags = {"Book Search"})
+    @Operation(
+            summary = "책 검색",
+            description = "검색어로 책 목록 조회",
+            tags = {"Book Search"})
     @PostMapping("/search")
-    public ResponseEntity<ApiResponse<BookSearchPageRes>> searchBookList(@RequestBody BookSearchReq req,
-        @AuthenticationPrincipal CustomUserDetails currentUser
-    ) {
+    public ResponseEntity<ApiResponse<BookSearchPageRes>> searchBookList(
+            @RequestBody BookSearchReq req,
+            @AuthenticationPrincipal CustomUserDetails currentUser) {
         BookSearchPageRes res = bookSearchService.getBookSearchList(req);
         currentUserCheck.validateLoginUser(currentUser);
 
         return ResponseEntity.status(HttpStatus.OK)
                 .body(ApiResponse.success(SuccessCode.BOOK_LIST_READ_SUCCESS, res));
     }
-
-
-
 }

@@ -4,7 +4,7 @@ import BookPick.mvp.domain.user.enums.user.UserErrorCode;
 import BookPick.mvp.global.exception.BusinessException;
 
 public class NotHaveAdminRole extends BusinessException {
-    public NotHaveAdminRole(){
+    public NotHaveAdminRole() {
         super(UserErrorCode.NOT_HAVE_ADMIN_ROLE);
     }
 }

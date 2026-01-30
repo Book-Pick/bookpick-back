@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-
 @RestController
 @RequestMapping("/api/v1/my/password")
 @RequiredArgsConstructor
@@ -23,10 +22,10 @@ public class PasswordContorller {
     private final PassWordService passWordService;
 
     @PostMapping("/change")
-    public ResponseEntity<ApiResponse<Void>> changePassword(@AuthenticationPrincipal CustomUserDetails currentUser,
-                                                            @RequestBody @Valid PassWordChangeReq req) {
+    public ResponseEntity<ApiResponse<Void>> changePassword(
+            @AuthenticationPrincipal CustomUserDetails currentUser,
+            @RequestBody @Valid PassWordChangeReq req) {
         passWordService.PassWordChange(currentUser.getId(), req);
-
 
         return ResponseEntity.status(HttpStatus.OK)
                 .body(ApiResponse.success(UserSuccessCode.PASSWORD_CHANGE_SUCCESS, null));

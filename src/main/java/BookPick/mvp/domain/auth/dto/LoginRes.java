@@ -9,24 +9,23 @@ public record LoginRes(
         String bio,
         String profileImageUrl,
         boolean isFirstLogin,
-
         String accessToken,
-        String refreshToken
+        String refreshToken) {
 
-) {
-    public static LoginRes from(CustomUserDetails customUserDetails, String accessToken, String refreshToken) {
+    public static LoginRes from(
+            CustomUserDetails customUserDetails, String accessToken, String refreshToken) {
         return new LoginRes(
                 customUserDetails.getId(),
-                customUserDetails.getUsername(),       // username = email
+                customUserDetails.getUsername(), // username = email
                 customUserDetails.getNickname(),
                 customUserDetails.getBio(),
                 customUserDetails.getProfileImageUrl(),
                 customUserDetails.isFirstLogin(),
                 accessToken,
-                refreshToken
-        );
+                refreshToken);
     }
-    public static LoginRes fromWithoutRefreshToken(LoginRes res ,String accessToken) {
+
+    public static LoginRes fromWithoutRefreshToken(LoginRes res, String accessToken) {
         return new LoginRes(
                 res.userId(),
                 res.email(),
@@ -35,7 +34,6 @@ public record LoginRes(
                 res.profileImageUrl(),
                 res.isFirstLogin(),
                 accessToken,
-                null
-        );
+                null);
     }
 }

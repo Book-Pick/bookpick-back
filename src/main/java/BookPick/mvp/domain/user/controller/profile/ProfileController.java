@@ -1,6 +1,5 @@
 package BookPick.mvp.domain.user.controller.profile;
 
-
 import BookPick.mvp.domain.auth.service.CustomUserDetails;
 import BookPick.mvp.domain.user.dto.base.UserReq;
 import BookPick.mvp.domain.user.dto.base.UserRes;
@@ -25,34 +24,43 @@ public class ProfileController {
     private final UserService userService;
     private final AdminManager adminManager;
 
-
     // 1. 프로필 조회
     @GetMapping("/me")
-    @Operation(summary = "유저 프로필 조회", description = "로그인한 사용자의 프로필을 조회합니다.", tags = {"User"})
-    public ResponseEntity<ApiResponse<UserRes>> getUseProfile(@AuthenticationPrincipal CustomUserDetails currentUser) {
+    @Operation(
+            summary = "유저 프로필 조회",
+            description = "로그인한 사용자의 프로필을 조회합니다.",
+            tags = {"User"})
+    public ResponseEntity<ApiResponse<UserRes>> getUseProfile(
+            @AuthenticationPrincipal CustomUserDetails currentUser) {
         UserRes res = userService.userProfileGet(currentUser.getId());
 
         return ResponseEntity.status(HttpStatus.OK)
                 .body(ApiResponse.success(UserSuccessCode.GET_MY_PROFILE_SUCCESS, res));
     }
 
-
     // 2. 프로필 수정
     @PatchMapping("/me")
-    @Operation(summary = "유저 프로필 수정", description = "로그인한 사용자의 프로필을 수정합니다.", tags = {"User"})
-    public ResponseEntity<ApiResponse<UserRes>> updateUserProfile(@AuthenticationPrincipal @Valid CustomUserDetails currentUser
-            , @RequestBody @Valid UserReq req) {
+    @Operation(
+            summary = "유저 프로필 수정",
+            description = "로그인한 사용자의 프로필을 수정합니다.",
+            tags = {"User"})
+    public ResponseEntity<ApiResponse<UserRes>> updateUserProfile(
+            @AuthenticationPrincipal @Valid CustomUserDetails currentUser,
+            @RequestBody @Valid UserReq req) {
         UserRes res = userService.userProfileUpdate(currentUser.getId(), req);
 
         return ResponseEntity.status(HttpStatus.OK)
                 .body(ApiResponse.success(UserSuccessCode.UPDATE_MY_PROFILE_SUCCESS, res));
     }
 
-
     // 3. 회원 탈퇴 (소프트 삭제)
     @DeleteMapping("/soft")
-    @Operation(summary = "유저 프로필 소프트 삭제", description = "로그인한 사용자의 프로필을 임시 삭제합니다.", tags = {"User"})
-    public ResponseEntity<ApiResponse<UserSoftDeleteRes>> softDeleteProfile(@AuthenticationPrincipal CustomUserDetails currentUser) {
+    @Operation(
+            summary = "유저 프로필 소프트 삭제",
+            description = "로그인한 사용자의 프로필을 임시 삭제합니다.",
+            tags = {"User"})
+    public ResponseEntity<ApiResponse<UserSoftDeleteRes>> softDeleteProfile(
+            @AuthenticationPrincipal CustomUserDetails currentUser) {
         UserSoftDeleteRes res = userService.softDeleteProfile(currentUser.getId());
 
         return ResponseEntity.status(HttpStatus.OK)
@@ -61,8 +69,12 @@ public class ProfileController {
 
     // 4. 유저 하드 삭제
     @DeleteMapping("/hard")
-    @Operation(summary = "유저 프로필 하드 삭제", description = "로그인한 사용자의 프로필을 완전히 삭제합니다.", tags = {"User"})
-    public ResponseEntity<ApiResponse<UserRes>> hardDeleteUser(@AuthenticationPrincipal CustomUserDetails currentUser) {
+    @Operation(
+            summary = "유저 프로필 하드 삭제",
+            description = "로그인한 사용자의 프로필을 완전히 삭제합니다.",
+            tags = {"User"})
+    public ResponseEntity<ApiResponse<UserRes>> hardDeleteUser(
+            @AuthenticationPrincipal CustomUserDetails currentUser) {
         if (adminManager.isAdmin(currentUser.getAuthorities())) {
             userService.hardDeleteUserProfile(currentUser.getId());
         }

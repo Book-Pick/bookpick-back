@@ -20,11 +20,13 @@ public class CurationLikeController {
     private final CurationLikeService curationLikeService;
     private final CurrentUserCheck currentUserCheck;
 
-
     @PostMapping("/{curationId}")
-    @Operation(summary = "큐레이션 좋아요", description = "큐레이션 좋아요 버튼을 누릅니다.", tags = {"Curation"})
-    public ResponseEntity<ApiResponse<Void>> likeOrUnlikeCuration(@AuthenticationPrincipal CustomUserDetails currentUser
-            , @PathVariable Long curationId) {
+    @Operation(
+            summary = "큐레이션 좋아요",
+            description = "큐레이션 좋아요 버튼을 누릅니다.",
+            tags = {"Curation"})
+    public ResponseEntity<ApiResponse<Void>> likeOrUnlikeCuration(
+            @AuthenticationPrincipal CustomUserDetails currentUser, @PathVariable Long curationId) {
 
         currentUserCheck.validateLoginUser(currentUser);
 
@@ -38,9 +40,4 @@ public class CurationLikeController {
                     .body(ApiResponse.success(CurationSuccessCode.CURATION_DISLIKE_SUCCESS, null));
         }
     }
-
-
-
-
-
 }

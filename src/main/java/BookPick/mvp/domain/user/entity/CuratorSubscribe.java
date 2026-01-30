@@ -7,12 +7,10 @@ import lombok.*;
 @Table(
         name = "curator_subscribe",
         uniqueConstraints = {
-                @UniqueConstraint(
-                        name = "uk_user_curator",
-                        columnNames = {"user_id", "curator_id"}
-                )
-        }
-)
+            @UniqueConstraint(
+                    name = "uk_user_curator",
+                    columnNames = {"user_id", "curator_id"})
+        })
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
@@ -32,6 +30,3 @@ public class CuratorSubscribe {
     @JoinColumn(name = "curator_id")
     private User curator;
 }
-
-
-

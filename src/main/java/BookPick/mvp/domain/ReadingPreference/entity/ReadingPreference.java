@@ -2,16 +2,12 @@ package BookPick.mvp.domain.ReadingPreference.entity;
 
 import BookPick.mvp.domain.ReadingPreference.dto.ReadingPreferenceReq;
 import BookPick.mvp.domain.author.entity.Author;
-import BookPick.mvp.domain.author.service.AuthorSaveService;
-import BookPick.mvp.domain.book.dto.preference.BookDto;
 import BookPick.mvp.domain.book.entity.Book;
-import BookPick.mvp.domain.book.service.BookSaveService;
 import BookPick.mvp.domain.user.entity.User;
 import jakarta.persistence.*;
-import lombok.*;
-
 import java.time.LocalDateTime;
 import java.util.*;
+import lombok.*;
 
 @Entity
 @Table(name = "reading_preference")
@@ -36,18 +32,15 @@ public class ReadingPreference {
     @JoinTable(
             name = "preference_books",
             joinColumns = @JoinColumn(name = "preference_id"),
-            inverseJoinColumns = @JoinColumn(name = "book_id")
-    )
+            inverseJoinColumns = @JoinColumn(name = "book_id"))
     private Set<Book> favoriteBooks;
 
     @ManyToMany
     @JoinTable(
             name = "preference_authors",
             joinColumns = @JoinColumn(name = "preference_id"),
-            inverseJoinColumns = @JoinColumn(name = "author_id")
-    )
+            inverseJoinColumns = @JoinColumn(name = "author_id"))
     private Set<Author> favoriteAuthors;
-
 
     @ElementCollection
     @CollectionTable(name = "preference_moods", joinColumns = @JoinColumn(name = "preference_id"))
@@ -55,7 +48,9 @@ public class ReadingPreference {
     private List<String> moods;
 
     @ElementCollection
-    @CollectionTable(name = "preference_readinghabits", joinColumns = @JoinColumn(name = "preference_id"))
+    @CollectionTable(
+            name = "preference_readinghabits",
+            joinColumns = @JoinColumn(name = "preference_id"))
     @Column(name = "reading_habits")
     private List<String> readingHabits;
 
@@ -65,12 +60,16 @@ public class ReadingPreference {
     private List<String> genres;
 
     @ElementCollection
-    @CollectionTable(name = "preference_keywords", joinColumns = @JoinColumn(name = "preference_id"))
+    @CollectionTable(
+            name = "preference_keywords",
+            joinColumns = @JoinColumn(name = "preference_id"))
     @Column(name = "keyword")
     private List<String> keywords;
 
     @ElementCollection
-    @CollectionTable(name = "preference_readingstyles", joinColumns = @JoinColumn(name = "preference_id"))
+    @CollectionTable(
+            name = "preference_readingstyles",
+            joinColumns = @JoinColumn(name = "preference_id"))
     @Column(name = "reading_style")
     private List<String> readingStyles;
 
@@ -82,39 +81,39 @@ public class ReadingPreference {
 
     private LocalDateTime deletedAt;
 
-   /* public void update(ReadingPreferenceReq req) {
-//        if (req.mbti() != null) this.mbti = req.mbti();  // mbti null값 허용
+    /* public void update(ReadingPreferenceReq req) {
+    //        if (req.mbti() != null) this.mbti = req.mbti();  // mbti null값 허용
 
 
 
-        if (req.moods() != null) {
-            this.moods.clear();
-            this.moods.addAll(req.moods());
-        }
-        else{
-            this.moods.clear();
-        }
+            if (req.moods() != null) {
+                this.moods.clear();
+                this.moods.addAll(req.moods());
+            }
+            else{
+                this.moods.clear();
+            }
 
-        if (req.readingHabits() != null) {
-            this.readingHabits.clear();
-            this.readingHabits.addAll(req.readingHabits());
-        }
+            if (req.readingHabits() != null) {
+                this.readingHabits.clear();
+                this.readingHabits.addAll(req.readingHabits());
+            }
 
-        if (req.genres() != null) {
-            this.genres.clear();
-            this.genres.addAll(req.genres());
-        }
+            if (req.genres() != null) {
+                this.genres.clear();
+                this.genres.addAll(req.genres());
+            }
 
-        if (req.keywords() != null) {
-            this.keywords.clear();
-            this.keywords.addAll(req.keywords());
-        }
+            if (req.keywords() != null) {
+                this.keywords.clear();
+                this.keywords.addAll(req.keywords());
+            }
 
-        if (req.readingStyles() != null) {
-            this.readingStyles.clear();
-            this.readingStyles.addAll(req.readingStyles());
-        }
-    }*/
+            if (req.readingStyles() != null) {
+                this.readingStyles.clear();
+                this.readingStyles.addAll(req.readingStyles());
+            }
+        }*/
 
     public void update(ReadingPreferenceReq req) {
 
@@ -146,7 +145,6 @@ public class ReadingPreference {
         }
     }
 
-
     public static ReadingPreference clearPreferences(User user) {
 
         return ReadingPreference.builder()
@@ -162,8 +160,4 @@ public class ReadingPreference {
                 .isCompleted(false)
                 .build();
     }
-
-
 }
-
-

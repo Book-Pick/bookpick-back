@@ -1,9 +1,13 @@
 package BookPick.mvp.domain.auth.service;
 
+import static org.assertj.core.api.Assertions.*;
+import static org.mockito.Mockito.*;
+
 import BookPick.mvp.domain.auth.Roles;
 import BookPick.mvp.domain.user.entity.User;
 import BookPick.mvp.domain.user.exception.common.UserNotFoundException;
 import BookPick.mvp.domain.user.repository.UserRepository;
+import java.util.Optional;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -13,36 +17,30 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import java.util.Optional;
-
-import static org.assertj.core.api.Assertions.*;
-import static org.mockito.Mockito.*;
-
 @ExtendWith(MockitoExtension.class)
 @DisplayName("UserDetailsService 테스트")
 class MyUserDetailsServiceTest {
 
-    @InjectMocks
-    private MyUserDetailsService myUserDetailsService;
+    @InjectMocks private MyUserDetailsService myUserDetailsService;
 
-    @Mock
-    private UserRepository userRepository;
+    @Mock private UserRepository userRepository;
 
     @Test
     @DisplayName("정상 사용자 조회 - 일반 유저")
     void loadUserByUsername_success_normalUser() {
         // given
         String email = "test@test.com";
-        User mockUser = User.builder()
-                .id(1L)
-                .email(email)
-                .password("encodedPassword")
-                .nickname("테스터")
-                .bio("자기소개")
-                .profileImageUrl("profile.jpg")
-                .role(Roles.ROLE_USER)
-                .isFirstLogin(true)
-                .build();
+        User mockUser =
+                User.builder()
+                        .id(1L)
+                        .email(email)
+                        .password("encodedPassword")
+                        .nickname("테스터")
+                        .bio("자기소개")
+                        .profileImageUrl("profile.jpg")
+                        .role(Roles.ROLE_USER)
+                        .isFirstLogin(true)
+                        .build();
 
         when(userRepository.findByEmail(email)).thenReturn(Optional.of(mockUser));
 
@@ -70,12 +68,13 @@ class MyUserDetailsServiceTest {
     void loadUserByUsername_roleUser_granted() {
         // given
         String email = "user@test.com";
-        User mockUser = User.builder()
-                .id(1L)
-                .email(email)
-                .password("password")
-                .role(Roles.ROLE_USER)
-                .build();
+        User mockUser =
+                User.builder()
+                        .id(1L)
+                        .email(email)
+                        .password("password")
+                        .role(Roles.ROLE_USER)
+                        .build();
 
         when(userRepository.findByEmail(email)).thenReturn(Optional.of(mockUser));
 
@@ -111,16 +110,17 @@ class MyUserDetailsServiceTest {
     void loadUserByUsername_allFieldsSet() {
         // given
         String email = "complete@test.com";
-        User mockUser = User.builder()
-                .id(999L)
-                .email(email)
-                .password("hashedPassword123")
-                .nickname("완전한사용자")
-                .bio("완전한 자기소개입니다")
-                .profileImageUrl("https://example.com/profile.jpg")
-                .role(Roles.ROLE_USER)
-                .isFirstLogin(false)
-                .build();
+        User mockUser =
+                User.builder()
+                        .id(999L)
+                        .email(email)
+                        .password("hashedPassword123")
+                        .nickname("완전한사용자")
+                        .bio("완전한 자기소개입니다")
+                        .profileImageUrl("https://example.com/profile.jpg")
+                        .role(Roles.ROLE_USER)
+                        .isFirstLogin(false)
+                        .build();
 
         when(userRepository.findByEmail(email)).thenReturn(Optional.of(mockUser));
 
@@ -146,13 +146,14 @@ class MyUserDetailsServiceTest {
     void loadUserByUsername_nullNickname_success() {
         // given
         String email = "nonickname@test.com";
-        User mockUser = User.builder()
-                .id(1L)
-                .email(email)
-                .password("password")
-                .nickname(null)
-                .role(Roles.ROLE_USER)
-                .build();
+        User mockUser =
+                User.builder()
+                        .id(1L)
+                        .email(email)
+                        .password("password")
+                        .nickname(null)
+                        .role(Roles.ROLE_USER)
+                        .build();
 
         when(userRepository.findByEmail(email)).thenReturn(Optional.of(mockUser));
 
@@ -171,12 +172,13 @@ class MyUserDetailsServiceTest {
     void loadUserByUsername_multipleCalls_success() {
         // given
         String email = "multi@test.com";
-        User mockUser = User.builder()
-                .id(1L)
-                .email(email)
-                .password("password")
-                .role(Roles.ROLE_USER)
-                .build();
+        User mockUser =
+                User.builder()
+                        .id(1L)
+                        .email(email)
+                        .password("password")
+                        .role(Roles.ROLE_USER)
+                        .build();
 
         when(userRepository.findByEmail(email)).thenReturn(Optional.of(mockUser));
 
@@ -197,14 +199,15 @@ class MyUserDetailsServiceTest {
     void loadUserByUsername_noProfileImage_success() {
         // given
         String email = "noimage@test.com";
-        User mockUser = User.builder()
-                .id(1L)
-                .email(email)
-                .password("password")
-                .nickname("이미지없음")
-                .profileImageUrl(null)
-                .role(Roles.ROLE_USER)
-                .build();
+        User mockUser =
+                User.builder()
+                        .id(1L)
+                        .email(email)
+                        .password("password")
+                        .nickname("이미지없음")
+                        .profileImageUrl(null)
+                        .role(Roles.ROLE_USER)
+                        .build();
 
         when(userRepository.findByEmail(email)).thenReturn(Optional.of(mockUser));
 
@@ -226,28 +229,32 @@ class MyUserDetailsServiceTest {
         String email1 = "first@test.com";
         String email2 = "second@test.com";
 
-        User firstLoginUser = User.builder()
-                .id(1L)
-                .email(email1)
-                .password("password")
-                .role(Roles.ROLE_USER)
-                .isFirstLogin(true)
-                .build();
+        User firstLoginUser =
+                User.builder()
+                        .id(1L)
+                        .email(email1)
+                        .password("password")
+                        .role(Roles.ROLE_USER)
+                        .isFirstLogin(true)
+                        .build();
 
-        User returningUser = User.builder()
-                .id(2L)
-                .email(email2)
-                .password("password")
-                .role(Roles.ROLE_USER)
-                .isFirstLogin(false)
-                .build();
+        User returningUser =
+                User.builder()
+                        .id(2L)
+                        .email(email2)
+                        .password("password")
+                        .role(Roles.ROLE_USER)
+                        .isFirstLogin(false)
+                        .build();
 
         when(userRepository.findByEmail(email1)).thenReturn(Optional.of(firstLoginUser));
         when(userRepository.findByEmail(email2)).thenReturn(Optional.of(returningUser));
 
         // when
-        CustomUserDetails firstResult = (CustomUserDetails) myUserDetailsService.loadUserByUsername(email1);
-        CustomUserDetails secondResult = (CustomUserDetails) myUserDetailsService.loadUserByUsername(email2);
+        CustomUserDetails firstResult =
+                (CustomUserDetails) myUserDetailsService.loadUserByUsername(email1);
+        CustomUserDetails secondResult =
+                (CustomUserDetails) myUserDetailsService.loadUserByUsername(email2);
 
         // then
         assertThat(firstResult.isFirstLogin()).isTrue();

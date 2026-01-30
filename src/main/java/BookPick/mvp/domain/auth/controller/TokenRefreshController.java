@@ -1,6 +1,7 @@
 package BookPick.mvp.domain.auth.controller;
 
 import BookPick.mvp.domain.auth.dto.LoginRes;
+import BookPick.mvp.domain.auth.service.CustomUserDetails;
 import BookPick.mvp.domain.auth.service.TokenRefreshService;
 import BookPick.mvp.domain.auth.util.Manager.login.jwt.RefreshTokenCookieManager;
 import BookPick.mvp.global.api.ApiResponse;
@@ -14,7 +15,6 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import BookPick.mvp.domain.auth.service.CustomUserDetails;
 
 @RestController
 @RequestMapping("/api/v1/auth/token")
@@ -24,16 +24,16 @@ public class TokenRefreshController {
     private final RefreshTokenCookieManager refreshTokenCookieManager;
     private final TokenRefreshService tokenRefreshService;
 
-    /**
-     * 🔄 Refresh Token을 이용해 Access Token 재발급
-     */
+    /** 🔄 Refresh Token을 이용해 Access Token 재발급 */
     @PostMapping("/refresh")
-    @Operation(summary = "액세스 토큰 재발급", description = "액세스 토큰 재발급", tags = {"Auth"})
+    @Operation(
+            summary = "액세스 토큰 재발급",
+            description = "액세스 토큰 재발급",
+            tags = {"Auth"})
     public ResponseEntity<ApiResponse<LoginRes>> refreshAccessToken(
             HttpServletRequest request,
             HttpServletResponse response,
-            @AuthenticationPrincipal CustomUserDetails currentUser
-    ) {
+            @AuthenticationPrincipal CustomUserDetails currentUser) {
 
         // 1️⃣ 쿠키에서 refresh token 추출
         String refreshToken = refreshTokenCookieManager.getRefreshTokenFromCookie(request);

@@ -1,7 +1,6 @@
 package BookPick.mvp.domain.ReadingPreference.enums.filed;
 
 public enum ReadingStyle implements PreferenceField {
-
     SPEED_READING("속독형"),
     IMMERSIVE("몰입형"),
     CAREFUL_READING("정독형"),

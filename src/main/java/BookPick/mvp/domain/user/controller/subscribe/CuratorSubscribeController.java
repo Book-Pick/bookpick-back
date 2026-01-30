@@ -26,28 +26,39 @@ public class CuratorSubscribeController {
 
     // 1. 큐레이터 구독하기
 
-
     @PostMapping("/subscribe")
-    @Operation(summary = "큐레이터 구독/취소", description = "큐레이터 구독 버튼을 누릅니다. 이미 구독된 상태라면 구독이 취소됩니다.", tags = {"Subscribe"})
+    @Operation(
+            summary = "큐레이터 구독/취소",
+            description = "큐레이터 구독 버튼을 누릅니다. 이미 구독된 상태라면 구독이 취소됩니다.",
+            tags = {"Subscribe"})
     public ResponseEntity<ApiResponse<CuratorSubscribeRes>> subscribe(
             @RequestBody @Valid CuratorSubscribeReq req,
-            @AuthenticationPrincipal CustomUserDetails currentUser){
+            @AuthenticationPrincipal CustomUserDetails currentUser) {
 
         currentUserCheck.validateLoginUser(currentUser);
 
-        CuratorSubscribeRes curatorSubscribeRes = curationSubscribeService.subscribe(currentUser.getId(), req);
+        CuratorSubscribeRes curatorSubscribeRes =
+                curationSubscribeService.subscribe(currentUser.getId(), req);
 
         if (curatorSubscribeRes.subscribed()) {
             return ResponseEntity.status(HttpStatus.OK)
-                    .body(ApiResponse.success(CuratorSuccessCode.CURATOR_SUBSCRIBE_SUCCESS, curatorSubscribeRes));
+                    .body(
+                            ApiResponse.success(
+                                    CuratorSuccessCode.CURATOR_SUBSCRIBE_SUCCESS,
+                                    curatorSubscribeRes));
         } else {
             return ResponseEntity.status(HttpStatus.OK)
-                    .body(ApiResponse.success(CuratorSuccessCode.CURATOR_SUBSCRIBE_CANCLE_SUCCESS, curatorSubscribeRes));
+                    .body(
+                            ApiResponse.success(
+                                    CuratorSuccessCode.CURATOR_SUBSCRIBE_CANCLE_SUCCESS,
+                                    curatorSubscribeRes));
         }
     }
 
-
-    @Operation(summary = "큐레이터 구독 리스트 제공", description = "사용자가 구독한 큐레이터 리스트를 제공합니다.", tags = {"Subscribe"})
+    @Operation(
+            summary = "큐레이터 구독 리스트 제공",
+            description = "사용자가 구독한 큐레이터 리스트를 제공합니다.",
+            tags = {"Subscribe"})
     @GetMapping("/subscribe/curators")
     public ResponseEntity<ApiResponse<SubscribedCuratorPageRes>> getSubscribedCurators(
             @AuthenticationPrincipal @Valid CustomUserDetails currentUser,
@@ -55,8 +66,12 @@ public class CuratorSubscribeController {
             @RequestParam(defaultValue = "10") int size) {
 
         currentUserCheck.validateLoginUser(currentUser);
-        SubscribedCuratorPageRes subscribedCuratorPageRes = curationSubscribeService.getSubscribedCurators(currentUser.getId(), page, size);
+        SubscribedCuratorPageRes subscribedCuratorPageRes =
+                curationSubscribeService.getSubscribedCurators(currentUser.getId(), page, size);
         return ResponseEntity.ok()
-                .body(ApiResponse.success(CuratorSuccessCode.GET_CURATOR_SUBSCRIBE_LIST_SUCCESS, subscribedCuratorPageRes));
+                .body(
+                        ApiResponse.success(
+                                CuratorSuccessCode.GET_CURATOR_SUBSCRIBE_LIST_SUCCESS,
+                                subscribedCuratorPageRes));
     }
 }

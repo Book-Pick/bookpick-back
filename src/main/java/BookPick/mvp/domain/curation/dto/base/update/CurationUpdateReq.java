@@ -11,5 +11,4 @@ public record CurationUpdateReq(
         BookDto book,
         String review,
         RecommendDto recommend,
-        Boolean isDrafted
-) {}
+        Boolean isDrafted) {}
