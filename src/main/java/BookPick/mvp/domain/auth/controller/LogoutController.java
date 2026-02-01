@@ -5,6 +5,9 @@ import BookPick.mvp.domain.auth.service.LogoutService;
 import BookPick.mvp.global.api.ApiResponse;
 import BookPick.mvp.global.api.SuccessCode.SuccessCode;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -26,6 +29,10 @@ public class LogoutController {
             summary = "로그아웃",
             description = "로그아웃",
             tags = {"Auth"})
+    @ApiResponses({
+        @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "로그아웃 성공"),
+        @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "401", description = "로그인이 필요합니다", content = @Content(schema = @Schema(implementation = ApiResponse.class)))
+    })
     public ResponseEntity<ApiResponse<Void>> logout(
             HttpServletRequest request,
             HttpServletResponse response,

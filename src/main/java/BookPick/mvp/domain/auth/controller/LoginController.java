@@ -7,6 +7,9 @@ import BookPick.mvp.domain.auth.util.Manager.login.jwt.RefreshTokenCookieManager
 import BookPick.mvp.global.api.ApiResponse;
 import BookPick.mvp.global.api.SuccessCode.SuccessCode;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
@@ -30,6 +33,11 @@ public class LoginController {
             summary = "로그인",
             description = "로그인",
             tags = {"Auth"})
+    @ApiResponses({
+        @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "로그인 성공"),
+        @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "401", description = "아이디 또는 비밀번호가 잘못되었습니다", content = @Content(schema = @Schema(implementation = ApiResponse.class))),
+        @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "400", description = "잘못된 요청입니다", content = @Content(schema = @Schema(implementation = ApiResponse.class)))
+    })
     public ResponseEntity<ApiResponse<LoginRes>> login(
             @RequestBody @Valid LoginReq req,
             HttpServletRequest servletRequest,

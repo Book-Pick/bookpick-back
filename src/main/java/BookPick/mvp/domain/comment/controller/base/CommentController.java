@@ -14,6 +14,9 @@ import BookPick.mvp.domain.user.util.CurrentUserCheck;
 import BookPick.mvp.global.api.ApiResponse;
 import BookPick.mvp.global.api.SuccessCode.SuccessCode;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -34,6 +37,11 @@ public class CommentController {
             summary = "댓글 생성",
             description = "특정 큐레이션에 댓글을 생성합니다",
             tags = {"Comment"})
+    @ApiResponses({
+        @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "201", description = "댓글 생성 성공"),
+        @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "401", description = "로그인이 필요합니다", content = @Content(schema = @Schema(implementation = ApiResponse.class))),
+        @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "404", description = "해당 큐레이션을 찾을 수 없습니다", content = @Content(schema = @Schema(implementation = ApiResponse.class)))
+    })
     @PostMapping("/{curationId}/comments")
     public ResponseEntity<ApiResponse<CommentCreateRes>> create(
             @PathVariable Long curationId,
@@ -54,6 +62,10 @@ public class CommentController {
             summary = "댓글 리스트 조회",
             description = "특정 큐레이션의 댓글 목록을 페이지네이션하여 조회합니다",
             tags = {"Comment"})
+    @ApiResponses({
+        @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "댓글 목록 조회 성공"),
+        @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "404", description = "해당 큐레이션을 찾을 수 없습니다", content = @Content(schema = @Schema(implementation = ApiResponse.class)))
+    })
     @GetMapping("/{curationId}/comments")
     public ResponseEntity<ApiResponse<CommentListRes>> getCommentList(
             @PathVariable Long curationId,
@@ -78,6 +90,10 @@ public class CommentController {
             summary = "댓글 상세 조회",
             description = "특정 댓글의 상세 정보를 조회합니다",
             tags = {"Comment"})
+    @ApiResponses({
+        @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "댓글 조회 성공"),
+        @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "404", description = "해당 댓글을 찾을 수 없습니다", content = @Content(schema = @Schema(implementation = ApiResponse.class)))
+    })
     @GetMapping("/{curationId}/comments/{commentId}")
     public ResponseEntity<ApiResponse<CommentDetailRes>> getCommentDetail(
             @PathVariable Long curationId, @PathVariable Long commentId) {
@@ -90,6 +106,12 @@ public class CommentController {
             summary = "댓글 수정",
             description = "특정 댓글의 내용을 수정합니다",
             tags = {"Comment"})
+    @ApiResponses({
+        @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "댓글 수정 성공"),
+        @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "401", description = "로그인이 필요합니다", content = @Content(schema = @Schema(implementation = ApiResponse.class))),
+        @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "403", description = "댓글 수정 권한이 없습니다", content = @Content(schema = @Schema(implementation = ApiResponse.class))),
+        @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "404", description = "해당 댓글을 찾을 수 없습니다", content = @Content(schema = @Schema(implementation = ApiResponse.class)))
+    })
     @PatchMapping("/{curationId}/comments/{commentId}")
     public ResponseEntity<ApiResponse<CommentUpdateRes>> updateComment(
             @PathVariable Long curationId,
@@ -107,6 +129,10 @@ public class CommentController {
             summary = "댓글 삭제",
             description = "특정 댓글을 삭제합니다 (자식 댓글도 함께 삭제됩니다)",
             tags = {"Comment"})
+    @ApiResponses({
+        @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "댓글 삭제 성공"),
+        @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "404", description = "해당 댓글을 찾을 수 없습니다", content = @Content(schema = @Schema(implementation = ApiResponse.class)))
+    })
     @DeleteMapping("/{curationId}/comments/{commentId}")
     public ResponseEntity<ApiResponse<CommentDeleteRes>> deleteComment(
             @PathVariable Long curationId,

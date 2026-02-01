@@ -12,6 +12,9 @@ import BookPick.mvp.domain.user.util.CurrentUserCheck;
 import BookPick.mvp.global.api.ApiResponse;
 import BookPick.mvp.global.api.SuccessCode.SuccessCode;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.validation.Valid;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -33,6 +36,11 @@ public class CurationListController {
             summary = "큐레이션 목록  조회",
             description = "최신순 / 인기순 / 사용자 취향 유사도 순",
             tags = {"Curation"})
+    @ApiResponses({
+        @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "큐레이션 목록 조회 성공"),
+        @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "401", description = "로그인이 필요합니다", content = @Content(schema = @Schema(implementation = ApiResponse.class))),
+        @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "403", description = "임시저장 큐레이션은 작성자만 접근할 수 있습니다", content = @Content(schema = @Schema(implementation = ApiResponse.class)))
+    })
     @GetMapping
     public ResponseEntity<ApiResponse<CurationListGetRes>> getCurations(
             @RequestParam(defaultValue = "latest") String sort,
@@ -73,6 +81,10 @@ public class CurationListController {
             summary = "큐레이션 ID 목록으로 조회",
             description = "curationId 배열을 받아 해당 큐레이션 목록 반환",
             tags = {"Curation"})
+    @ApiResponses({
+        @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "큐레이션 목록 조회 성공"),
+        @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "401", description = "로그인이 필요합니다", content = @Content(schema = @Schema(implementation = ApiResponse.class)))
+    })
     @PostMapping("/by-ids")
     public ResponseEntity<ApiResponse<List<CurationContentRes>>> getCurationsByIds(
             @RequestBody @Valid CurationIdsReq request,

@@ -6,6 +6,9 @@ import BookPick.mvp.domain.auth.service.SignUpService;
 import BookPick.mvp.global.api.ApiResponse;
 import BookPick.mvp.global.api.SuccessCode.SuccessCode;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -28,6 +31,11 @@ public class SignUpController {
             summary = "회원가입",
             description = "회원가입",
             tags = {"Auth"})
+    @ApiResponses({
+        @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "회원가입 성공"),
+        @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "400", description = "잘못된 요청입니다", content = @Content(schema = @Schema(implementation = ApiResponse.class))),
+        @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "409", description = "이미 존재하는 이메일입니다", content = @Content(schema = @Schema(implementation = ApiResponse.class)))
+    })
     public ResponseEntity<ApiResponse<SignRes>> signUp(
             @RequestBody @Valid SignReq req, HttpServletResponse servletRes) {
         SignRes res = authService.signUp(req); // data 얻기

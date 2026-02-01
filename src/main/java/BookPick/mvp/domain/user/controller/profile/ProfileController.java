@@ -9,6 +9,9 @@ import BookPick.mvp.domain.user.service.base.UserService;
 import BookPick.mvp.domain.user.util.AdminManager;
 import BookPick.mvp.global.api.ApiResponse;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -30,6 +33,11 @@ public class ProfileController {
             summary = "유저 프로필 조회",
             description = "로그인한 사용자의 프로필을 조회합니다.",
             tags = {"User"})
+    @ApiResponses({
+        @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "프로필 조회 성공"),
+        @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "401", description = "로그인이 필요합니다", content = @Content(schema = @Schema(implementation = ApiResponse.class))),
+        @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "404", description = "해당 유저를 찾을 수 없습니다", content = @Content(schema = @Schema(implementation = ApiResponse.class)))
+    })
     public ResponseEntity<ApiResponse<UserRes>> getUseProfile(
             @AuthenticationPrincipal CustomUserDetails currentUser) {
         UserRes res = userService.userProfileGet(currentUser.getId());
@@ -44,6 +52,11 @@ public class ProfileController {
             summary = "유저 프로필 수정",
             description = "로그인한 사용자의 프로필을 수정합니다.",
             tags = {"User"})
+    @ApiResponses({
+        @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "프로필 수정 성공"),
+        @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "400", description = "닉네임은 비어있으면 안됩니다", content = @Content(schema = @Schema(implementation = ApiResponse.class))),
+        @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "401", description = "로그인이 필요합니다", content = @Content(schema = @Schema(implementation = ApiResponse.class)))
+    })
     public ResponseEntity<ApiResponse<UserRes>> updateUserProfile(
             @AuthenticationPrincipal @Valid CustomUserDetails currentUser,
             @RequestBody @Valid UserReq req) {
@@ -59,6 +72,11 @@ public class ProfileController {
             summary = "유저 프로필 소프트 삭제",
             description = "로그인한 사용자의 프로필을 임시 삭제합니다.",
             tags = {"User"})
+    @ApiResponses({
+        @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "프로필 삭제 성공"),
+        @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "401", description = "로그인이 필요합니다", content = @Content(schema = @Schema(implementation = ApiResponse.class))),
+        @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "409", description = "이미 삭제한 유저입니다", content = @Content(schema = @Schema(implementation = ApiResponse.class)))
+    })
     public ResponseEntity<ApiResponse<UserSoftDeleteRes>> softDeleteProfile(
             @AuthenticationPrincipal CustomUserDetails currentUser) {
         UserSoftDeleteRes res = userService.softDeleteProfile(currentUser.getId());
@@ -73,6 +91,11 @@ public class ProfileController {
             summary = "유저 프로필 하드 삭제",
             description = "로그인한 사용자의 프로필을 완전히 삭제합니다.",
             tags = {"User"})
+    @ApiResponses({
+        @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "프로필 완전 삭제 성공"),
+        @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "400", description = "관리자 권한이 없는 유저입니다", content = @Content(schema = @Schema(implementation = ApiResponse.class))),
+        @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "401", description = "로그인이 필요합니다", content = @Content(schema = @Schema(implementation = ApiResponse.class)))
+    })
     public ResponseEntity<ApiResponse<UserRes>> hardDeleteUser(
             @AuthenticationPrincipal CustomUserDetails currentUser) {
         if (adminManager.isAdmin(currentUser.getAuthorities())) {
