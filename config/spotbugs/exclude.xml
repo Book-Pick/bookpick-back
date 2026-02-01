@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<FindBugsFilter
+        xmlns="https://github.com/spotbugs/filter/3.0.0"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="https://github.com/spotbugs/filter/3.0.0 https://raw.githubusercontent.com/spotbugs/spotbugs/3.1.0/spotbugs/etc/findbugsfilter.xsd">
+
+    <!--
+        SpotBugs 제외 규칙 - BookPick 프로젝트
+    -->
+
+    <!-- 테스트 코드 제외 -->
+    <Match>
+        <Source name="~.*Test\.java"/>
+    </Match>
+
+    <!-- DTO/Entity 클래스의 직렬화 경고 무시 -->
+    <Match>
+        <Or>
+            <Class name="~.*Dto"/>
+            <Class name="~.*DTO"/>
+            <Class name="~.*Req"/>
+            <Class name="~.*Res"/>
+            <Class name="~.*Request"/>
+            <Class name="~.*Response"/>
+        </Or>
+        <Bug pattern="SE_NO_SERIALVERSIONID"/>
+    </Match>
+
+    <!-- Entity 클래스 경고 무시 -->
+    <Match>
+        <Package name="~.*\.entity"/>
+        <Or>
+            <Bug pattern="SE_NO_SERIALVERSIONID"/>
+            <Bug pattern="EI_EXPOSE_REP"/>
+            <Bug pattern="EI_EXPOSE_REP2"/>
+        </Or>
+    </Match>
+
+    <!-- Lombok @Data로 생성된 equals/hashCode 관련 경고 -->
+    <Match>
+        <Bug pattern="EQ_DOESNT_OVERRIDE_EQUALS"/>
+    </Match>
+
+    <!-- Spring Controller 관련 -->
+    <Match>
+        <Or>
+            <Class name="~.*Controller"/>
+            <Class name="~.*Config"/>
+        </Or>
+        <Bug pattern="URF_UNREAD_FIELD"/>
+    </Match>
+
+    <!-- 의도적인 예외 무시 패턴 -->
+    <Match>
+        <Bug pattern="REC_CATCH_EXCEPTION"/>
+    </Match>
+
+    <!-- 날짜/시간 필드 노출 (DTO에서는 허용) -->
+    <Match>
+        <Or>
+            <Class name="~.*Dto"/>
+            <Class name="~.*DTO"/>
+            <Class name="~.*Res"/>
+        </Or>
+        <Bug pattern="EI_EXPOSE_REP"/>
+    </Match>
+
+    <!-- 빌더 패턴의 mutable 필드 -->
+    <Match>
+        <Bug pattern="EI_EXPOSE_REP2"/>
+        <Method name="~.*builder.*|~.*Builder.*"/>
+    </Match>
+
+    <!-- 국제화 관련 (현재 한국어만 지원) -->
+    <Match>
+        <Bug pattern="DM_DEFAULT_ENCODING"/>
+    </Match>
+
+    <!-- null 체크 관련 (Optional 사용 시) -->
+    <Match>
+        <Bug pattern="NP_NULL_ON_SOME_PATH_FROM_RETURN_VALUE"/>
+    </Match>
+</FindBugsFilter>
