@@ -92,4 +92,16 @@ public interface CurationRepository extends JpaRepository<Curation, Long> {
     @Lock(LockModeType.PESSIMISTIC_WRITE)
     @Query("SELECT c FROM Curation c JOIN FETCH c.user WHERE c.id = :id")
     Optional<Curation> findByIdWithUserAndLock(@Param("id") Long id);
+
+    // 순수 매칭용: 발행된 큐레이션 전체 조회 (본인 제외)
+    // Note: ElementCollection은 Batch Fetch로 처리 (application.yml에서 설정)
+    @Query("""
+            SELECT DISTINCT c FROM Curation c
+            JOIN FETCH c.user
+            WHERE c.deletedAt IS NULL
+            AND c.isDrafted = false
+            AND c.user.id != :userId
+            ORDER BY c.popularityScore DESC
+            """)
+    List<Curation> findAllPublishedExcludeUser(@Param("userId") Long userId);
 }
