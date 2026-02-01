@@ -1,7 +1,6 @@
 package BookPick.mvp.domain.ReadingPreference.enums.filed;
 
 public enum Genre implements PreferenceField {
-
     NOVEL("소설"),
     ESSAY("에세이"),
     HISTORY("역사"),
@@ -30,5 +29,4 @@ public enum Genre implements PreferenceField {
     public static boolean isValid(String description) {
         return PreferenceField.isValidDescription(Genre.class, description);
     }
-
 }

@@ -3,7 +3,6 @@ package BookPick.mvp.domain.curation.dto.prefer;
 import BookPick.mvp.domain.ReadingPreference.entity.ReadingPreference;
 import BookPick.mvp.domain.author.entity.Author;
 import BookPick.mvp.domain.book.entity.Book;
-
 import java.util.List;
 import java.util.Set;
 
@@ -16,8 +15,7 @@ public record ReadingPreferenceInfo(
         List<String> moods,
         List<String> genres,
         List<String> keywords,
-        List<String> readingStyles
-       ) {
+        List<String> readingStyles) {
 
     // 엔티티 → DTO 변환
     public static ReadingPreferenceInfo from(ReadingPreference preference) {
@@ -30,8 +28,6 @@ public record ReadingPreferenceInfo(
                 preference.getReadingHabits(),
                 preference.getGenres(),
                 preference.getKeywords(),
-                preference.getReadingStyles()
-        );
+                preference.getReadingStyles());
     }
-
 }

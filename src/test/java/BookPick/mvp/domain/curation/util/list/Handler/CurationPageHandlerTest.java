@@ -1,11 +1,17 @@
 package BookPick.mvp.domain.curation.util.list.Handler;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.when;
+
 import BookPick.mvp.domain.curation.dto.base.get.list.CurationContentRes;
 import BookPick.mvp.domain.curation.dto.base.get.list.CursorPage;
 import BookPick.mvp.domain.curation.entity.Curation;
 import BookPick.mvp.domain.curation.util.list.fetcher.CurationFetcher;
 import BookPick.mvp.domain.user.entity.User;
-import org.junit.jupiter.api.BeforeEach;
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -13,32 +19,22 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.util.Collections;
-import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.when;
-
 @ExtendWith(MockitoExtension.class)
 @DisplayName("CurationPageHandler 테스트")
 class CurationPageHandlerTest {
 
-    @InjectMocks
-    private CurationPageHandler curationPageHandler;
+    @InjectMocks private CurationPageHandler curationPageHandler;
 
-    @Mock
-    private CurationFetcher curationFetcher;
+    @Mock private CurationFetcher curationFetcher;
 
     @Test
     @DisplayName("다음 페이지가 있는 경우 커서 페이지 생성")
     void createCursorPage_withNextPage() {
         // given
-        List<Curation> curations = IntStream.range(0, 11)
-                .mapToObj(i -> Curation.builder().id((long) i).build())
-                .collect(Collectors.toList());
+        List<Curation> curations =
+                IntStream.range(0, 11)
+                        .mapToObj(i -> Curation.builder().id((long) i).build())
+                        .collect(Collectors.toList());
         int size = 10;
         when(curationFetcher.calculateNextCursor(curations, size, true)).thenReturn(10L);
 
@@ -55,9 +51,10 @@ class CurationPageHandlerTest {
     @DisplayName("다음 페이지가 없는 경우 커서 페이지 생성")
     void createCursorPage_withoutNextPage() {
         // given
-        List<Curation> curations = IntStream.range(0, 5)
-                .mapToObj(i -> Curation.builder().id((long) i).build())
-                .collect(Collectors.toList());
+        List<Curation> curations =
+                IntStream.range(0, 5)
+                        .mapToObj(i -> Curation.builder().id((long) i).build())
+                        .collect(Collectors.toList());
         int size = 10;
         when(curationFetcher.calculateNextCursor(curations, size, false)).thenReturn(null);
 

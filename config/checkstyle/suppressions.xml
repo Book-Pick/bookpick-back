@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+<!DOCTYPE suppressions PUBLIC
+        "-//Checkstyle//DTD SuppressionFilter Configuration 1.2//EN"
+        "https://checkstyle.org/dtds/suppressions_1_2.dtd">
+
+<suppressions>
+    <!-- 테스트 코드는 일부 규칙 완화 -->
+    <suppress checks="MethodLength" files=".*Test\.java"/>
+    <suppress checks="MethodName" files=".*Test\.java"/>
+    <suppress checks="MagicNumber" files=".*Test\.java"/>
+    <suppress checks="LineLength" files=".*Test\.java"/>
+
+    <!-- DTO, Entity는 필드 가시성 규칙 완화 (Lombok 사용) -->
+    <suppress checks="VisibilityModifier" files=".*Dto\.java"/>
+    <suppress checks="VisibilityModifier" files=".*DTO\.java"/>
+    <suppress checks="VisibilityModifier" files=".*Req\.java"/>
+    <suppress checks="VisibilityModifier" files=".*Res\.java"/>
+    <suppress checks="VisibilityModifier" files=".*/entity/.*\.java"/>
+    <suppress checks="HideUtilityClassConstructor" files=".*/entity/.*\.java"/>
+
+    <!-- Application 클래스 -->
+    <suppress checks="HideUtilityClassConstructor" files=".*Application\.java"/>
+
+    <!-- Enum 클래스 -->
+    <suppress checks="VisibilityModifier" files=".*/enums/.*\.java"/>
+
+    <!-- 설정 파일 -->
+    <suppress checks="HideUtilityClassConstructor" files=".*Config\.java"/>
+</suppressions>

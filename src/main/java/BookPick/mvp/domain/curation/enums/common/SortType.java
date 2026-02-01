@@ -16,7 +16,6 @@ public enum SortType {
     private final String value;
     private final String description;
 
-
     public static SortType fromValue(String value) {
         for (SortType type : values()) {
             if (type.value.equals(value)) {

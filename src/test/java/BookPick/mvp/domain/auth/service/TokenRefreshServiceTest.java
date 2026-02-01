@@ -1,5 +1,9 @@
 package BookPick.mvp.domain.auth.service;
 
+import static org.assertj.core.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.*;
+
 import BookPick.mvp.domain.auth.Roles;
 import BookPick.mvp.domain.auth.dto.LoginRes;
 import BookPick.mvp.domain.auth.util.Manager.login.jwt.JwtAuthManager;
@@ -7,6 +11,7 @@ import BookPick.mvp.domain.auth.util.Manager.login.jwt.TokenBlacklistManager;
 import BookPick.mvp.domain.user.entity.User;
 import BookPick.mvp.global.util.JwtUtil;
 import io.jsonwebtoken.Claims;
+import java.util.Collections;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -15,44 +20,35 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
-import java.util.Collections;
-
-import static org.assertj.core.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.*;
-
 @ExtendWith(MockitoExtension.class)
 @DisplayName("토큰 갱신 서비스 테스트")
 class TokenRefreshServiceTest {
 
-    @InjectMocks
-    private TokenRefreshService tokenRefreshService;
+    @InjectMocks private TokenRefreshService tokenRefreshService;
 
-    @Mock
-    private JwtAuthManager jwtAuthManager;
+    @Mock private JwtAuthManager jwtAuthManager;
 
-    @Mock
-    private TokenBlacklistManager tokenBlacklistManager;
+    @Mock private TokenBlacklistManager tokenBlacklistManager;
 
-    @Mock
-    private JwtUtil jwtUtil;
+    @Mock private JwtUtil jwtUtil;
 
     @Test
     @DisplayName("정상 토큰 갱신 성공")
     void refreshTokens_success() {
         // given
-        User mockUser = User.builder()
-                .id(1L)
-                .email("test@test.com")
-                .password("password")
-                .nickname("테스터")
-                .role(Roles.ROLE_USER)
-                .build();
+        User mockUser =
+                User.builder()
+                        .id(1L)
+                        .email("test@test.com")
+                        .password("password")
+                        .nickname("테스터")
+                        .role(Roles.ROLE_USER)
+                        .build();
 
-        CustomUserDetails customUserDetails = new CustomUserDetails(
-                mockUser,
-                Collections.singletonList(new SimpleGrantedAuthority("ROLE_USER"))
-        );
+        CustomUserDetails customUserDetails =
+                new CustomUserDetails(
+                        mockUser,
+                        Collections.singletonList(new SimpleGrantedAuthority("ROLE_USER")));
         customUserDetails.setId(1L);
         customUserDetails.setNickname("테스터");
 
@@ -61,10 +57,8 @@ class TokenRefreshServiceTest {
         Claims claims = mock(Claims.class);
         when(claims.get("userId", Double.class)).thenReturn(1.0); // Double로 저장
 
-        JwtAuthManager.TokenPair newTokenPair = new JwtAuthManager.TokenPair(
-                "new_access_token",
-                "new_refresh_token"
-        );
+        JwtAuthManager.TokenPair newTokenPair =
+                new JwtAuthManager.TokenPair("new_access_token", "new_refresh_token");
 
         when(tokenBlacklistManager.isBlacklisted(refreshToken)).thenReturn(false);
         when(jwtUtil.validateToken(refreshToken, false)).thenReturn(true);
@@ -90,16 +84,12 @@ class TokenRefreshServiceTest {
     @DisplayName("토큰이 null인 경우 - 예외 발생")
     void refreshTokens_fail_nullToken() {
         // given
-        User mockUser = User.builder()
-                .id(1L)
-                .email("test@test.com")
-                .password("password")
-                .build();
+        User mockUser = User.builder().id(1L).email("test@test.com").password("password").build();
 
-        CustomUserDetails customUserDetails = new CustomUserDetails(
-                mockUser,
-                Collections.singletonList(new SimpleGrantedAuthority("ROLE_USER"))
-        );
+        CustomUserDetails customUserDetails =
+                new CustomUserDetails(
+                        mockUser,
+                        Collections.singletonList(new SimpleGrantedAuthority("ROLE_USER")));
         customUserDetails.setId(1L);
 
         // when & then
@@ -115,16 +105,12 @@ class TokenRefreshServiceTest {
     @DisplayName("토큰이 빈 문자열인 경우 - 예외 발생")
     void refreshTokens_fail_blankToken() {
         // given
-        User mockUser = User.builder()
-                .id(1L)
-                .email("test@test.com")
-                .password("password")
-                .build();
+        User mockUser = User.builder().id(1L).email("test@test.com").password("password").build();
 
-        CustomUserDetails customUserDetails = new CustomUserDetails(
-                mockUser,
-                Collections.singletonList(new SimpleGrantedAuthority("ROLE_USER"))
-        );
+        CustomUserDetails customUserDetails =
+                new CustomUserDetails(
+                        mockUser,
+                        Collections.singletonList(new SimpleGrantedAuthority("ROLE_USER")));
         customUserDetails.setId(1L);
 
         // when & then
@@ -139,16 +125,12 @@ class TokenRefreshServiceTest {
     @DisplayName("블랙리스트에 등록된 토큰 - 예외 발생")
     void refreshTokens_fail_blacklistedToken() {
         // given
-        User mockUser = User.builder()
-                .id(1L)
-                .email("test@test.com")
-                .password("password")
-                .build();
+        User mockUser = User.builder().id(1L).email("test@test.com").password("password").build();
 
-        CustomUserDetails customUserDetails = new CustomUserDetails(
-                mockUser,
-                Collections.singletonList(new SimpleGrantedAuthority("ROLE_USER"))
-        );
+        CustomUserDetails customUserDetails =
+                new CustomUserDetails(
+                        mockUser,
+                        Collections.singletonList(new SimpleGrantedAuthority("ROLE_USER")));
         customUserDetails.setId(1L);
 
         String blacklistedToken = "blacklisted_token";
@@ -156,7 +138,10 @@ class TokenRefreshServiceTest {
         when(tokenBlacklistManager.isBlacklisted(blacklistedToken)).thenReturn(true);
 
         // when & then
-        assertThatThrownBy(() -> tokenRefreshService.refreshTokens(customUserDetails, blacklistedToken))
+        assertThatThrownBy(
+                        () ->
+                                tokenRefreshService.refreshTokens(
+                                        customUserDetails, blacklistedToken))
                 .isInstanceOf(RuntimeException.class)
                 .hasMessageContaining("유효하지 않은 리프레시 토큰입니다");
 
@@ -169,16 +154,12 @@ class TokenRefreshServiceTest {
     @DisplayName("만료된 토큰 - 예외 발생")
     void refreshTokens_fail_expiredToken() {
         // given
-        User mockUser = User.builder()
-                .id(1L)
-                .email("test@test.com")
-                .password("password")
-                .build();
+        User mockUser = User.builder().id(1L).email("test@test.com").password("password").build();
 
-        CustomUserDetails customUserDetails = new CustomUserDetails(
-                mockUser,
-                Collections.singletonList(new SimpleGrantedAuthority("ROLE_USER"))
-        );
+        CustomUserDetails customUserDetails =
+                new CustomUserDetails(
+                        mockUser,
+                        Collections.singletonList(new SimpleGrantedAuthority("ROLE_USER")));
         customUserDetails.setId(1L);
 
         String expiredToken = "expired_token";
@@ -200,16 +181,12 @@ class TokenRefreshServiceTest {
     @DisplayName("토큰의 사용자 정보와 현재 사용자 불일치 - 예외 발생")
     void refreshTokens_fail_userMismatch() {
         // given
-        User mockUser = User.builder()
-                .id(1L)
-                .email("test@test.com")
-                .password("password")
-                .build();
+        User mockUser = User.builder().id(1L).email("test@test.com").password("password").build();
 
-        CustomUserDetails customUserDetails = new CustomUserDetails(
-                mockUser,
-                Collections.singletonList(new SimpleGrantedAuthority("ROLE_USER"))
-        );
+        CustomUserDetails customUserDetails =
+                new CustomUserDetails(
+                        mockUser,
+                        Collections.singletonList(new SimpleGrantedAuthority("ROLE_USER")));
         customUserDetails.setId(1L);
 
         String refreshToken = "valid_token_but_different_user";
@@ -234,19 +211,20 @@ class TokenRefreshServiceTest {
     @DisplayName("토큰 갱신 후 새로운 토큰 페어 반환 확인")
     void refreshTokens_newTokensReturned() {
         // given
-        User mockUser = User.builder()
-                .id(1L)
-                .email("test@test.com")
-                .password("password")
-                .nickname("테스터")
-                .role(Roles.ROLE_USER)
-                .isFirstLogin(false)
-                .build();
+        User mockUser =
+                User.builder()
+                        .id(1L)
+                        .email("test@test.com")
+                        .password("password")
+                        .nickname("테스터")
+                        .role(Roles.ROLE_USER)
+                        .isFirstLogin(false)
+                        .build();
 
-        CustomUserDetails customUserDetails = new CustomUserDetails(
-                mockUser,
-                Collections.singletonList(new SimpleGrantedAuthority("ROLE_USER"))
-        );
+        CustomUserDetails customUserDetails =
+                new CustomUserDetails(
+                        mockUser,
+                        Collections.singletonList(new SimpleGrantedAuthority("ROLE_USER")));
         customUserDetails.setId(1L);
         customUserDetails.setNickname("테스터");
         customUserDetails.setFirstLogin(false);
@@ -256,10 +234,8 @@ class TokenRefreshServiceTest {
         Claims claims = mock(Claims.class);
         when(claims.get("userId", Double.class)).thenReturn(1.0);
 
-        JwtAuthManager.TokenPair newTokenPair = new JwtAuthManager.TokenPair(
-                "brand_new_access_token",
-                "brand_new_refresh_token"
-        );
+        JwtAuthManager.TokenPair newTokenPair =
+                new JwtAuthManager.TokenPair("brand_new_access_token", "brand_new_refresh_token");
 
         when(tokenBlacklistManager.isBlacklisted(oldRefreshToken)).thenReturn(false);
         when(jwtUtil.validateToken(oldRefreshToken, false)).thenReturn(true);
@@ -281,16 +257,12 @@ class TokenRefreshServiceTest {
     @DisplayName("검증 순서 확인 - 블랙리스트 먼저, 유효성 두번째")
     void refreshTokens_validationOrder() {
         // given
-        User mockUser = User.builder()
-                .id(1L)
-                .email("test@test.com")
-                .password("password")
-                .build();
+        User mockUser = User.builder().id(1L).email("test@test.com").password("password").build();
 
-        CustomUserDetails customUserDetails = new CustomUserDetails(
-                mockUser,
-                Collections.singletonList(new SimpleGrantedAuthority("ROLE_USER"))
-        );
+        CustomUserDetails customUserDetails =
+                new CustomUserDetails(
+                        mockUser,
+                        Collections.singletonList(new SimpleGrantedAuthority("ROLE_USER")));
         customUserDetails.setId(1L);
 
         String refreshToken = "test_token";
@@ -310,17 +282,18 @@ class TokenRefreshServiceTest {
     @DisplayName("Integer 타입 userId도 정상 처리")
     void refreshTokens_integerUserId_success() {
         // given
-        User mockUser = User.builder()
-                .id(5L)
-                .email("test@test.com")
-                .password("password")
-                .nickname("테스터")
-                .build();
+        User mockUser =
+                User.builder()
+                        .id(5L)
+                        .email("test@test.com")
+                        .password("password")
+                        .nickname("테스터")
+                        .build();
 
-        CustomUserDetails customUserDetails = new CustomUserDetails(
-                mockUser,
-                Collections.singletonList(new SimpleGrantedAuthority("ROLE_USER"))
-        );
+        CustomUserDetails customUserDetails =
+                new CustomUserDetails(
+                        mockUser,
+                        Collections.singletonList(new SimpleGrantedAuthority("ROLE_USER")));
         customUserDetails.setId(5L);
         customUserDetails.setNickname("테스터");
 
@@ -329,9 +302,7 @@ class TokenRefreshServiceTest {
         Claims claims = mock(Claims.class);
         when(claims.get("userId", Double.class)).thenReturn(5.0); // Double로 저장
 
-        JwtAuthManager.TokenPair newTokenPair = new JwtAuthManager.TokenPair(
-                "access", "refresh"
-        );
+        JwtAuthManager.TokenPair newTokenPair = new JwtAuthManager.TokenPair("access", "refresh");
 
         when(tokenBlacklistManager.isBlacklisted(refreshToken)).thenReturn(false);
         when(jwtUtil.validateToken(refreshToken, false)).thenReturn(true);

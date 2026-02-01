@@ -1,15 +1,11 @@
 package BookPick.mvp.domain.comment.dto.read;
 
 import BookPick.mvp.global.dto.PageInfo;
-
 import java.time.LocalDateTime;
 import java.util.List;
 
 // -- R --
-public record CommentListRes(
-        List<CommentSummary> comments,
-        PageInfo pageInfo
-) {
+public record CommentListRes(List<CommentSummary> comments, PageInfo pageInfo) {
     public static CommentListRes of(List<CommentSummary> comments, PageInfo pageInfo) {
         return new CommentListRes(comments, pageInfo);
     }
@@ -23,8 +19,7 @@ public record CommentListRes(
             String profileImageUrl,
             String content,
             LocalDateTime createdAt,
-            LocalDateTime updatedAt
-    ) {
+            LocalDateTime updatedAt) {
         public static CommentSummary of(
                 Long commentId,
                 Long userId,
@@ -33,9 +28,16 @@ public record CommentListRes(
                 String profileImageUrl,
                 String content,
                 LocalDateTime createdAt,
-                LocalDateTime updatedAt
-        ) {
-            return new CommentSummary(commentId, userId, parentId, nickname, profileImageUrl, content, createdAt, updatedAt);
+                LocalDateTime updatedAt) {
+            return new CommentSummary(
+                    commentId,
+                    userId,
+                    parentId,
+                    nickname,
+                    profileImageUrl,
+                    content,
+                    createdAt,
+                    updatedAt);
         }
     }
 }

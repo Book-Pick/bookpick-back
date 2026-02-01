@@ -1,5 +1,12 @@
 package BookPick.mvp.domain.auth.controller;
 
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+
 import BookPick.mvp.domain.auth.dto.LoginReq;
 import BookPick.mvp.domain.auth.dto.LoginRes;
 import BookPick.mvp.domain.auth.exception.InvalidLoginException;
@@ -20,13 +27,6 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-
 @SpringBootTest
 @AutoConfigureMockMvc(addFilters = false)
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.ANY)
@@ -35,41 +35,38 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 @DisplayName("로그인 컨트롤러 테스트")
 class LoginControllerTest {
 
-    @Autowired
-    private MockMvc mockMvc;
+    @Autowired private MockMvc mockMvc;
 
-    @Autowired
-    private ObjectMapper objectMapper;
+    @Autowired private ObjectMapper objectMapper;
 
-    @MockBean
-    private LoginService loginService;
+    @MockBean private LoginService loginService;
 
-    @MockBean
-    private RefreshTokenCookieManager refreshTokenCookieManager;
+    @MockBean private RefreshTokenCookieManager refreshTokenCookieManager;
 
     @Test
     @DisplayName("정상 로그인 성공 - 첫 로그인")
     void login_success_firstLogin() throws Exception {
         // given
         LoginReq req = new LoginReq("test@test.com", "password123");
-        LoginRes loginRes = new LoginRes(
-                1L,
-                "test@test.com",
-                "테스터",
-                "자기소개",
-                "profile.jpg",
-                true,
-                "access_token",
-                "refresh_token"
-        );
+        LoginRes loginRes =
+                new LoginRes(
+                        1L,
+                        "test@test.com",
+                        "테스터",
+                        "자기소개",
+                        "profile.jpg",
+                        true,
+                        "access_token",
+                        "refresh_token");
 
         when(loginService.login(any(LoginReq.class), any(HttpServletRequest.class)))
                 .thenReturn(loginRes);
 
         // when & then
-        mockMvc.perform(post("/api/v1/auth/login")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(req)))
+        mockMvc.perform(
+                        post("/api/v1/auth/login")
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(objectMapper.writeValueAsString(req)))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.success").value(true))
@@ -79,10 +76,12 @@ class LoginControllerTest {
                 .andExpect(jsonPath("$.data.nickname").value("테스터"))
                 .andExpect(jsonPath("$.data.accessToken").value("access_token"))
                 .andExpect(jsonPath("$.data.isFirstLogin").value(true))
-                .andExpect(jsonPath("$.data.refreshToken").doesNotExist()); // refresh token은 응답에 없어야 함
+                .andExpect(
+                        jsonPath("$.data.refreshToken").doesNotExist()); // refresh token은 응답에 없어야 함
 
         verify(loginService).login(any(LoginReq.class), any(HttpServletRequest.class));
-        verify(refreshTokenCookieManager).addRefreshTokenCookie(any(HttpServletResponse.class), eq("refresh_token"));
+        verify(refreshTokenCookieManager)
+                .addRefreshTokenCookie(any(HttpServletResponse.class), eq("refresh_token"));
     }
 
     @Test
@@ -90,28 +89,30 @@ class LoginControllerTest {
     void login_success_notFirstLogin() throws Exception {
         // given
         LoginReq req = new LoginReq("test@test.com", "password123");
-        LoginRes loginRes = new LoginRes(
-                1L,
-                "test@test.com",
-                "테스터",
-                "자기소개",
-                "profile.jpg",
-                false,
-                "access_token",
-                "refresh_token"
-        );
+        LoginRes loginRes =
+                new LoginRes(
+                        1L,
+                        "test@test.com",
+                        "테스터",
+                        "자기소개",
+                        "profile.jpg",
+                        false,
+                        "access_token",
+                        "refresh_token");
 
         when(loginService.login(any(LoginReq.class), any(HttpServletRequest.class)))
                 .thenReturn(loginRes);
 
         // when & then
-        mockMvc.perform(post("/api/v1/auth/login")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(req)))
+        mockMvc.perform(
+                        post("/api/v1/auth/login")
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(objectMapper.writeValueAsString(req)))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.data.isFirstLogin").value(false));
 
-        verify(refreshTokenCookieManager).addRefreshTokenCookie(any(HttpServletResponse.class), eq("refresh_token"));
+        verify(refreshTokenCookieManager)
+                .addRefreshTokenCookie(any(HttpServletResponse.class), eq("refresh_token"));
     }
 
     @Test
@@ -124,9 +125,10 @@ class LoginControllerTest {
                 .thenThrow(new InvalidLoginException());
 
         // when & then
-        mockMvc.perform(post("/api/v1/auth/login")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(req)))
+        mockMvc.perform(
+                        post("/api/v1/auth/login")
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(objectMapper.writeValueAsString(req)))
                 .andExpect(status().isUnauthorized());
 
         verify(loginService).login(any(LoginReq.class), any(HttpServletRequest.class));
@@ -143,9 +145,10 @@ class LoginControllerTest {
                 .thenThrow(new InvalidLoginException());
 
         // when & then
-        mockMvc.perform(post("/api/v1/auth/login")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(req)))
+        mockMvc.perform(
+                        post("/api/v1/auth/login")
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(objectMapper.writeValueAsString(req)))
                 .andExpect(status().isUnauthorized());
 
         verify(refreshTokenCookieManager, never()).addRefreshTokenCookie(any(), anyString());
@@ -158,9 +161,10 @@ class LoginControllerTest {
         LoginReq req = new LoginReq("", "password123");
 
         // when & then
-        mockMvc.perform(post("/api/v1/auth/login")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(req)))
+        mockMvc.perform(
+                        post("/api/v1/auth/login")
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(objectMapper.writeValueAsString(req)))
                 .andExpect(status().isBadRequest());
 
         verify(loginService, never()).login(any(LoginReq.class), any(HttpServletRequest.class));
@@ -173,9 +177,10 @@ class LoginControllerTest {
         LoginReq req = new LoginReq("invalid-email", "password123");
 
         // when & then
-        mockMvc.perform(post("/api/v1/auth/login")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(req)))
+        mockMvc.perform(
+                        post("/api/v1/auth/login")
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(objectMapper.writeValueAsString(req)))
                 .andExpect(status().isBadRequest());
 
         verify(loginService, never()).login(any(LoginReq.class), any(HttpServletRequest.class));
@@ -188,9 +193,10 @@ class LoginControllerTest {
         LoginReq req = new LoginReq("test@test.com", "");
 
         // when & then
-        mockMvc.perform(post("/api/v1/auth/login")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(req)))
+        mockMvc.perform(
+                        post("/api/v1/auth/login")
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(objectMapper.writeValueAsString(req)))
                 .andExpect(status().isBadRequest());
 
         verify(loginService, never()).login(any(LoginReq.class), any(HttpServletRequest.class));
@@ -200,8 +206,7 @@ class LoginControllerTest {
     @DisplayName("요청 바디 없음 - 예외 발생")
     void login_fail_noRequestBody() throws Exception {
         // when & then
-        mockMvc.perform(post("/api/v1/auth/login")
-                        .contentType(MediaType.APPLICATION_JSON))
+        mockMvc.perform(post("/api/v1/auth/login").contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest());
 
         verify(loginService, never()).login(any(LoginReq.class), any(HttpServletRequest.class));
@@ -212,31 +217,30 @@ class LoginControllerTest {
     void login_refreshTokenCookie_set() throws Exception {
         // given
         LoginReq req = new LoginReq("test@test.com", "password123");
-        LoginRes loginRes = new LoginRes(
-                1L,
-                "test@test.com",
-                "테스터",
-                "자기소개",
-                "profile.jpg",
-                false,
-                "access_token",
-                "refresh_token_value"
-        );
+        LoginRes loginRes =
+                new LoginRes(
+                        1L,
+                        "test@test.com",
+                        "테스터",
+                        "자기소개",
+                        "profile.jpg",
+                        false,
+                        "access_token",
+                        "refresh_token_value");
 
         when(loginService.login(any(LoginReq.class), any(HttpServletRequest.class)))
                 .thenReturn(loginRes);
 
         // when
-        mockMvc.perform(post("/api/v1/auth/login")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(req)))
+        mockMvc.perform(
+                        post("/api/v1/auth/login")
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(objectMapper.writeValueAsString(req)))
                 .andExpect(status().isOk());
 
         // then
-        verify(refreshTokenCookieManager).addRefreshTokenCookie(
-                any(HttpServletResponse.class),
-                eq("refresh_token_value")
-        );
+        verify(refreshTokenCookieManager)
+                .addRefreshTokenCookie(any(HttpServletResponse.class), eq("refresh_token_value"));
     }
 
     @Test
@@ -244,24 +248,25 @@ class LoginControllerTest {
     void login_refreshTokenNotInResponse() throws Exception {
         // given
         LoginReq req = new LoginReq("test@test.com", "password123");
-        LoginRes loginRes = new LoginRes(
-                1L,
-                "test@test.com",
-                "테스터",
-                "자기소개",
-                "profile.jpg",
-                false,
-                "access_token",
-                "refresh_token"
-        );
+        LoginRes loginRes =
+                new LoginRes(
+                        1L,
+                        "test@test.com",
+                        "테스터",
+                        "자기소개",
+                        "profile.jpg",
+                        false,
+                        "access_token",
+                        "refresh_token");
 
         when(loginService.login(any(LoginReq.class), any(HttpServletRequest.class)))
                 .thenReturn(loginRes);
 
         // when & then
-        mockMvc.perform(post("/api/v1/auth/login")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(req)))
+        mockMvc.perform(
+                        post("/api/v1/auth/login")
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(objectMapper.writeValueAsString(req)))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.data.accessToken").exists())
                 .andExpect(jsonPath("$.data.refreshToken").doesNotExist());

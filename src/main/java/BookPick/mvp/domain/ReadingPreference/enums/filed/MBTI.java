@@ -1,8 +1,6 @@
 package BookPick.mvp.domain.ReadingPreference.enums.filed;
 
 public enum MBTI {
-
-
     ISTJ,
     ISFJ,
     INFJ,
@@ -20,7 +18,7 @@ public enum MBTI {
     ENFJ,
     ENTJ;
 
-    public static boolean isValid(String value){
+    public static boolean isValid(String value) {
         try {
             MBTI.valueOf(value);
             return true;

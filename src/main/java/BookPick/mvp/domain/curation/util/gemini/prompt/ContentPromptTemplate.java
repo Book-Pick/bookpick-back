@@ -1,11 +1,11 @@
 package BookPick.mvp.domain.curation.util.gemini.prompt;
+
 import lombok.Builder;
 import lombok.Getter;
 
-
 @Getter
 @Builder
-public class ContentPromptTemplate {    //
+public class ContentPromptTemplate { //
 
     private String mbti;
     private String mood;
@@ -15,7 +15,8 @@ public class ContentPromptTemplate {    //
     private String readingStyle;
 
     public String toContentPrompt() {
-        return String.format("""
+        return String.format(
+                """
             **User Input**
             MBTI: %s
             Mood: %s
@@ -24,12 +25,6 @@ public class ContentPromptTemplate {    //
             Keyword: %s
             Reading Style: %s
             """,
-            mbti,
-            mood,
-            readingMethod,
-            genre,
-            keyword,
-            readingStyle
-        );
+                mbti, mood, readingMethod, genre, keyword, readingStyle);
     }
 }

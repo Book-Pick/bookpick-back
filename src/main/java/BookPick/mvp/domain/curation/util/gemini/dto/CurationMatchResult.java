@@ -2,11 +2,10 @@ package BookPick.mvp.domain.curation.util.gemini.dto;
 
 import BookPick.mvp.domain.curation.entity.Curation;
 import BookPick.mvp.domain.user.entity.User;
-import lombok.Builder;
-import lombok.Getter;
-
 import java.util.ArrayList;
 import java.util.List;
+import lombok.Builder;
+import lombok.Getter;
 
 @Getter
 @Builder
@@ -20,12 +19,13 @@ public class CurationMatchResult {
     private int totalMatchCount;
     private String matched;
 
-    public static CurationMatchResult of(Curation curation,
-                                         User user,
-                                         String recommendedMood,
-                                         String recommendedGenre,
-                                         String recommendedKeyword,
-                                         String recommendedStyle) {
+    public static CurationMatchResult of(
+            Curation curation,
+            User user,
+            String recommendedMood,
+            String recommendedGenre,
+            String recommendedKeyword,
+            String recommendedStyle) {
 
         String matchedMood = null;
         String matchedGenre = null;

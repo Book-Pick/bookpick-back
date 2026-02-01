@@ -1,7 +1,6 @@
 package BookPick.mvp.domain.user.dto.base;
 
 import BookPick.mvp.domain.auth.Roles;
-import BookPick.mvp.domain.user.entity.User;
 
 public record UserReq(
         Long id,
@@ -10,7 +9,4 @@ public record UserReq(
         String nickName,
         String profileImage,
         String introduction,
-        Roles role
-) {
-
-}
+        Roles role) {}

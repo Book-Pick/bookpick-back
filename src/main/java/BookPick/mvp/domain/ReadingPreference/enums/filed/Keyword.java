@@ -1,7 +1,6 @@
 package BookPick.mvp.domain.ReadingPreference.enums.filed;
 
 public enum Keyword implements PreferenceField {
-
     COMFORT("위로"),
     GROWTH("성장"),
     LOVE("사랑"),
@@ -31,4 +30,3 @@ public enum Keyword implements PreferenceField {
         return PreferenceField.isValidDescription(Keyword.class, description);
     }
 }
-
