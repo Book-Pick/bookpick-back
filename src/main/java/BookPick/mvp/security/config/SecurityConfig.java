@@ -48,7 +48,8 @@ public class SecurityConfig {
                                         .requestMatchers(
                                                 "/api/v1/auth/signup",
                                                 "/api/v1/auth/login",
-                                                "/api/v1/auth/logout")
+                                                "/api/v1/auth/logout",
+                                                "/api/v1/oauth/**")
                                         .permitAll()
                                         // 2. author
                                         // 3. book
@@ -72,6 +73,11 @@ public class SecurityConfig {
                                             res.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
                                             res.setContentType("application/json; charset=UTF-8");
 
+                                            ApiResponse<?> response =
+                                                    ApiResponse.customError(
+                                                            HttpStatus.UNAUTHORIZED,
+                                                            "인증이 필요합니다.",
+                                                            null);
                                             ObjectMapper objectMapper = new ObjectMapper();
                                             res.getWriter()
                                                     .write(
