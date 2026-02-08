@@ -6,6 +6,7 @@ import BookPick.mvp.domain.auth.service.CustomUserDetails;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
+import BookPick.mvp.domain.user.entity.User;
 import java.util.Date;
 import java.util.stream.Collectors;
 import javax.crypto.SecretKey;
@@ -66,6 +67,30 @@ public class JwtUtil {
                 .claim("userId", usr.getId()) // 여기 추가
                 .claim("email", usr.getUsername())
                 .claim("typ", "refresh") // (권장) 토큰 타입 명시
+                .issuedAt(new Date(System.currentTimeMillis()))
+                .expiration(new Date(System.currentTimeMillis() + this.refreshTtl))
+                .signWith(refreshKey)
+                .compact();
+    }
+
+    // OAuth 사용자용 Access 토큰 생성
+    public String createAccessTokenForOAuth(User user, String authorities) {
+        return Jwts.builder()
+                .claim("userId", user.getId())
+                .claim("email", user.getEmail())
+                .claim("authorities", authorities)
+                .issuedAt(new Date(System.currentTimeMillis()))
+                .expiration(new Date(System.currentTimeMillis() + this.accessTtl))
+                .signWith(accessKey)
+                .compact();
+    }
+
+    // OAuth 사용자용 Refresh 토큰 생성
+    public String createRefreshTokenForOAuth(User user) {
+        return Jwts.builder()
+                .claim("userId", user.getId())
+                .claim("email", user.getEmail())
+                .claim("typ", "refresh")
                 .issuedAt(new Date(System.currentTimeMillis()))
                 .expiration(new Date(System.currentTimeMillis() + this.refreshTtl))
                 .signWith(refreshKey)

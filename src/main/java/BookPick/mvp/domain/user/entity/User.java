@@ -27,8 +27,14 @@ public class User {
     @Email(message = "올바른 이메일 형식이여야 합니다.")
     private String email; // 로그인 ID, 고유
 
-    @Column(name = "login_password", nullable = false, length = 255)
-    private String password; // 비밀번호 해시
+    @Column(name = "login_password", nullable = true, length = 255)
+    private String password; // 비밀번호 해시 (OAuth 사용자는 null)
+
+    @Column(name = "provider", length = 20)
+    private String provider; // OAuth 제공자 (kakao, google 등)
+
+    @Column(name = "provider_id", length = 100)
+    private String providerId; // OAuth 제공자의 사용자 ID
 
     @Column(length = 50)
     @Size(min = 2, max = 10, message = "닉네임은 2~10자여야 합니다.")
