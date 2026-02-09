@@ -9,6 +9,7 @@ import BookPick.mvp.domain.curation.util.gemini.prompt.SystemInstructionPromptTe
 import java.util.List;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -52,7 +53,8 @@ public class GeminiService {
                         List.of(recommendedMood),
                         List.of(recommendedGenre),
                         List.of(recommendedKeyword),
-                        List.of(recommendedStyle));
+                        List.of(recommendedStyle),
+                        Pageable.unpaged());
 
         // 4. 일치 정보와 함께 반환 (일치 개수 많은 순, 0점 제외)
 

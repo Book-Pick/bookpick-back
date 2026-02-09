@@ -44,18 +44,18 @@ public interface CurationRepository extends JpaRepository<Curation, Long> {
             @Param("cursorId") Long cursorId,
             Pageable pageable);
 
-    // Gemini 추천 결과로 큐레이션 찾기 (Batch Fetch로 N+1 방지)
-    // 1. m : 컬럼 별칭
-    // 2.
+    // 태그 매칭 사전 필터링 + 후보 수 제한 (EXISTS 서브쿼리로 행 증식 방지)
     @Query(
             """
-            SELECT DISTINCT c FROM Curation c
-            LEFT JOIN c.moods m
-            LEFT JOIN c.genres g
-            LEFT JOIN c.keywords k
-            LEFT JOIN c.styles s
-            WHERE c.deletedAt IS NULL and c.isDrafted is false and c.user.id != :userId
-            AND (m IN :moods OR g IN :genres OR k IN :keywords OR s IN :styles)
+            SELECT c FROM Curation c
+            JOIN FETCH c.user
+            WHERE c.deletedAt IS NULL AND c.isDrafted = false AND c.user.id != :userId
+            AND (
+                EXISTS (SELECT 1 FROM Curation c2 JOIN c2.moods m WHERE c2 = c AND m IN :moods)
+                OR EXISTS (SELECT 1 FROM Curation c3 JOIN c3.genres g WHERE c3 = c AND g IN :genres)
+                OR EXISTS (SELECT 1 FROM Curation c4 JOIN c4.keywords k WHERE c4 = c AND k IN :keywords)
+                OR EXISTS (SELECT 1 FROM Curation c5 JOIN c5.styles s WHERE c5 = c AND s IN :styles)
+            )
             ORDER BY c.popularityScore DESC
             """)
     List<Curation> findPublishedCurationsByRecommendation(
@@ -63,7 +63,8 @@ public interface CurationRepository extends JpaRepository<Curation, Long> {
             @Param("moods") List<String> moods,
             @Param("genres") List<String> genres,
             @Param("keywords") List<String> keywords,
-            @Param("styles") List<String> styles);
+            @Param("styles") List<String> styles,
+            Pageable pageable);
 
     Optional<CurationLike> findByUserIdAndId(Long userId, Long id);
 
