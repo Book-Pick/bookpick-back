@@ -13,7 +13,7 @@ import java.util.Set;
  * 카테고리별 가중치와 점진적 매칭 비율을 반영한 유사도 계산
  *
  * 점수 구성:
- * - 기본: 30점
+ * - 기본: 30점 (1개 이상 매칭 시에만 부여)
  * - 장르 매칭: 최대 25점 (첫 매칭 50% 보장 + 매칭 비율에 비례)
  * - 키워드 매칭: 최대 20점 (첫 매칭 50% 보장 + 매칭 비율에 비례)
  * - 분위기 매칭: 최대 15점 (첫 매칭 50% 보장 + 매칭 비율에 비례)
@@ -46,7 +46,7 @@ public class SimilarityMatcher {
      * 유사도 계산
      */
     public static int calculate(Curation curation, ReadingPreferenceInfo preferenceInfo) {
-        int score = BASE_SCORE;
+        int score = 0;
 
         // 1. 장르 매칭 (최대 25점)
         score += calculateCategoryScore(
@@ -76,6 +76,11 @@ public class SimilarityMatcher {
         score += calculateAuthorBonus(
                 curation.getBookAuthor(),
                 preferenceInfo.favoriteAuthors());
+
+        // 6. 1개라도 매칭되면 기본 점수 부여
+        if (score > 0) {
+            score += BASE_SCORE;
+        }
 
         return Math.min(score, MAX_SCORE);
     }

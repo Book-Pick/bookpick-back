@@ -167,8 +167,8 @@ class SimilarityMatcherTest {
     }
 
     @Test
-    @DisplayName("매칭 없을 시 기본 점수만")
-    void calculate_noMatch_baseScore() {
+    @DisplayName("매칭 없을 시 0점")
+    void calculate_noMatch_zeroScore() {
         // given
         Curation curation = Curation.builder()
                 .genres(List.of("소설"))
@@ -193,7 +193,7 @@ class SimilarityMatcherTest {
         int score = SimilarityMatcher.calculate(curation, preference);
 
         // then
-        assertThat(score).isEqualTo(30);
+        assertThat(score).isEqualTo(0);
     }
 
     @Test
