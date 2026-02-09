@@ -131,7 +131,7 @@ class CommentServiceTest {
         when(commentRepository.findById(commentId)).thenReturn(Optional.of(mockComment));
 
         // when
-        CommentDeleteRes result = commentService.deleteComment(curationId, commentId);
+        CommentDeleteRes result = commentService.deleteComment(1L, curationId, commentId);
 
         // then
         assertThat(result.commentId()).isEqualTo(commentId);
@@ -241,7 +241,7 @@ class CommentServiceTest {
         when(commentRepository.findById(commentId)).thenReturn(Optional.of(mockComment));
 
         // when
-        commentService.deleteComment(curationId, commentId);
+        commentService.deleteComment(1L, curationId, commentId);
 
         // then
         assertThat(mockCuration.getCommentCount()).isEqualTo(0); // 음수 안됨

@@ -10,14 +10,14 @@ import java.util.Set;
 /**
  * 큐레이션-사용자 유사도 계산기
  *
- * 카테고리별 가중치와 다중 매칭 점수를 반영한 유사도 계산
+ * 카테고리별 가중치와 점진적 매칭 비율을 반영한 유사도 계산
  *
  * 점수 구성:
  * - 기본: 30점
- * - 장르 매칭: 최대 25점 (1개: 15점, 2개+: 25점)
- * - 키워드 매칭: 최대 20점 (1개: 12점, 2개+: 20점)
- * - 분위기 매칭: 최대 15점 (1개: 9점, 2개+: 15점)
- * - 스타일 매칭: 최대 10점 (1개: 6점, 2개+: 10점)
+ * - 장르 매칭: 최대 25점 (첫 매칭 50% 보장 + 매칭 비율에 비례)
+ * - 키워드 매칭: 최대 20점 (첫 매칭 50% 보장 + 매칭 비율에 비례)
+ * - 분위기 매칭: 최대 15점 (첫 매칭 50% 보장 + 매칭 비율에 비례)
+ * - 스타일 매칭: 최대 10점 (첫 매칭 50% 보장 + 매칭 비율에 비례)
  * - 작가 매칭: 10점
  * = 최대 110점 → 100점으로 cap
  */
@@ -36,9 +36,9 @@ public class SimilarityMatcher {
     // 작가 매칭 보너스
     private static final int AUTHOR_BONUS = 10;
 
-    // 다중 매칭 보너스 비율
-    private static final double SINGLE_MATCH_RATIO = 0.6;
-    private static final double MULTI_MATCH_RATIO = 1.0;
+    // 첫 매칭 기본 비율 및 비례 증가 비율
+    private static final double FIRST_MATCH_RATIO = 0.5;
+    private static final double ADDITIONAL_MATCH_RATIO = 0.5;
 
     private SimilarityMatcher() {}
 
@@ -82,6 +82,16 @@ public class SimilarityMatcher {
 
     /**
      * 카테고리별 점수 계산
+     *
+     * 첫 매칭 시 최대 가중치의 50%를 부여하고,
+     * 나머지 50%는 매칭 비율(matchCount / possibleMatches)에 비례하여 부여한다.
+     *
+     * 예시 (maxWeight = 20, possibleMatches = 4):
+     *   0개 매칭 →  0점
+     *   1개 매칭 → 12점 (50% + 50%×1/4 = 62.5%)
+     *   2개 매칭 → 15점 (50% + 50%×2/4 = 75%)
+     *   3개 매칭 → 17점 (50% + 50%×3/4 = 87.5%)
+     *   4개 매칭 → 20점 (50% + 50%×4/4 = 100%)
      */
     private static int calculateCategoryScore(
             List<String> curationItems,
@@ -100,12 +110,13 @@ public class SimilarityMatcher {
             return 0;
         }
 
-        // 다중 매칭 시 더 높은 점수
-        if (matchCount >= 2) {
-            return (int) (maxWeight * MULTI_MATCH_RATIO);
-        }
+        int possibleMatches = Math.min(curationItems.size(), userPreferences.size());
+        double matchRatio = (double) matchCount / possibleMatches;
 
-        return (int) (maxWeight * SINGLE_MATCH_RATIO);
+        // 첫 매칭 50% 보장 + 나머지 50%는 매칭 비율에 비례
+        double score = maxWeight * (FIRST_MATCH_RATIO + ADDITIONAL_MATCH_RATIO * matchRatio);
+
+        return (int) Math.round(score);
     }
 
     /**
