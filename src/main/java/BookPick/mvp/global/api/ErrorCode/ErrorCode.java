@@ -22,6 +22,9 @@ public enum ErrorCode implements ErrorCodeInterface {
     INVALID_TOKEN_TYPE(HttpStatus.UNAUTHORIZED, "유효하지 않은 토큰 형식입니다. 다시 로그인해주세요."),
     TOKEN_LOGOUTED(HttpStatus.UNAUTHORIZED, "이미 로그아웃된 토큰입니다."),
 
+    // -- OAuth --
+    INVALID_OAUTH_CODE(HttpStatus.UNAUTHORIZED, "유효하지 않은 OAuth 인가 코드입니다."),
+
     // -- User --
     User_NOT_FOUND(HttpStatus.NOT_FOUND, "해당 유저를 찾을 수 없습니다."), // 404
 
