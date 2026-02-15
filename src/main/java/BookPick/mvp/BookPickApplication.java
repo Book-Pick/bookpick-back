@@ -3,9 +3,11 @@ package BookPick.mvp;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
+import org.springframework.scheduling.annotation.EnableScheduling;
 
 @SpringBootApplication
-@EnableJpaAuditing // ← 이거 있어?
+@EnableJpaAuditing
+@EnableScheduling
 public class BookPickApplication {
 
     public static void main(String[] args) {
