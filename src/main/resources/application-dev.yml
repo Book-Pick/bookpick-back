@@ -39,3 +39,4 @@ oauth:
     client-id: ${KAKAO_CLIENT_ID}
     client-secret: ${KAKAO_CLIENT_SECRET}
     redirect-uri: ${KAKAO_REDIRECT_URI}
+  front-redirect-uri: ${OAUTH_FRONT_REDIRECT_URI:https://bookpick-front-dev.vercel.app/auth/kakao/callback}
