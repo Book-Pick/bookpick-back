@@ -74,10 +74,11 @@ public class KakaoOAuthService {
         return processUser(userInfo);
     }
 
+
+    // 카카오한테 액세스 토큰 요청
     private KakaoTokenResponse getKakaoAccessToken(String code) {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
-
         MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
         params.add("grant_type", "authorization_code");
         params.add("client_id", clientId);
@@ -113,6 +114,8 @@ public class KakaoOAuthService {
         return response.getBody();
     }
 
+
+    // DB에 사용자 저장 및 JWT 포함한 LoginRes반환
     private LoginRes processUser(KakaoUserInfo userInfo) {
         String providerId = String.valueOf(userInfo.id());
 
