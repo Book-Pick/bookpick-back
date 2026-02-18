@@ -5,7 +5,6 @@ import BookPick.mvp.domain.curation.dto.base.get.one.field.BookInfo;
 import BookPick.mvp.domain.curation.dto.base.get.one.field.RecommendInfo;
 import BookPick.mvp.domain.curation.dto.base.get.one.field.ThumbnailInfo;
 import BookPick.mvp.domain.curation.entity.Curation;
-
 import java.time.LocalDateTime;
 
 public record CurationGetRes(
@@ -25,10 +24,8 @@ public record CurationGetRes(
         Integer likeCount,
         Integer viewCount,
         Integer CommentCount,
-
         LocalDateTime createdAt,
-        LocalDateTime updatedAt
-) {
+        LocalDateTime updatedAt) {
     public static CurationGetRes from(Curation curation, boolean subscribed, boolean isLiked) {
         return new CurationGetRes(
                 curation.getId(),
@@ -41,18 +38,22 @@ public record CurationGetRes(
                 new ThumbnailInfo(curation.getThumbnailUrl(), curation.getThumbnailColor()),
                 null,
                 curation.getReview(),
-                new RecommendInfo(curation.getMoods(), curation.getGenres(),
-                        curation.getKeywords(), curation.getStyles()),
+                new RecommendInfo(
+                        curation.getMoods(),
+                        curation.getGenres(),
+                        curation.getKeywords(),
+                        curation.getStyles()),
                 isLiked,
                 curation.getIsDrafted(),
                 curation.getLikeCount(),
                 curation.getViewCount(),
                 curation.getCommentCount(),
                 curation.getCreatedAt(),
-                curation.getUpdatedAt()
-        );
+                curation.getUpdatedAt());
     }
-    public static CurationGetRes fromOwnerView(Curation curation, boolean subscribed, boolean isLiked) {
+
+    public static CurationGetRes fromOwnerView(
+            Curation curation, boolean subscribed, boolean isLiked) {
         return new CurationGetRes(
                 curation.getId(),
                 curation.getUser().getId(),
@@ -64,17 +65,17 @@ public record CurationGetRes(
                 new ThumbnailInfo(curation.getThumbnailUrl(), curation.getThumbnailColor()),
                 BookInfo.of(curation),
                 curation.getReview(),
-                new RecommendInfo(curation.getMoods(), curation.getGenres(),
-                        curation.getKeywords(), curation.getStyles()),
+                new RecommendInfo(
+                        curation.getMoods(),
+                        curation.getGenres(),
+                        curation.getKeywords(),
+                        curation.getStyles()),
                 isLiked,
                 curation.getIsDrafted(),
                 curation.getLikeCount(),
                 curation.getViewCount(),
                 curation.getCommentCount(),
                 curation.getCreatedAt(),
-                curation.getUpdatedAt()
-        );
+                curation.getUpdatedAt());
     }
-
-
 }

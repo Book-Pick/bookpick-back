@@ -4,19 +4,23 @@ import BookPick.mvp.domain.curation.entity.Curation;
 import BookPick.mvp.domain.user.entity.User;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Size;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-
 @Entity
 @Getter
 @Setter
-@Table(name = "comment")
+@Table(
+        name = "comment",
+        indexes = {
+            @Index(name = "idx_comment_curation_id", columnList = "curation_id"),
+            @Index(name = "idx_comment_user_id", columnList = "user_id")
+        })
 @Builder
 @AllArgsConstructor
 public class Comment {
@@ -54,8 +58,7 @@ public class Comment {
     @Column(name = "deleted_at")
     private LocalDateTime deletedAt;
 
-    public Comment() {
-    }
+    public Comment() {}
 
     public void softDelete() {
         this.deletedAt = LocalDateTime.now();
@@ -65,4 +68,3 @@ public class Comment {
         return this.deletedAt != null;
     }
 }
-

@@ -1,5 +1,9 @@
 package BookPick.mvp.domain.curation.service;
 
+import static org.assertj.core.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.*;
+
 import BookPick.mvp.domain.curation.entity.Curation;
 import BookPick.mvp.domain.curation.entity.CurationLike;
 import BookPick.mvp.domain.curation.exception.common.CurationNotFoundException;
@@ -9,6 +13,7 @@ import BookPick.mvp.domain.curation.service.like.CurationLikeService;
 import BookPick.mvp.domain.user.entity.User;
 import BookPick.mvp.domain.user.exception.common.UserNotFoundException;
 import BookPick.mvp.domain.user.repository.UserRepository;
+import java.util.Optional;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -16,27 +21,17 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.util.Optional;
-
-import static org.assertj.core.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.*;
-
 @ExtendWith(MockitoExtension.class)
 @DisplayName("큐레이션 좋아요 서비스 테스트")
 class CurationLikeServiceTest {
 
-    @InjectMocks
-    private CurationLikeService curationLikeService;
+    @InjectMocks private CurationLikeService curationLikeService;
 
-    @Mock
-    private CurationRepository curationRepository;
+    @Mock private CurationRepository curationRepository;
 
-    @Mock
-    private UserRepository userRepository;
+    @Mock private UserRepository userRepository;
 
-    @Mock
-    private CurationLikeRepository curationLikeRepository;
+    @Mock private CurationLikeRepository curationLikeRepository;
 
     @Test
     @DisplayName("좋아요 추가 성공")
@@ -45,15 +40,9 @@ class CurationLikeServiceTest {
         Long userId = 1L;
         Long curationId = 1L;
 
-        User mockUser = User.builder()
-                .id(userId)
-                .email("test@test.com")
-                .build();
+        User mockUser = User.builder().id(userId).email("test@test.com").build();
 
-        Curation mockCuration = Curation.builder()
-                .id(curationId)
-                .likeCount(0)
-                .build();
+        Curation mockCuration = Curation.builder().id(curationId).likeCount(0).build();
 
         when(curationRepository.findByIdWithLock(curationId)).thenReturn(Optional.of(mockCuration));
         when(userRepository.findById(userId)).thenReturn(Optional.of(mockUser));
@@ -81,20 +70,12 @@ class CurationLikeServiceTest {
         Long userId = 1L;
         Long curationId = 1L;
 
-        User mockUser = User.builder()
-                .id(userId)
-                .email("test@test.com")
-                .build();
+        User mockUser = User.builder().id(userId).email("test@test.com").build();
 
-        Curation mockCuration = Curation.builder()
-                .id(curationId)
-                .likeCount(5)
-                .build();
+        Curation mockCuration = Curation.builder().id(curationId).likeCount(5).build();
 
-        CurationLike existingLike = CurationLike.builder()
-                .user(mockUser)
-                .curation(mockCuration)
-                .build();
+        CurationLike existingLike =
+                CurationLike.builder().user(mockUser).curation(mockCuration).build();
 
         when(curationRepository.findByIdWithLock(curationId)).thenReturn(Optional.of(mockCuration));
         when(userRepository.findById(userId)).thenReturn(Optional.of(mockUser));
@@ -138,9 +119,7 @@ class CurationLikeServiceTest {
         Long userId = 999L;
         Long curationId = 1L;
 
-        Curation mockCuration = Curation.builder()
-                .id(curationId)
-                .build();
+        Curation mockCuration = Curation.builder().id(curationId).build();
 
         when(curationRepository.findByIdWithLock(curationId)).thenReturn(Optional.of(mockCuration));
         when(userRepository.findById(userId)).thenReturn(Optional.empty());
@@ -161,15 +140,14 @@ class CurationLikeServiceTest {
         Long curationId = 1L;
 
         User mockUser = User.builder().id(userId).build();
-        Curation mockCuration = Curation.builder()
-                .id(curationId)
-                .likeCount(0)  // 이미 0
-                .build();
+        Curation mockCuration =
+                Curation.builder()
+                        .id(curationId)
+                        .likeCount(0) // 이미 0
+                        .build();
 
-        CurationLike existingLike = CurationLike.builder()
-                .user(mockUser)
-                .curation(mockCuration)
-                .build();
+        CurationLike existingLike =
+                CurationLike.builder().user(mockUser).curation(mockCuration).build();
 
         when(curationRepository.findByIdWithLock(curationId)).thenReturn(Optional.of(mockCuration));
         when(userRepository.findById(userId)).thenReturn(Optional.of(mockUser));
@@ -180,7 +158,7 @@ class CurationLikeServiceTest {
         curationLikeService.CurationLikeOrUnlike(userId, curationId);
 
         // then
-        assertThat(mockCuration.getLikeCount()).isEqualTo(0);  // 음수 아님
+        assertThat(mockCuration.getLikeCount()).isEqualTo(0); // 음수 아님
     }
 
     @Test
@@ -203,7 +181,7 @@ class CurationLikeServiceTest {
         curationLikeService.CurationLikeOrUnlike(userId, curationId);
 
         // then
-        verify(curationRepository).findByIdWithLock(curationId);  // 비관적 락 메서드 사용
-        verify(curationRepository, never()).findById(curationId);  // 일반 findById 사용 안함
+        verify(curationRepository).findByIdWithLock(curationId); // 비관적 락 메서드 사용
+        verify(curationRepository, never()).findById(curationId); // 일반 findById 사용 안함
     }
 }

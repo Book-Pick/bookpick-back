@@ -2,6 +2,12 @@ plugins {
     id 'java'
     id 'org.springframework.boot' version '3.5.6'
     id 'io.spring.dependency-management' version '1.1.7'
+    // 정적분석 도구
+    id 'checkstyle'
+    id 'pmd'
+    id 'com.github.spotbugs' version '6.0.26'
+    // 자동 포맷팅
+    id 'com.diffplug.spotless' version '6.25.0'
 }
 
 group = 'BookPick'
@@ -70,6 +76,7 @@ dependencies {
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'org.springframework.security:spring-security-test'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+    testRuntimeOnly 'com.h2database:h2'
 
 
 }
@@ -80,4 +87,96 @@ test {
 
 tasks.named('test') {
     useJUnitPlatform()
+}
+
+// ================================
+// 정적분석 도구 설정
+// ================================
+
+// Checkstyle 설정
+checkstyle {
+    toolVersion = '10.21.0'
+    configFile = file("${rootDir}/config/checkstyle/checkstyle.xml")
+    configProperties = ['suppressionFile': "${rootDir}/config/checkstyle/suppressions.xml"]
+    ignoreFailures = false
+    maxWarnings = 0
+}
+
+tasks.withType(Checkstyle).configureEach {
+    reports {
+        xml.required = true
+        html.required = true
+    }
+}
+
+// PMD 설정
+pmd {
+    toolVersion = '7.9.0'
+    consoleOutput = true
+    ruleSetFiles = files("${rootDir}/config/pmd/ruleset.xml")
+    ignoreFailures = false
+}
+
+tasks.withType(Pmd).configureEach {
+    reports {
+        xml.required = true
+        html.required = true
+    }
+}
+
+// SpotBugs 설정
+spotbugs {
+    ignoreFailures = false
+    showStackTraces = true
+    showProgress = true
+    effort = 'max'
+    reportLevel = 'medium'
+    excludeFilter = file("${rootDir}/config/spotbugs/exclude.xml")
+}
+
+tasks.withType(com.github.spotbugs.snom.SpotBugsTask).configureEach {
+    reports {
+        html.required = true
+        xml.required = false
+    }
+}
+
+// 전체 정적분석 실행 태스크
+tasks.register('staticAnalysis') {
+    dependsOn 'checkstyleMain', 'checkstyleTest', 'pmdMain', 'pmdTest', 'spotbugsMain', 'spotbugsTest'
+    group = 'verification'
+    description = '모든 정적분석 도구 실행 (Checkstyle, PMD, SpotBugs)'
+}
+
+// ================================
+// Spotless 자동 포맷팅 설정
+// ================================
+spotless {
+    java {
+        target 'src/**/*.java'
+
+        // 사용하지 않는 import 제거
+        removeUnusedImports()
+
+        // import 정렬
+        importOrder('java', 'javax', 'org', 'com', '')
+
+        // Google Java Format 적용
+        googleJavaFormat('1.19.2').aosp().reflowLongStrings()
+
+        // 줄 끝 공백 제거
+        trimTrailingWhitespace()
+
+        // 파일 끝 개행 추가
+        endWithNewline()
+
+        // 라이선스 헤더 (필요시 주석 해제)
+        // licenseHeader '/* (C) 2024 BookPick */'
+    }
+
+    format 'misc', {
+        target '*.gradle', '*.md', '.gitignore'
+        trimTrailingWhitespace()
+        endWithNewline()
+    }
 }

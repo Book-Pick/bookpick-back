@@ -1,5 +1,9 @@
 package BookPick.mvp.domain.auth.service;
 
+import static org.assertj.core.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.*;
+
 import BookPick.mvp.domain.auth.Roles;
 import BookPick.mvp.domain.auth.dto.LoginReq;
 import BookPick.mvp.domain.auth.dto.LoginRes;
@@ -8,6 +12,8 @@ import BookPick.mvp.domain.auth.util.Manager.login.jwt.JwtAuthManager;
 import BookPick.mvp.domain.user.entity.User;
 import BookPick.mvp.domain.user.repository.UserRepository;
 import jakarta.servlet.http.HttpServletRequest;
+import java.util.Collections;
+import java.util.Optional;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -22,64 +28,49 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
-import java.util.Collections;
-import java.util.Optional;
-
-import static org.assertj.core.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.*;
-
 @ExtendWith(MockitoExtension.class)
 @DisplayName("로그인 서비스 테스트")
 class LoginServiceTest {
 
-    @InjectMocks
-    private LoginService loginService;
+    @InjectMocks private LoginService loginService;
 
-    @Mock
-    private JwtAuthManager jwtAuthManager;
+    @Mock private JwtAuthManager jwtAuthManager;
 
-    @Mock
-    private AuthenticationManagerBuilder authenticationManagerBuilder;
+    @Mock private AuthenticationManagerBuilder authenticationManagerBuilder;
 
-    @Mock
-    private UserRepository userRepository;
+    @Mock private UserRepository userRepository;
 
-    @Mock
-    private HttpServletRequest httpServletRequest;
+    @Mock private HttpServletRequest httpServletRequest;
 
-    @Mock
-    private AuthenticationManager authenticationManager;
+    @Mock private AuthenticationManager authenticationManager;
 
-    @Mock
-    private Authentication authentication;
+    @Mock private Authentication authentication;
 
     @Test
     @DisplayName("정상 로그인 - 첫 로그인")
     void login_success_firstLogin() {
         // given
         LoginReq req = new LoginReq("test@test.com", "password123");
-        User mockUser = User.builder()
-                .id(1L)
-                .email(req.email())
-                .password("encodedPassword")
-                .nickname("테스터")
-                .role(Roles.ROLE_USER)
-                .isFirstLogin(true)
-                .build();
+        User mockUser =
+                User.builder()
+                        .id(1L)
+                        .email(req.email())
+                        .password("encodedPassword")
+                        .nickname("테스터")
+                        .role(Roles.ROLE_USER)
+                        .isFirstLogin(true)
+                        .build();
 
-        CustomUserDetails mockUserDetails = new CustomUserDetails(
-                mockUser,
-                Collections.singletonList(new SimpleGrantedAuthority("ROLE_USER"))
-        );
+        CustomUserDetails mockUserDetails =
+                new CustomUserDetails(
+                        mockUser,
+                        Collections.singletonList(new SimpleGrantedAuthority("ROLE_USER")));
         mockUserDetails.setId(mockUser.getId());
         mockUserDetails.setNickname(mockUser.getNickname());
         mockUserDetails.setFirstLogin(mockUser.isFirstLogin());
 
-        JwtAuthManager.TokenPair tokenPair = new JwtAuthManager.TokenPair(
-                "access_token",
-                "refresh_token"
-        );
+        JwtAuthManager.TokenPair tokenPair =
+                new JwtAuthManager.TokenPair("access_token", "refresh_token");
 
         when(authenticationManagerBuilder.getObject()).thenReturn(authenticationManager);
         when(authenticationManager.authenticate(any(UsernamePasswordAuthenticationToken.class)))
@@ -108,27 +99,26 @@ class LoginServiceTest {
     void login_success_notFirstLogin() {
         // given
         LoginReq req = new LoginReq("test@test.com", "password123");
-        User mockUser = User.builder()
-                .id(1L)
-                .email(req.email())
-                .password("encodedPassword")
-                .nickname("테스터")
-                .role(Roles.ROLE_USER)
-                .isFirstLogin(false)
-                .build();
+        User mockUser =
+                User.builder()
+                        .id(1L)
+                        .email(req.email())
+                        .password("encodedPassword")
+                        .nickname("테스터")
+                        .role(Roles.ROLE_USER)
+                        .isFirstLogin(false)
+                        .build();
 
-        CustomUserDetails mockUserDetails = new CustomUserDetails(
-                mockUser,
-                Collections.singletonList(new SimpleGrantedAuthority("ROLE_USER"))
-        );
+        CustomUserDetails mockUserDetails =
+                new CustomUserDetails(
+                        mockUser,
+                        Collections.singletonList(new SimpleGrantedAuthority("ROLE_USER")));
         mockUserDetails.setId(mockUser.getId());
         mockUserDetails.setNickname(mockUser.getNickname());
         mockUserDetails.setFirstLogin(mockUser.isFirstLogin());
 
-        JwtAuthManager.TokenPair tokenPair = new JwtAuthManager.TokenPair(
-                "access_token",
-                "refresh_token"
-        );
+        JwtAuthManager.TokenPair tokenPair =
+                new JwtAuthManager.TokenPair("access_token", "refresh_token");
 
         when(authenticationManagerBuilder.getObject()).thenReturn(authenticationManager);
         when(authenticationManager.authenticate(any(UsernamePasswordAuthenticationToken.class)))
@@ -183,26 +173,25 @@ class LoginServiceTest {
     void login_tokenGeneration() {
         // given
         LoginReq req = new LoginReq("test@test.com", "password123");
-        User mockUser = User.builder()
-                .id(1L)
-                .email(req.email())
-                .password("encodedPassword")
-                .role(Roles.ROLE_USER)
-                .isFirstLogin(false)
-                .build();
+        User mockUser =
+                User.builder()
+                        .id(1L)
+                        .email(req.email())
+                        .password("encodedPassword")
+                        .role(Roles.ROLE_USER)
+                        .isFirstLogin(false)
+                        .build();
 
-        CustomUserDetails mockUserDetails = new CustomUserDetails(
-                mockUser,
-                Collections.singletonList(new SimpleGrantedAuthority("ROLE_USER"))
-        );
+        CustomUserDetails mockUserDetails =
+                new CustomUserDetails(
+                        mockUser,
+                        Collections.singletonList(new SimpleGrantedAuthority("ROLE_USER")));
         mockUserDetails.setId(mockUser.getId());
         mockUserDetails.setNickname(mockUser.getNickname());
         mockUserDetails.setFirstLogin(mockUser.isFirstLogin());
 
-        JwtAuthManager.TokenPair tokenPair = new JwtAuthManager.TokenPair(
-                "generated_access_token",
-                "generated_refresh_token"
-        );
+        JwtAuthManager.TokenPair tokenPair =
+                new JwtAuthManager.TokenPair("generated_access_token", "generated_refresh_token");
 
         when(authenticationManagerBuilder.getObject()).thenReturn(authenticationManager);
         when(authenticationManager.authenticate(any(UsernamePasswordAuthenticationToken.class)))

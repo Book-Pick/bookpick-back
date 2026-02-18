@@ -1,5 +1,9 @@
 package BookPick.mvp.domain.comment.service;
 
+import static org.assertj.core.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.*;
+
 import BookPick.mvp.domain.comment.dto.create.CommentCreateReq;
 import BookPick.mvp.domain.comment.dto.create.CommentCreateRes;
 import BookPick.mvp.domain.comment.dto.delete.CommentDeleteRes;
@@ -12,6 +16,7 @@ import BookPick.mvp.domain.curation.repository.CurationRepository;
 import BookPick.mvp.domain.user.entity.User;
 import BookPick.mvp.domain.user.exception.common.UserNotFoundException;
 import BookPick.mvp.domain.user.repository.UserRepository;
+import java.util.Optional;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -19,27 +24,17 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.util.Optional;
-
-import static org.assertj.core.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.*;
-
 @ExtendWith(MockitoExtension.class)
 @DisplayName("댓글 서비스 테스트")
 class CommentServiceTest {
 
-    @InjectMocks
-    private CommentService commentService;
+    @InjectMocks private CommentService commentService;
 
-    @Mock
-    private UserRepository userRepository;
+    @Mock private UserRepository userRepository;
 
-    @Mock
-    private CurationRepository curationRepository;
+    @Mock private CurationRepository curationRepository;
 
-    @Mock
-    private CommentRepository commentRepository;
+    @Mock private CommentRepository commentRepository;
 
     @Test
     @DisplayName("댓글 생성 성공 - 일반 댓글")
@@ -49,22 +44,17 @@ class CommentServiceTest {
         Long curationId = 1L;
         CommentCreateReq req = new CommentCreateReq(null, "좋은 큐레이션이네요!");
 
-        User mockUser = User.builder()
-                .id(userId)
-                .email("test@test.com")
-                .build();
+        User mockUser = User.builder().id(userId).email("test@test.com").build();
 
-        Curation mockCuration = Curation.builder()
-                .id(curationId)
-                .commentCount(0)
-                .build();
+        Curation mockCuration = Curation.builder().id(curationId).commentCount(0).build();
 
-        Comment mockComment = Comment.builder()
-                .id(1L)
-                .user(mockUser)
-                .curation(mockCuration)
-                .content(req.content())
-                .build();
+        Comment mockComment =
+                Comment.builder()
+                        .id(1L)
+                        .user(mockUser)
+                        .curation(mockCuration)
+                        .content(req.content())
+                        .build();
 
         when(userRepository.findById(userId)).thenReturn(Optional.of(mockUser));
         when(curationRepository.findByIdWithLock(curationId)).thenReturn(Optional.of(mockCuration));
@@ -94,13 +84,14 @@ class CommentServiceTest {
         User mockUser = User.builder().id(userId).build();
         Curation mockCuration = Curation.builder().id(curationId).commentCount(1).build();
         Comment parentComment = Comment.builder().id(parentCommentId).build();
-        Comment mockReply = Comment.builder()
-                .id(2L)
-                .user(mockUser)
-                .curation(mockCuration)
-                .parent(parentComment)
-                .content(req.content())
-                .build();
+        Comment mockReply =
+                Comment.builder()
+                        .id(2L)
+                        .user(mockUser)
+                        .curation(mockCuration)
+                        .parent(parentComment)
+                        .content(req.content())
+                        .build();
 
         when(userRepository.findById(userId)).thenReturn(Optional.of(mockUser));
         when(curationRepository.findByIdWithLock(curationId)).thenReturn(Optional.of(mockCuration));
@@ -115,10 +106,14 @@ class CommentServiceTest {
         assertThat(mockCuration.getCommentCount()).isEqualTo(2);
 
         verify(commentRepository).findById(parentCommentId);
-        verify(commentRepository).save(argThat(comment ->
-                comment.getParent() != null &&
-                comment.getParent().getId().equals(parentCommentId)
-        ));
+        verify(commentRepository)
+                .save(
+                        argThat(
+                                comment ->
+                                        comment.getParent() != null
+                                                && comment.getParent()
+                                                        .getId()
+                                                        .equals(parentCommentId)));
     }
 
     @Test
@@ -128,21 +123,15 @@ class CommentServiceTest {
         Long curationId = 1L;
         Long commentId = 1L;
 
-        Curation mockCuration = Curation.builder()
-                .id(curationId)
-                .commentCount(5)
-                .build();
+        Curation mockCuration = Curation.builder().id(curationId).commentCount(5).build();
 
-        Comment mockComment = Comment.builder()
-                .id(commentId)
-                .content("댓글 내용")
-                .build();
+        Comment mockComment = Comment.builder().id(commentId).content("댓글 내용").build();
 
         when(curationRepository.findByIdWithLock(curationId)).thenReturn(Optional.of(mockCuration));
         when(commentRepository.findById(commentId)).thenReturn(Optional.of(mockComment));
 
         // when
-        CommentDeleteRes result = commentService.deleteComment(curationId, commentId);
+        CommentDeleteRes result = commentService.deleteComment(1L, curationId, commentId);
 
         // then
         assertThat(result.commentId()).isEqualTo(commentId);
@@ -233,8 +222,8 @@ class CommentServiceTest {
         commentService.createComment(userId, curationId, req);
 
         // then
-        verify(curationRepository).findByIdWithLock(curationId);  // 비관적 락 사용
-        verify(curationRepository, never()).findById(curationId);  // 일반 findById 사용 안함
+        verify(curationRepository).findByIdWithLock(curationId); // 비관적 락 사용
+        verify(curationRepository, never()).findById(curationId); // 일반 findById 사용 안함
     }
 
     @Test
@@ -244,10 +233,7 @@ class CommentServiceTest {
         Long curationId = 1L;
         Long commentId = 1L;
 
-        Curation mockCuration = Curation.builder()
-                .id(curationId)
-                .commentCount(0)
-                .build();
+        Curation mockCuration = Curation.builder().id(curationId).commentCount(0).build();
 
         Comment mockComment = Comment.builder().id(commentId).build();
 
@@ -255,10 +241,10 @@ class CommentServiceTest {
         when(commentRepository.findById(commentId)).thenReturn(Optional.of(mockComment));
 
         // when
-        commentService.deleteComment(curationId, commentId);
+        commentService.deleteComment(1L, curationId, commentId);
 
         // then
-        assertThat(mockCuration.getCommentCount()).isEqualTo(0);  // 음수 안됨
+        assertThat(mockCuration.getCommentCount()).isEqualTo(0); // 음수 안됨
 
         verify(commentRepository).delete(mockComment);
     }

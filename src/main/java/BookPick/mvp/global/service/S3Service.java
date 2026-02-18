@@ -1,17 +1,18 @@
-//package BookPick.mvp.global.service;
+// package BookPick.mvp.global.service;
 //
 //
-//import lombok.RequiredArgsConstructor;
-//import org.springframework.beans.factory.annotation.Value;
-//import org.springframework.stereotype.Service;
-//import java.time.Duration;
+// import lombok.RequiredArgsConstructor;
+// import org.springframework.beans.factory.annotation.Value;
+// import org.springframework.stereotype.Service;
+// import java.time.Duration;
 //
-//@Service
-//@RequiredArgsConstructor
-//public class S3Service {
+// @Service
+// @RequiredArgsConstructor
+// public class S3Service {
 //
 //    //
-//    @Value("${spring.cloud.aws.s3.bucket}") //application.properties에 있는 버킷명 가져와서 아래 버킷 변수에 넣어달라는 어노테이션
+//    @Value("${spring.cloud.aws.s3.bucket}") //application.properties에 있는 버킷명 가져와서 아래 버킷 변수에 넣어달라는
+// 어노테이션
 //    private String bucket;
 //    private final S3Presigner s3Presigner;
 //
@@ -24,7 +25,8 @@
 //                .signatureDuration(Duration.ofMinutes(3)) //url 유효기간
 //                .putObjectRequest(putObjectRequest)
 //                .build();
-//        return s3Presigner.presignPutObject(preSignRequest).url().toString(); //presigned url Return
+//        return s3Presigner.presignPutObject(preSignRequest).url().toString(); //presigned url
+// Return
 //    }
 //
-//}
+// }

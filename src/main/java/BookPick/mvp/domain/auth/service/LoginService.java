@@ -2,6 +2,8 @@ package BookPick.mvp.domain.auth.service;
 
 import BookPick.mvp.domain.auth.dto.LoginReq;
 import BookPick.mvp.domain.auth.dto.LoginRes;
+import BookPick.mvp.domain.auth.exception.InvalidLoginException;
+import BookPick.mvp.domain.auth.util.Manager.login.jwt.JwtAuthManager;
 import BookPick.mvp.domain.user.entity.User;
 import BookPick.mvp.domain.user.exception.common.UserNotFoundException;
 import BookPick.mvp.domain.user.repository.UserRepository;
@@ -14,9 +16,6 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
-import BookPick.mvp.domain.auth.exception.InvalidLoginException;
-import BookPick.mvp.domain.auth.util.Manager.login.jwt.JwtAuthManager;
-
 
 @Service
 @RequiredArgsConstructor
@@ -24,7 +23,6 @@ public class LoginService {
     private final JwtAuthManager jwtAuthManager;
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
     private final UserRepository userRepository;
-
 
     // 1. jwt 기반 로그인
     @Transactional
@@ -43,11 +41,17 @@ public class LoginService {
             JwtAuthManager.TokenPair tokenPair = jwtAuthManager.createTokens(auth);
 
             //
-            LoginRes res = LoginRes.from((CustomUserDetails) auth.getPrincipal(), tokenPair.accessToken(), tokenPair.refreshToken());
+            LoginRes res =
+                    LoginRes.from(
+                            (CustomUserDetails) auth.getPrincipal(),
+                            tokenPair.accessToken(),
+                            tokenPair.refreshToken());
 
-            if(res.isFirstLogin()){
-                User user =  userRepository.findById(res.userId())
-                        .orElseThrow(UserNotFoundException::new);
+            if (res.isFirstLogin()) {
+                User user =
+                        userRepository
+                                .findById(res.userId())
+                                .orElseThrow(UserNotFoundException::new);
 
                 user.setFirstLogin(false);
             }
@@ -60,4 +64,3 @@ public class LoginService {
         }
     }
 }
-

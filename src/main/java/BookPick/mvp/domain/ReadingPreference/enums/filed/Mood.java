@@ -1,7 +1,6 @@
 package BookPick.mvp.domain.ReadingPreference.enums.filed;
 
 public enum Mood implements PreferenceField {
-
     AFTER_WORK("퇴근 후"),
     HOT_TEA("따뜻한 차 한잔"),
     RAINY_DAY("비 오는 날"),

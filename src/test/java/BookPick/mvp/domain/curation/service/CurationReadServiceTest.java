@@ -1,5 +1,9 @@
 package BookPick.mvp.domain.curation.service;
 
+import static org.assertj.core.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.*;
+
 import BookPick.mvp.domain.auth.service.CustomUserDetails;
 import BookPick.mvp.domain.curation.dto.base.get.one.CurationGetRes;
 import BookPick.mvp.domain.curation.entity.Curation;
@@ -13,6 +17,8 @@ import BookPick.mvp.domain.user.entity.User;
 import BookPick.mvp.domain.user.repository.UserRepository;
 import BookPick.mvp.domain.user.service.subscribe.CurationSubscribeService;
 import jakarta.servlet.http.HttpServletRequest;
+import java.util.List;
+import java.util.Optional;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -20,61 +26,46 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.util.List;
-import java.util.Optional;
-
-import static org.assertj.core.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.*;
-
 @ExtendWith(MockitoExtension.class)
 @DisplayName("큐레이션 조회 서비스 테스트")
 class CurationReadServiceTest {
 
-    @InjectMocks
-    private CurationReadService curationReadService;
+    @InjectMocks private CurationReadService curationReadService;
 
-    @Mock
-    private CurationRepository curationRepository;
+    @Mock private CurationRepository curationRepository;
 
-    @Mock
-    private CurationLikeRepository curationLikeRepository;
+    @Mock private CurationLikeRepository curationLikeRepository;
 
-    @Mock
-    private UserRepository userRepository;
+    @Mock private UserRepository userRepository;
 
-    @Mock
-    private CurationSubscribeService curationSubscribeService;
+    @Mock private CurationSubscribeService curationSubscribeService;
 
-    @Mock
-    private HttpServletRequest request;
+    @Mock private HttpServletRequest request;
 
     @Test
     @DisplayName("큐레이션 조회 성공 - 비로그인 사용자")
     void findCuration_success_notLoggedIn() {
         // given
         Long curationId = 1L;
-        User mockUser = User.builder()
-                .id(1L)
-                .email("test@test.com")
-                .nickname("테스터")
-                .build();
+        User mockUser = User.builder().id(1L).email("test@test.com").nickname("테스터").build();
 
-        Curation mockCuration = Curation.builder()
-                .id(curationId)
-                .user(mockUser)
-                .title("테스트 큐레이션")
-                .isDrafted(false)
-                .viewCount(0)
-                .likeCount(0)
-                .commentCount(0)
-                .moods(List.of("감동적인"))
-                .genres(List.of("소설"))
-                .keywords(List.of("사랑"))
-                .styles(List.of("감성적인"))
-                .build();
+        Curation mockCuration =
+                Curation.builder()
+                        .id(curationId)
+                        .user(mockUser)
+                        .title("테스트 큐레이션")
+                        .isDrafted(false)
+                        .viewCount(0)
+                        .likeCount(0)
+                        .commentCount(0)
+                        .moods(List.of("감동적인"))
+                        .genres(List.of("소설"))
+                        .keywords(List.of("사랑"))
+                        .styles(List.of("감성적인"))
+                        .build();
 
-        when(curationRepository.findByIdWithUserAndLock(curationId)).thenReturn(Optional.of(mockCuration));
+        when(curationRepository.findByIdWithUserAndLock(curationId))
+                .thenReturn(Optional.of(mockCuration));
 
         // when
         CurationGetRes result = curationReadService.findCuration(curationId, null, request, false);
@@ -98,43 +89,39 @@ class CurationReadServiceTest {
         Long curationId = 1L;
         Long userId = 2L;
 
-        User curator = User.builder()
-                .id(1L)
-                .email("curator@test.com")
-                .nickname("큐레이터")
-                .build();
+        User curator = User.builder().id(1L).email("curator@test.com").nickname("큐레이터").build();
 
-        User viewer = User.builder()
-                .id(userId)
-                .email("viewer@test.com")
-                .nickname("뷰어")
-                .build();
+        User viewer = User.builder().id(userId).email("viewer@test.com").nickname("뷰어").build();
 
-        Curation mockCuration = Curation.builder()
-                .id(curationId)
-                .user(curator)
-                .title("테스트 큐레이션")
-                .isDrafted(false)
-                .viewCount(5)
-                .likeCount(10)
-                .commentCount(3)
-                .moods(List.of())
-                .genres(List.of())
-                .keywords(List.of())
-                .styles(List.of())
-                .build();
+        Curation mockCuration =
+                Curation.builder()
+                        .id(curationId)
+                        .user(curator)
+                        .title("테스트 큐레이션")
+                        .isDrafted(false)
+                        .viewCount(5)
+                        .likeCount(10)
+                        .commentCount(3)
+                        .moods(List.of())
+                        .genres(List.of())
+                        .keywords(List.of())
+                        .styles(List.of())
+                        .build();
 
         CurationLike mockLike = new CurationLike();
 
         CustomUserDetails userDetails = mock(CustomUserDetails.class);
         when(userDetails.getId()).thenReturn(userId);
 
-        when(curationRepository.findByIdWithUserAndLock(curationId)).thenReturn(Optional.of(mockCuration));
-        when(curationLikeRepository.findByUserIdAndCurationId(userId, curationId)).thenReturn(Optional.of(mockLike));
+        when(curationRepository.findByIdWithUserAndLock(curationId))
+                .thenReturn(Optional.of(mockCuration));
+        when(curationLikeRepository.findByUserIdAndCurationId(userId, curationId))
+                .thenReturn(Optional.of(mockLike));
         when(curationSubscribeService.isSubscribeCurator(userId, curator.getId())).thenReturn(true);
 
         // when
-        CurationGetRes result = curationReadService.findCuration(curationId, userDetails, request, false);
+        CurationGetRes result =
+                curationReadService.findCuration(curationId, userDetails, request, false);
 
         // then
         assertThat(result).isNotNull();
@@ -155,34 +142,36 @@ class CurationReadServiceTest {
         Long curationId = 1L;
         Long userId = 2L;
 
-        User curator = User.builder()
-                .id(1L)
-                .email("curator@test.com")
-                .build();
+        User curator = User.builder().id(1L).email("curator@test.com").build();
 
-        Curation mockCuration = Curation.builder()
-                .id(curationId)
-                .user(curator)
-                .title("테스트 큐레이션")
-                .isDrafted(false)
-                .viewCount(0)
-                .likeCount(0)
-                .commentCount(0)
-                .moods(List.of())
-                .genres(List.of())
-                .keywords(List.of())
-                .styles(List.of())
-                .build();
+        Curation mockCuration =
+                Curation.builder()
+                        .id(curationId)
+                        .user(curator)
+                        .title("테스트 큐레이션")
+                        .isDrafted(false)
+                        .viewCount(0)
+                        .likeCount(0)
+                        .commentCount(0)
+                        .moods(List.of())
+                        .genres(List.of())
+                        .keywords(List.of())
+                        .styles(List.of())
+                        .build();
 
         CustomUserDetails userDetails = mock(CustomUserDetails.class);
         when(userDetails.getId()).thenReturn(userId);
 
-        when(curationRepository.findByIdWithUserAndLock(curationId)).thenReturn(Optional.of(mockCuration));
-        when(curationLikeRepository.findByUserIdAndCurationId(userId, curationId)).thenReturn(Optional.empty());
-        when(curationSubscribeService.isSubscribeCurator(userId, curator.getId())).thenReturn(false);
+        when(curationRepository.findByIdWithUserAndLock(curationId))
+                .thenReturn(Optional.of(mockCuration));
+        when(curationLikeRepository.findByUserIdAndCurationId(userId, curationId))
+                .thenReturn(Optional.empty());
+        when(curationSubscribeService.isSubscribeCurator(userId, curator.getId()))
+                .thenReturn(false);
 
         // when
-        CurationGetRes result = curationReadService.findCuration(curationId, userDetails, request, false);
+        CurationGetRes result =
+                curationReadService.findCuration(curationId, userDetails, request, false);
 
         // then
         assertThat(result.isLiked()).isFalse();
@@ -199,38 +188,39 @@ class CurationReadServiceTest {
         Long curationId = 1L;
         Long userId = 1L;
 
-        User owner = User.builder()
-                .id(userId)
-                .email("owner@test.com")
-                .build();
+        User owner = User.builder().id(userId).email("owner@test.com").build();
 
-        Curation mockCuration = Curation.builder()
-                .id(curationId)
-                .user(owner)
-                .title("테스트 큐레이션")
-                .isDrafted(true)
-                .viewCount(0)
-                .likeCount(0)
-                .commentCount(0)
-                .bookTitle("책 제목")
-                .bookAuthor("작가")
-                .bookIsbn("1234567890")
-                .bookImageUrl("book.jpg")
-                .moods(List.of())
-                .genres(List.of())
-                .keywords(List.of())
-                .styles(List.of())
-                .build();
+        Curation mockCuration =
+                Curation.builder()
+                        .id(curationId)
+                        .user(owner)
+                        .title("테스트 큐레이션")
+                        .isDrafted(true)
+                        .viewCount(0)
+                        .likeCount(0)
+                        .commentCount(0)
+                        .bookTitle("책 제목")
+                        .bookAuthor("작가")
+                        .bookIsbn("1234567890")
+                        .bookImageUrl("book.jpg")
+                        .moods(List.of())
+                        .genres(List.of())
+                        .keywords(List.of())
+                        .styles(List.of())
+                        .build();
 
         CustomUserDetails userDetails = mock(CustomUserDetails.class);
         when(userDetails.getId()).thenReturn(userId);
 
-        when(curationRepository.findByIdWithUserAndLock(curationId)).thenReturn(Optional.of(mockCuration));
-        when(curationLikeRepository.findByUserIdAndCurationId(userId, curationId)).thenReturn(Optional.empty());
+        when(curationRepository.findByIdWithUserAndLock(curationId))
+                .thenReturn(Optional.of(mockCuration));
+        when(curationLikeRepository.findByUserIdAndCurationId(userId, curationId))
+                .thenReturn(Optional.empty());
         when(curationSubscribeService.isSubscribeCurator(userId, owner.getId())).thenReturn(false);
 
         // when
-        CurationGetRes result = curationReadService.findCuration(curationId, userDetails, request, true);
+        CurationGetRes result =
+                curationReadService.findCuration(curationId, userDetails, request, true);
 
         // then
         assertThat(result).isNotNull();
@@ -248,34 +238,37 @@ class CurationReadServiceTest {
         Long ownerId = 1L;
         Long viewerId = 2L;
 
-        User owner = User.builder()
-                .id(ownerId)
-                .email("owner@test.com")
-                .build();
+        User owner = User.builder().id(ownerId).email("owner@test.com").build();
 
-        Curation mockCuration = Curation.builder()
-                .id(curationId)
-                .user(owner)
-                .title("테스트 큐레이션")
-                .isDrafted(false)
-                .viewCount(0)
-                .likeCount(0)
-                .commentCount(0)
-                .moods(List.of())
-                .genres(List.of())
-                .keywords(List.of())
-                .styles(List.of())
-                .build();
+        Curation mockCuration =
+                Curation.builder()
+                        .id(curationId)
+                        .user(owner)
+                        .title("테스트 큐레이션")
+                        .isDrafted(false)
+                        .viewCount(0)
+                        .likeCount(0)
+                        .commentCount(0)
+                        .moods(List.of())
+                        .genres(List.of())
+                        .keywords(List.of())
+                        .styles(List.of())
+                        .build();
 
         CustomUserDetails userDetails = mock(CustomUserDetails.class);
         when(userDetails.getId()).thenReturn(viewerId);
 
-        when(curationRepository.findByIdWithUserAndLock(curationId)).thenReturn(Optional.of(mockCuration));
-        when(curationLikeRepository.findByUserIdAndCurationId(viewerId, curationId)).thenReturn(Optional.empty());
+        when(curationRepository.findByIdWithUserAndLock(curationId))
+                .thenReturn(Optional.of(mockCuration));
+        when(curationLikeRepository.findByUserIdAndCurationId(viewerId, curationId))
+                .thenReturn(Optional.empty());
         when(curationSubscribeService.isSubscribeCurator(viewerId, ownerId)).thenReturn(false);
 
         // when & then
-        assertThatThrownBy(() -> curationReadService.findCuration(curationId, userDetails, request, true))
+        assertThatThrownBy(
+                        () ->
+                                curationReadService.findCuration(
+                                        curationId, userDetails, request, true))
                 .isInstanceOf(CurationAccessDeniedException.class);
 
         verify(curationRepository).findByIdWithUserAndLock(curationId);

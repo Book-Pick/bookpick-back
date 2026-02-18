@@ -1,17 +1,15 @@
 package BookPick.mvp.domain.curation.util.gemini.client;
 
-
-
 import BookPick.mvp.domain.curation.util.gemini.GeminiErrorException;
 import BookPick.mvp.domain.curation.util.gemini.enums.GeminiErrorCode;
 import BookPick.mvp.global.exception.BusinessException;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Component;
-import org.springframework.web.client.RestTemplate;
-import org.springframework.http.*;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.*;
+import org.springframework.stereotype.Component;
+import org.springframework.web.client.RestTemplate;
 
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
@@ -36,7 +34,9 @@ public class GeminiClient {
             String url = config.getApiUrl() + "?key=" + config.getApiKey();
 
             // 요청 바디 생성 (올바른 구조)
-            String requestBody = String.format("""
+            String requestBody =
+                    String.format(
+                            """
                             {
                                 "system_instruction": {
                                     "parts": [
@@ -52,27 +52,26 @@ public class GeminiClient {
                                 ]
                             }
                             """,
-                    systemInstruction.replace("\"", "\\\"").replace("\n", "\\n"),
-                    userContent.replace("\"", "\\\"").replace("\n", "\\n")
-            );
+                            systemInstruction.replace("\"", "\\\"").replace("\n", "\\n"),
+                            userContent.replace("\"", "\\\"").replace("\n", "\\n"));
 
             HttpHeaders headers = new HttpHeaders();
             headers.setContentType(MediaType.APPLICATION_JSON);
 
             HttpEntity<String> entity = new HttpEntity<>(requestBody, headers);
 
-            ResponseEntity<String> response = restTemplate.exchange(
-                    url,
-                    HttpMethod.POST,
-                    entity,
-                    String.class
-            );
+            ResponseEntity<String> response =
+                    restTemplate.exchange(url, HttpMethod.POST, entity, String.class);
 
             // 응답에서 텍스트 추출
             JsonNode root = objectMapper.readTree(response.getBody());
-            return root.path("candidates").get(0)
-                    .path("content").path("parts").get(0)
-                    .path("text").asText();
+            return root.path("candidates")
+                    .get(0)
+                    .path("content")
+                    .path("parts")
+                    .get(0)
+                    .path("text")
+                    .asText();
 
         } catch (BusinessException e) {
             throw e;

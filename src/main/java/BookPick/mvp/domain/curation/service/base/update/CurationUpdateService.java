@@ -27,75 +27,77 @@ public class CurationUpdateService {
     private final CurationSubscribeService curationSubscribeService;
 
     @Transactional
-    public CurationUpdateResult updateCuration(Long userId, Long curationId, CurationUpdateReq req) {
-        Curation curation = curationRepository.findById(curationId)
-                .orElseThrow(CurationNotFoundException::new);
+    public CurationUpdateResult updateCuration(
+            Long userId, Long curationId, CurationUpdateReq req) {
+        Curation curation =
+                curationRepository.findById(curationId).orElseThrow(CurationNotFoundException::new);
 
         if (curation.getIsDrafted()) {
             if (req.isDrafted()) {
                 // 임시저장 -> 임시저장
-                return CurationUpdateResult.from(reDraftCuration(userId, curation, req), SuccessCode.CURATION_DRAFT_UPDATE_SUCCESS);
+                return CurationUpdateResult.from(
+                        reDraftCuration(userId, curation, req),
+                        SuccessCode.CURATION_DRAFT_UPDATE_SUCCESS);
             } else {
                 // 임시저장 -> 발행본
-                return CurationUpdateResult.from(publishDraftedCuration(userId, curation, req), SuccessCode.DRAFTED_CURATION_PUBLISH_SUCCESS);
+                return CurationUpdateResult.from(
+                        publishDraftedCuration(userId, curation, req),
+                        SuccessCode.DRAFTED_CURATION_PUBLISH_SUCCESS);
             }
         }
-
 
         // 발행본 -> 발행본
         else {
             if (!req.isDrafted()) {
-                return CurationUpdateResult.from(modifyPublishedCuration(userId, curation, req), SuccessCode.CURATION_UPDATE_SUCCESS);
+                return CurationUpdateResult.from(
+                        modifyPublishedCuration(userId, curation, req),
+                        SuccessCode.CURATION_UPDATE_SUCCESS);
             } else {
                 throw new CurationAlreadyPublishedException();
             }
         }
-
     }
-
-
 
     /*---------------------------------------------------------------------------------------------------*/
 
     // 임시저장 -> 임시저장
-    public CurationUpdateRes reDraftCuration(Long userId, Curation curation, CurationUpdateReq req) {
+    public CurationUpdateRes reDraftCuration(
+            Long userId, Curation curation, CurationUpdateReq req) {
 
         if (!curation.getUser().getId().equals(userId)) {
             throw new CurationAccessDeniedException();
         }
 
-
-        curation.curationUpdate(req);   // 임시저장 및 발행 처리도 가능
+        curation.curationUpdate(req); // 임시저장 및 발행 처리도 가능
         curation.draft();
 
         return CurationUpdateRes.from(curation);
     }
 
     // 임시저장 -> 발행본
-    public CurationUpdateRes publishDraftedCuration(Long userId, Curation curation, CurationUpdateReq req) {
-
+    public CurationUpdateRes publishDraftedCuration(
+            Long userId, Curation curation, CurationUpdateReq req) {
 
         if (!curation.getUser().getId().equals(userId)) {
             throw new CurationAccessDeniedException();
         }
 
-        curation.curationUpdate(req);   // 임시저장 및 발행 처리도 가능
+        curation.curationUpdate(req); // 임시저장 및 발행 처리도 가능
         curation.publish();
 
         return CurationUpdateRes.from(curation);
     }
 
     // 발행 -> 발행
-    public CurationUpdateRes modifyPublishedCuration(Long userId, Curation curation, CurationUpdateReq req) {
-
+    public CurationUpdateRes modifyPublishedCuration(
+            Long userId, Curation curation, CurationUpdateReq req) {
 
         if (!curation.getUser().getId().equals(userId)) {
             throw new CurationAccessDeniedException();
         }
 
-        curation.curationUpdate(req);   // 임시저장 및 발행 처리도 가능
+        curation.curationUpdate(req); // 임시저장 및 발행 처리도 가능
 
         return CurationUpdateRes.from(curation);
     }
-
 }

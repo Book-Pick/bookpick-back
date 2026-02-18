@@ -1,7 +1,6 @@
 package BookPick.mvp.domain.comment.dto.read;
 
 import BookPick.mvp.domain.comment.entity.Comment;
-
 import java.time.LocalDateTime;
 
 public record CommentDetailRes(
@@ -13,8 +12,7 @@ public record CommentDetailRes(
         String profileImageUrl,
         String content,
         LocalDateTime createdAt,
-        LocalDateTime updatedAt
-) {
+        LocalDateTime updatedAt) {
     public static CommentDetailRes of(Comment comment) {
         return new CommentDetailRes(
                 comment.getId(),
@@ -25,7 +23,6 @@ public record CommentDetailRes(
                 comment.getUser().getProfileImageUrl(),
                 comment.getContent(),
                 comment.getCreatedAt(),
-                comment.getUpdatedAt()
-        );
+                comment.getUpdatedAt());
     }
 }

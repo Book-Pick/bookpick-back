@@ -3,7 +3,6 @@ package BookPick.mvp.domain.curation.dto.base;
 import BookPick.mvp.domain.curation.dto.base.create.ETC.BookDto;
 import BookPick.mvp.domain.curation.dto.base.create.ETC.RecommendDto;
 import BookPick.mvp.domain.curation.dto.base.create.ETC.ThumbnailDto;
-import BookPick.mvp.domain.curation.enums.common.State;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -21,12 +20,4 @@ public record CurationReq(
         String review,
 
         RecommendDto recommend,
-
-        @NotNull
-        Boolean isDrafted
-) {
-}
-
-
-
-
+        @NotNull Boolean isDrafted) {}

@@ -1,5 +1,10 @@
 package BookPick.mvp.domain.auth.controller;
 
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+
 import BookPick.mvp.domain.auth.dto.SignReq;
 import BookPick.mvp.domain.auth.dto.SignRes;
 import BookPick.mvp.domain.auth.exception.DuplicateEmailException;
@@ -8,42 +13,33 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.data.jpa.JpaRepositoriesAutoConfiguration;
+import org.springframework.boot.autoconfigure.orm.jpa.HibernateJpaAutoConfiguration;
+import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
-import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
-import org.springframework.boot.autoconfigure.orm.jpa.HibernateJpaAutoConfiguration;
-import org.springframework.boot.autoconfigure.data.jpa.JpaRepositoriesAutoConfiguration;
-
-@WebMvcTest(value = SignUpController.class,
-    excludeAutoConfiguration = {
-        SecurityAutoConfiguration.class,
-        HibernateJpaAutoConfiguration.class,
-        JpaRepositoriesAutoConfiguration.class
-    })
+@WebMvcTest(
+        value = SignUpController.class,
+        excludeAutoConfiguration = {
+            SecurityAutoConfiguration.class,
+            HibernateJpaAutoConfiguration.class,
+            JpaRepositoriesAutoConfiguration.class
+        })
 @DisplayName("회원가입 컨트롤러 테스트")
 class SignUpControllerTest {
 
-    @Autowired
-    private MockMvc mockMvc;
+    @Autowired private MockMvc mockMvc;
 
-    @Autowired
-    private ObjectMapper objectMapper;
+    @Autowired private ObjectMapper objectMapper;
 
-    @MockBean
-    private SignUpService authService;
+    @MockBean private SignUpService authService;
 
-    @MockBean
-    private BookPick.mvp.global.util.JwtUtil jwtUtil;
+    @MockBean private BookPick.mvp.global.util.JwtUtil jwtUtil;
 
-    @MockBean
-    private BookPick.mvp.global.config.JwtFilter jwtFilter;
+    @MockBean private BookPick.mvp.global.config.JwtFilter jwtFilter;
 
     @Test
     @DisplayName("정상 회원가입 성공")
@@ -55,9 +51,10 @@ class SignUpControllerTest {
         when(authService.signUp(any(SignReq.class))).thenReturn(res);
 
         // when & then
-        mockMvc.perform(post("/api/v1/auth/signup")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(req)))
+        mockMvc.perform(
+                        post("/api/v1/auth/signup")
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(objectMapper.writeValueAsString(req)))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.success").value(true))
                 .andExpect(jsonPath("$.code").value("REGISTER_SUCCESS"))
@@ -72,13 +69,13 @@ class SignUpControllerTest {
         // given
         SignReq req = new SignReq("duplicate@test.com", "password123");
 
-        when(authService.signUp(any(SignReq.class)))
-                .thenThrow(new DuplicateEmailException());
+        when(authService.signUp(any(SignReq.class))).thenThrow(new DuplicateEmailException());
 
         // when & then
-        mockMvc.perform(post("/api/v1/auth/signup")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(req)))
+        mockMvc.perform(
+                        post("/api/v1/auth/signup")
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(objectMapper.writeValueAsString(req)))
                 .andExpect(status().isBadRequest());
 
         verify(authService).signUp(any(SignReq.class));
@@ -91,9 +88,10 @@ class SignUpControllerTest {
         SignReq req = new SignReq("", "password123");
 
         // when & then
-        mockMvc.perform(post("/api/v1/auth/signup")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(req)))
+        mockMvc.perform(
+                        post("/api/v1/auth/signup")
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(objectMapper.writeValueAsString(req)))
                 .andExpect(status().isBadRequest());
 
         verify(authService, never()).signUp(any(SignReq.class));
@@ -106,9 +104,10 @@ class SignUpControllerTest {
         SignReq req = new SignReq("invalid-email", "password123");
 
         // when & then
-        mockMvc.perform(post("/api/v1/auth/signup")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(req)))
+        mockMvc.perform(
+                        post("/api/v1/auth/signup")
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(objectMapper.writeValueAsString(req)))
                 .andExpect(status().isBadRequest());
 
         verify(authService, never()).signUp(any(SignReq.class));
@@ -121,9 +120,10 @@ class SignUpControllerTest {
         SignReq req = new SignReq("test@test.com", "");
 
         // when & then
-        mockMvc.perform(post("/api/v1/auth/signup")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(req)))
+        mockMvc.perform(
+                        post("/api/v1/auth/signup")
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(objectMapper.writeValueAsString(req)))
                 .andExpect(status().isBadRequest());
 
         verify(authService, never()).signUp(any(SignReq.class));
@@ -133,8 +133,7 @@ class SignUpControllerTest {
     @DisplayName("요청 바디 없음 - 예외 발생")
     void signUp_fail_noRequestBody() throws Exception {
         // when & then
-        mockMvc.perform(post("/api/v1/auth/signup")
-                        .contentType(MediaType.APPLICATION_JSON))
+        mockMvc.perform(post("/api/v1/auth/signup").contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest());
 
         verify(authService, never()).signUp(any(SignReq.class));
@@ -147,8 +146,7 @@ class SignUpControllerTest {
         SignReq req = new SignReq("test@test.com", "password123");
 
         // when & then
-        mockMvc.perform(post("/api/v1/auth/signup")
-                        .content(objectMapper.writeValueAsString(req)))
+        mockMvc.perform(post("/api/v1/auth/signup").content(objectMapper.writeValueAsString(req)))
                 .andExpect(status().isUnsupportedMediaType());
 
         verify(authService, never()).signUp(any(SignReq.class));
@@ -164,20 +162,20 @@ class SignUpControllerTest {
         SignRes res1 = new SignRes(1L);
         SignRes res2 = new SignRes(2L);
 
-        when(authService.signUp(any(SignReq.class)))
-                .thenReturn(res1)
-                .thenReturn(res2);
+        when(authService.signUp(any(SignReq.class))).thenReturn(res1).thenReturn(res2);
 
         // when & then
-        mockMvc.perform(post("/api/v1/auth/signup")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(req1)))
+        mockMvc.perform(
+                        post("/api/v1/auth/signup")
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(objectMapper.writeValueAsString(req1)))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.data.userId").value(1L));
 
-        mockMvc.perform(post("/api/v1/auth/signup")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(req2)))
+        mockMvc.perform(
+                        post("/api/v1/auth/signup")
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(objectMapper.writeValueAsString(req2)))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.data.userId").value(2L));
 

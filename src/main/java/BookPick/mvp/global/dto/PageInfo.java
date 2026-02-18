@@ -2,18 +2,12 @@ package BookPick.mvp.global.dto;
 
 import org.springframework.data.domain.Page;
 
-public record PageInfo(
-        int currentPage,
-        int totalPages,
-        long totalElements,
-        boolean hasNext
-) {
+public record PageInfo(int currentPage, int totalPages, long totalElements, boolean hasNext) {
     public static PageInfo of(Page<?> page) {
         return new PageInfo(
-                page.getNumber()+1,
+                page.getNumber() + 1,
                 page.getTotalPages(),
                 page.getTotalElements(),
-                page.hasNext()
-        );
+                page.hasNext());
     }
 }

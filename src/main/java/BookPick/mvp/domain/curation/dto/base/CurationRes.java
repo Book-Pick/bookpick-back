@@ -2,8 +2,6 @@
 package BookPick.mvp.domain.curation.dto.base;
 
 import BookPick.mvp.domain.curation.entity.Curation;
-import BookPick.mvp.domain.curation.enums.common.State;
-
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -11,42 +9,36 @@ public record CurationRes(
         Long id,
         Long userId,
         String title,
-
         ThumbnailInfo thumbnail,
         BookInfo book,
         String review,
-
         RecommendInfo recommend,
         Boolean isDrafted,
-
         LocalDateTime createdAt,
-        LocalDateTime updatedAt
-) {
+        LocalDateTime updatedAt) {
     public static CurationRes from(Curation curation) {
         return new CurationRes(
                 curation.getId(),
                 curation.getUser().getId(),
                 curation.getTitle(),
-
                 new ThumbnailInfo(curation.getThumbnailUrl(), curation.getThumbnailColor()),
-                new BookInfo(curation.getBookTitle(), curation.getBookAuthor(), curation.getBookIsbn()),
+                new BookInfo(
+                        curation.getBookTitle(), curation.getBookAuthor(), curation.getBookIsbn()),
                 curation.getReview(),
-
-                new RecommendInfo(curation.getMoods(), curation.getGenres(), curation.getKeywords(), curation.getStyles()),
+                new RecommendInfo(
+                        curation.getMoods(),
+                        curation.getGenres(),
+                        curation.getKeywords(),
+                        curation.getStyles()),
                 curation.getIsDrafted(),
-
                 curation.getCreatedAt(),
-                curation.getUpdatedAt()
-        );
+                curation.getUpdatedAt());
     }
 
-    public record ThumbnailInfo(String imageUrl, String imageColor) {
-    }
+    public record ThumbnailInfo(String imageUrl, String imageColor) {}
 
-    public record BookInfo(String title, String author, String isbn) {
-    }
+    public record BookInfo(String title, String author, String isbn) {}
 
-    public record RecommendInfo(List<String> moods, List<String> genres,
-                                List<String> keywords, List<String> styles) {
-    }
+    public record RecommendInfo(
+            List<String> moods, List<String> genres, List<String> keywords, List<String> styles) {}
 }
