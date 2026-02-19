@@ -5,4 +5,5 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 
 // -- SignUp --
-public record SignReq(@NotBlank @Email String email, @Size(min = 8, max = 72) String password) {}
+public record SignReq(
+        @NotBlank @Email String email, @NotBlank @Size(min = 8, max = 72) String password) {}

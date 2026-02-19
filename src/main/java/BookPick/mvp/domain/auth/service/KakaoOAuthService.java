@@ -8,6 +8,7 @@ import BookPick.mvp.domain.ReadingPreference.service.ReadingPreferenceService;
 import BookPick.mvp.domain.user.entity.User;
 import BookPick.mvp.domain.user.repository.UserRepository;
 import BookPick.mvp.global.util.JwtUtil;
+import java.util.UUID;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
@@ -15,6 +16,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.LinkedMultiValueMap;
@@ -28,19 +30,23 @@ public class KakaoOAuthService {
     private static final String KAKAO_AUTH_URL = "https://kauth.kakao.com";
     private static final String KAKAO_API_URL = "https://kapi.kakao.com";
     private static final String PROVIDER = "kakao";
+    private static final String OAUTH_PASSWORD_PREFIX = "oauth-kakao-";
 
     private final UserRepository userRepository;
     private final JwtUtil jwtUtil;
     private final ReadingPreferenceService readingPreferenceService;
+    private final PasswordEncoder passwordEncoder;
     private final RestTemplate restTemplate = new RestTemplate();
 
     public KakaoOAuthService(
             UserRepository userRepository,
             JwtUtil jwtUtil,
-            ReadingPreferenceService readingPreferenceService) {
+            ReadingPreferenceService readingPreferenceService,
+            PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
         this.jwtUtil = jwtUtil;
         this.readingPreferenceService = readingPreferenceService;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @Value("${oauth.kakao.client-id:}")
@@ -141,7 +147,7 @@ public class KakaoOAuthService {
                                     User newUser =
                                             User.builder()
                                                     .email(email != null ? email : providerId + "@kakao.user")
-                                                    .password(null)
+                                                    .password(createOAuthPassword(providerId))
                                                     .nickname(userInfo.getNickname())
                                                     .profileImageUrl(userInfo.getProfileImageUrl())
                                                     .provider(PROVIDER)
@@ -174,5 +180,9 @@ public class KakaoOAuthService {
                 isFirstLogin,
                 accessToken,
                 refreshToken);
+    }
+
+    private String createOAuthPassword(String providerId) {
+        return passwordEncoder.encode(OAUTH_PASSWORD_PREFIX + providerId + "-" + UUID.randomUUID());
     }
 }
