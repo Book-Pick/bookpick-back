@@ -5,4 +5,5 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 
 // -- Login --
-public record LoginReq(@NotBlank @Email String email, @Size(min = 8, max = 72) String password) {}
+public record LoginReq(
+        @NotBlank @Email String email, @NotBlank @Size(min = 8, max = 72) String password) {}
