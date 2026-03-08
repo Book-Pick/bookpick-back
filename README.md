@@ -2,6 +2,9 @@
 
 BookPick MVP 버전의 백엔드 API 서버입니다. AI 기반 도서 큐레이션 및 추천 서비스를 제공합니다.
 
+<img width="1166" height="768" alt="image" src="https://github.com/user-attachments/assets/2039c9c7-24d8-485a-8bc6-f5d4098733f4" />
+
+
 ## Tech Stack
 
 ### Core
