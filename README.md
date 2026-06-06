@@ -1,3 +1,5 @@
+# 미리보기(아래 이미지 클릭)
+[![시연 영상](https://img.youtube.com/vi/to3HTmG8iFw/maxresdefault.jpg)](https://youtu.be/to3HTmG8iFw)
 # BookPick Backend
 
 BookPick MVP 버전의 백엔드 API 서버입니다. AI 기반 도서 큐레이션 및 추천 서비스를 제공합니다.
